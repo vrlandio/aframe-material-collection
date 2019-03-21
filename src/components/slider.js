@@ -33,9 +33,9 @@ module.exports = AFRAME.registerComponent('ui-slider', {
         // Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
         this.backgroundPanel = document.createElement('a-plane');
         this.backgroundPanel.setAttribute('class','no-yoga-layout background '+this.data.intersectableClass);
-        this.backgroundPanel.setAttribute('width',this.data.width+1);
-        this.backgroundPanel.setAttribute('height',this.data.height+1);
-        this.backgroundPanel.setAttribute('position','0 0 -0.02');
+        this.backgroundPanel.setAttribute('width',this.data.width+0.1);
+        this.backgroundPanel.setAttribute('height',this.data.height+0.1);
+        this.backgroundPanel.setAttribute('position','0 0 -0.12');
         this.backgroundPanel.setAttribute('opacity',0.0001);//
         this.backgroundPanel.setAttribute('transparent',true);
         this.el.appendChild(this.backgroundPanel);
