@@ -35,10 +35,11 @@ module.exports = AFRAME.registerComponent('ui-slider', {
         this.backgroundPanel.setAttribute('class','no-yoga-layout background '+this.data.intersectableClass);
         this.backgroundPanel.setAttribute('width',this.data.width+0.1);
         this.backgroundPanel.setAttribute('height',this.data.height+0.1);
-        this.backgroundPanel.setAttribute('position','0 0 -0.12');
+        this.backgroundPanel.setAttribute('position','0 0 -0.3');
         this.backgroundPanel.setAttribute('opacity',0.0001);//
         this.backgroundPanel.setAttribute('transparent',true);
-        this.el.appendChild(this.backgroundPanel);
+          
+        //this.el.appendChild(this.backgroundPanel);
         // Setup handle circle entity.
         this.handleEl = document.createElement('a-circle');
         this.handleEl.setAttribute('radius',this.data.handleRadius);
