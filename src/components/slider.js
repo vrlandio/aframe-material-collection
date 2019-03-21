@@ -37,8 +37,8 @@ module.exports = AFRAME.registerComponent('ui-slider', {
         this.backgroundPanel.setAttribute('height',this.data.height+0.01);
         this.backgroundPanel.setAttribute('position','0 0 -0.02');
         this.backgroundPanel.setAttribute('opacity',0.0001);//
-        this.backgroundPanel.setAttribute('transparent',true);
-          
+        this.backgroundPanel.setAttribute('transparent',false);
+        this.backgroundPanel.setAttribute('visible',false);
         this.el.appendChild(this.backgroundPanel);
         // Setup handle circle entity.
         this.handleEl = document.createElement('a-circle');
