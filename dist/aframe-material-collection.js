@@ -1136,7 +1136,7 @@ module.exports = AFRAME.registerComponent('ui-slider', {
         this.backgroundPanel.setAttribute('class','no-yoga-layout background '+this.data.intersectableClass);
         this.backgroundPanel.setAttribute('width',this.data.width+0.01);
         this.backgroundPanel.setAttribute('height',this.data.height+0.01);
-        this.backgroundPanel.setAttribute('position','0 0 -0.3');
+        this.backgroundPanel.setAttribute('position','0 0 -0.02');
         this.backgroundPanel.setAttribute('opacity',0.0001);//
         this.backgroundPanel.setAttribute('transparent',true);
           
