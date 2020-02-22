@@ -5,12 +5,15 @@
  * @primitive a-ui-switch
  * @author Shane Harris
  */
-module.exports = AFRAME.registerPrimitive('a-ui-switch', AFRAME.utils.extendDeep({}, AFRAME.primitives.getMeshMixin(), {
-    defaultComponents: {
-        "ui-switch":{}
-    },
-    mappings: {
-        value: 'ui-switch.value',
-        disabled: 'ui-switch.disabled',
-    }
-}));
+module.exports = AFRAME.registerPrimitive(
+	"a-ui-switch",
+	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
+		defaultComponents: {
+			"ui-switch": {}
+		},
+		mappings: {
+			value: "ui-switch.value",
+			disabled: "ui-switch.disabled"
+		}
+	} )
+);

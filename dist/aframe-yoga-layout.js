@@ -81,21 +81,21 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 38);
+/******/ 	return __webpack_require__(__webpack_require__.s = 37);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 38:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Yoga
-module.exports = window.Yoga = __webpack_require__(39);
+module.exports = window.Yoga = __webpack_require__(38);
 
 
 /***/ }),
 
-/***/ 39:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -113,8 +113,8 @@ module.exports = window.Yoga = __webpack_require__(39);
  * @format
  */
 
-var Yoga = __webpack_require__(40);
-var nbind = __webpack_require__(42);
+var Yoga = __webpack_require__(39);
+var nbind = __webpack_require__(41);
 
 var ran = false;
 var ret = null;
@@ -142,7 +142,7 @@ module.exports = Yoga(ret.bind, ret.lib);
 
 /***/ }),
 
-/***/ 40:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -168,7 +168,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @format
  */
 
-var CONSTANTS = __webpack_require__(41);
+var CONSTANTS = __webpack_require__(40);
 
 var Layout = function () {
   function Layout(left, right, top, bottom, width, height) {
@@ -396,7 +396,7 @@ module.exports = function (bind, lib) {
 
 /***/ }),
 
-/***/ 41:
+/***/ 40:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -513,7 +513,7 @@ module.exports = CONSTANTS;
 
 /***/ }),
 
-/***/ 42:
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, Buffer) {var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, wrapper) {
@@ -10338,11 +10338,11 @@ module.exports = CONSTANTS;
   }run();
 });
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(43), __webpack_require__(44).Buffer))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(42), __webpack_require__(43).Buffer))
 
 /***/ }),
 
-/***/ 43:
+/***/ 42:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -10533,7 +10533,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 44:
+/***/ 43:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10547,9 +10547,9 @@ process.umask = function() { return 0; };
 
 
 
-var base64 = __webpack_require__(46)
-var ieee754 = __webpack_require__(47)
-var isArray = __webpack_require__(48)
+var base64 = __webpack_require__(45)
+var ieee754 = __webpack_require__(46)
+var isArray = __webpack_require__(47)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -12327,11 +12327,11 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(44)))
 
 /***/ }),
 
-/***/ 45:
+/***/ 44:
 /***/ (function(module, exports) {
 
 var g;
@@ -12343,7 +12343,7 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
+	g = g || Function("return this")() || (1, eval)("this");
 } catch (e) {
 	// This works if the window reference is available
 	if (typeof window === "object") g = window;
@@ -12358,7 +12358,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 46:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12517,7 +12517,7 @@ function fromByteArray (uint8) {
 
 /***/ }),
 
-/***/ 47:
+/***/ 46:
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -12608,7 +12608,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 /***/ }),
 
-/***/ 48:
+/***/ 47:
 /***/ (function(module, exports) {
 
 var toString = {}.toString;

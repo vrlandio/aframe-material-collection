@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 49);
+/******/ 	return __webpack_require__(__webpack_require__.s = 48);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2562,253 +2562,12 @@ module.exports = AFRAME.registerComponent('ui-renderer', {
 
 /***/ }),
 /* 23 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,Yoga */
-/**
- * Yogo Layout Engine mapped to a Component for aframe-material-collection - https://yogalayout.com
- * @namespace aframe-material-collection
- * @component ui-yoga
- * @author Shane Harris
- */
-
-if (typeof Yoga === 'undefined') {
-    throw 'ui-yoga component requires the Yoga Layout Engine to be loaded - https://yogalayout.com';
-}
-// Map yoga enums to frendly names.
-// TODO: Need to expose the padding/border/margin side as seperate options to allow for combinations.
-module.exports = AFRAME.registerComponent('ui-yoga', {
-    schema: {
-        alignContent: {default: 'flex-start'},
-        alignItems: {default: 'auto'},
-        alignSelf: {default: 'auto'},
-        display: {default: 'default'},
-        flex: {type:'number',default: 1},
-        flexDirection: {default: 'row'},
-        flexWrap:{default: 'default'},
-        aspectRatio: {default: 'default'},
-        overflow:{default:'default'},
-        justifyContent:{default:'start'},
-        border: {type:'int',default: 0},
-        borderLeft: {type:'int',default: 0},
-        borderRight: {type:'int',default: 0},
-        borderTop: {type:'int',default: 0},
-        borderBottom: {type:'int',default: 0},
-        padding: {type:'int',default: 0},
-        paddingLeft: {type:'int',default: 0},
-        paddingRight: {type:'int',default: 0},
-        paddingTop: {type:'int',default: 0},
-        paddingBottom: {type:'int',default: 0},
-        margin: {type:'int',default: 0},
-        marginLeft: {type:'int',default: 0},
-        marginRight: {type:'int',default: 0},
-        marginTop: {type:'int',default: 0},
-        marginBottom: {type:'int',default: 0},
-        marginAuto: {type:'boolean',default: false},
-        marginAutoLeft: {type:'boolean',default: false},
-        marginAutoRight: {type:'boolean',default: false},
-        marginAutoTop: {type:'boolean',default: false},
-        marginAutoBottom: {type:'boolean',default: false},
-        marginPercent:{type:'number',default: 0},
-        marginPercentLeft: {type:'int',default: 0},
-        marginPercentRight: {type:'int',default: 0},
-        marginPercentTop: {type:'int',default: 0},
-        marginPercentBottom: {type:'int',default: 0},
-        flexBasis: {default: 'default'},
-        flexBasisPercent: {type:'number',default: 0},
-        flexGrow:{type:'number',default: 0},
-        flexShrink:{type:'number',default: 1},
-        maxHeight:{default: 'default'},
-        minHeight:{default: 'default'},
-        maxWidth:{default: 'default'},
-        minWidth:{default: 'default'},
-        maxHeightPercent:{default: 'default'},
-        minHeightPercent:{default: 'default'},
-        maxWidthPercent:{default: 'default'},
-        minWidthPercent:{default: 'default'},
-        position:{default: 'default'},
-        positionLeft: {type:'int',default: 0},
-        positionRight: {type:'int',default: 0},
-        positionTop: {type:'int',default: 0},
-        positionBottom: {type:'int',default: 0},
-        positionPercent:{default: 'default'},
-        positionPercentLeft: {type:'int',default: 0},
-        positionPercentRight: {type:'int',default: 0},
-        positionPercentTop: {type:'int',default: 0},
-        positionPercentBottom: {type:'int',default: 0},
-        width:{default: 'default'},
-        height:{default: 'default'},
-        widthAuto:{type:'boolean',default: false},
-        heightAuto:{type:'boolean',default: false},
-        widthPercent:{default: 'default'},
-        heightPercent:{default: 'default'},
-    },
-    init(){
-        this.el.getYogaProperties = this.getProperties.bind(this);
-        this.setProperties();
-    },
-    updateSchema(){
-        this.setProperties();
-    },
-    setProperties(){
-        this.properties = this.properties||[];
-        this.properties.length = 0;
-        // Store the current valid yoga properties;
-        for(let name in this.data){
-            if(this.data.hasOwnProperty(name)&&
-                this.data[name]!=='default'&&this.data[name]){
-                let value = this.mapPropertyToEnum(name);
-                if(value)this.properties.push({method:'set'+name.charAt(0).toUpperCase() + name.substr(1),value:this.mapPropertyToEnum(name)});
-            }
-        }
-    },
-    getProperties(){
-        // Get the current yoga properties array as an object
-        let propertiesObj = {};
-        for(let i = 0;i < this.properties.length;i++){
-            propertiesObj[this.properties[i].method] = this.properties[i];
-        }
-        return propertiesObj;
-    },
-    mapPropertyToEnum(name){
-        // Get the yoga enum for the friendly name.
-        switch(true){
-            case name.indexOf('align') > -1:
-                return this.enums.align[this.data[name]];
-            case name.indexOf('Edge') > -1:
-                return this.enums.edge[this.data[name]];
-            case name === 'flexDirection':
-            case name === 'flexWrap':
-            case name === 'positionType':
-            case name === 'overflow':
-            case name === 'display':
-            case name === 'justifyContent':
-                return this.enums[name][this.data[name]];
-            default:
-                return this.data[name];
-        }
-    },
-    enums:{
-        align:{
-            count:Yoga.ALIGN_COUNT,
-            auto:Yoga.ALIGN_AUTO,
-            "flex-start":Yoga.ALIGN_FLEX_START,
-            center:Yoga.ALIGN_CENTER,
-            "flex-end":Yoga.ALIGN_FLEX_END,
-            stretch:Yoga.ALIGN_STRETCH,
-            baseline:Yoga.ALIGN_BASELINE,
-            "space-between":Yoga.ALIGN_SPACE_BETWEEN,
-            "space-around":Yoga.ALIGN_SPACE_AROUND,
-        },
-        dimension:{
-            count:Yoga.DIMENSION_COUNT,
-            width:Yoga.DIMENSION_WIDTH,
-            height:Yoga.DIMENSION_HEIGHT,
-        },
-        direction:{
-            count:Yoga.DIRECTION_COUNT,
-            inherit:Yoga.DIRECTION_INHERIT,
-            ltr:Yoga.DIRECTION_LTR,
-            rtl:Yoga.DIRECTION_RTL,
-        },
-        display:{
-            count:Yoga.DISPLAY_COUNT,
-            flex:Yoga.DISPLAY_FLEX,
-            none:Yoga.DISPLAY_NONE,
-        },
-        edge:{
-            count:Yoga.EDGE_COUNT,
-            left:Yoga.EDGE_LEFT,
-            top:Yoga.EDGE_TOP,
-            right:Yoga.EDGE_RIGHT,
-            bottom:Yoga.EDGE_BOTTOM,
-            start:Yoga.EDGE_START,
-            end:Yoga.EDGE_END,
-            horizontal:Yoga.EDGE_HORIZONTAL,
-            vertical:Yoga.EDGE_VERTICAL,
-            all:Yoga.EDGE_ALL,
-        },
-        experimental:{
-            count:Yoga.EXPERIMENTAL_FEATURE_COUNT,
-            "flex-basis":Yoga.EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS,
-        },
-        flexDirection:{
-            count:Yoga.FLEX_DIRECTION_COUNT,
-            column:Yoga.FLEX_DIRECTION_COLUMN,
-            "column-reverse":Yoga.FLEX_DIRECTION_COLUMN_REVERSE,
-            row:Yoga.FLEX_DIRECTION_ROW,
-            reverse:Yoga.FLEX_DIRECTION_ROW_REVERSE,
-        },
-        justifyContent:{
-            count:Yoga.JUSTIFY_COUNT,
-            start:Yoga.JUSTIFY_FLEX_START,
-            center:Yoga.JUSTIFY_CENTER,
-            end:Yoga.JUSTIFY_FLEX_END,
-            between:Yoga.JUSTIFY_SPACE_BETWEEN,
-            around:Yoga.JUSTIFY_SPACE_AROUND,
-            evenly:Yoga.JUSTIFY_SPACE_EVENLY,
-        },
-        logLevel:{
-            count:Yoga.LOG_LEVEL_COUNT,
-            error:Yoga.LOG_LEVEL_ERROR,
-            warn:Yoga.LOG_LEVEL_WARN,
-            info:Yoga.LOG_LEVEL_INFO,
-            debug:Yoga.LOG_LEVEL_DEBUG,
-            verbose:Yoga.LOG_LEVEL_VERBOSE,
-            fatal:Yoga.LOG_LEVEL_FATAL,
-        },
-        measureMode:{
-            count:Yoga.MEASURE_MODE_COUNT,
-            undefined:Yoga.MEASURE_MODE_UNDEFINED,
-            exactly:Yoga.MEASURE_MODE_EXACTLY,
-            "at-most":Yoga.MEASURE_MODE_AT_MOST,
-        },
-        nodeType:{
-            count:Yoga.NODE_TYPE_COUNT,
-            default:Yoga.NODE_TYPE_DEFAULT,
-            text:Yoga.NODE_TYPE_TEXT,
-        },
-        overflow:{
-            count:Yoga.OVERFLOW_COUNT,
-            visible:Yoga.OVERFLOW_VISIBLE,
-            hidden:Yoga.OVERFLOW_HIDDEN,
-            scroll:Yoga.OVERFLOW_SCROLL,
-        },
-        positionType:{
-            count:Yoga.POSITION_TYPE_COUNT,
-            relative:Yoga.POSITION_TYPE_RELATIVE,
-            absolute:Yoga.POSITION_TYPE_ABSOLUTE,
-        },
-        printOptions:{
-            count:Yoga.PRINT_OPTIONS_COUNT,
-            layout:Yoga.PRINT_OPTIONS_LAYOUT,
-            style:Yoga.PRINT_OPTIONS_STYLE,
-            children:Yoga.PRINT_OPTIONS_CHILDREN,
-        },
-        unit:{
-            count:Yoga.UNIT_COUNT,
-            undefined:Yoga.UNIT_UNDEFINED,
-            point:Yoga.UNIT_POINT,
-            percent:Yoga.UNIT_PERCENT,
-            auto:Yoga.UNIT_AUTO,
-        },
-        flexWrap:{
-            count:Yoga.WRAP_COUNT,
-            "no-wrap":Yoga.WRAP_NO_WRAP,
-            wrap:Yoga.WRAP_WRAP,
-            "wrap-reverse":Yoga.WRAP_WRAP_REVERSE,
-        }
-    }
-});
-
-/***/ }),
-/* 24 */
 /***/ (function(module) {
 
 module.exports = {"name":"aframe-material-collection","version":"0.4.40","description":"Material UI based primitives and components for use in your aframe projects.","homepage":"https://github.com/shaneharris/aframe-material-collection","keywords":["AFRAME","UI","Material"],"scripts":{"start":"webpack-dev-server --mode development","build":"webpack --mode production"},"repository":{"type":"git","url":"git@github.com:shaneharris/aframe-material-collection.git"},"bugs":{"url":"https://github.com/shaneharris/aframe-material-collection/issues"},"devDependencies":{"uglifyjs-webpack-plugin":"^1.2.7","webpack":"^4.16.1","webpack-cli":"^3.1.0","webpack-dev-server":"^3.1.4"},"author":"Shane Harris","license":"MIT","dependencies":{}};
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -2834,7 +2593,7 @@ module.exports = AFRAME.registerPrimitive('a-ui-text-input', AFRAME.utils.extend
 }));
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -2861,7 +2620,7 @@ module.exports = AFRAME.registerPrimitive('a-ui-number-input', AFRAME.utils.exte
 }));
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -2888,7 +2647,7 @@ module.exports = AFRAME.registerPrimitive('a-ui-int-input', AFRAME.utils.extendD
 }));
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -2915,7 +2674,7 @@ module.exports = AFRAME.registerPrimitive('a-ui-password-input', AFRAME.utils.ex
 }));
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2951,7 +2710,7 @@ module.exports = AFRAME.registerComponent('ui-text', {
 });
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2976,7 +2735,7 @@ module.exports = AFRAME.registerComponent('ui-icon', {
 });
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -3015,7 +2774,7 @@ module.exports = AFRAME.registerComponent('ui-rounded', {
 });
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -3120,7 +2879,7 @@ module.exports = AFRAME.registerComponent('ui-ripple',{
 });
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -3161,7 +2920,7 @@ module.exports = AFRAME.registerComponent('ui-mouse-shim', {
 });
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -3192,7 +2951,7 @@ module.exports = AFRAME.registerComponent('ui-double-click', {
 });
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -3249,7 +3008,7 @@ module.exports = AFRAME.registerComponent('ui-border', {
 });
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -3661,7 +3420,7 @@ module.exports = AFRAME.registerComponent('ui-color-picker', {
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -3741,6 +3500,7 @@ module.exports = AFRAME.registerComponent('ui-modal', {
 });
 
 /***/ }),
+/* 37 */,
 /* 38 */,
 /* 39 */,
 /* 40 */,
@@ -3751,8 +3511,7 @@ module.exports = AFRAME.registerComponent('ui-modal', {
 /* 45 */,
 /* 46 */,
 /* 47 */,
-/* 48 */,
-/* 49 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3854,7 +3613,7 @@ class Utils{
  */
 
 
-let version = __webpack_require__(24).version;
+let version = __webpack_require__(23).version;
 console.log('aframe-material-collection version '+version);
 
 if (typeof AFRAME === 'undefined') {
@@ -3876,35 +3635,34 @@ window.UI = {
     a_ui_checkbox: __webpack_require__(7),
     a_ui_radio: __webpack_require__(8),
     a_ui_input_text: __webpack_require__(9),
-    a_ui_text_input: __webpack_require__(25),
-    a_ui_number_input: __webpack_require__(26),
-    a_ui_int_input: __webpack_require__(27),
-    a_ui_password_input: __webpack_require__(28),
+    a_ui_text_input: __webpack_require__(24),
+    a_ui_number_input: __webpack_require__(25),
+    a_ui_int_input: __webpack_require__(26),
+    a_ui_password_input: __webpack_require__(27),
     a_ui_scroll_pane: __webpack_require__(10),
     a_ui_renderer: __webpack_require__(11),
 
     // Components
-    text: __webpack_require__(29),
+    text: __webpack_require__(28),
     input_text: __webpack_require__(12),
     btn: __webpack_require__(13),
-    icon: __webpack_require__(30),
-    rounded: __webpack_require__(31),
-    ripple: __webpack_require__(32),
+    icon: __webpack_require__(29),
+    rounded: __webpack_require__(30),
+    ripple: __webpack_require__(31),
     slider: __webpack_require__(14),
     number: __webpack_require__(15),
     switch: __webpack_require__(16),
     toast: __webpack_require__(17),
     scroll_pane: __webpack_require__(18),
-    mouse_shim: __webpack_require__(33),
-    double_click: __webpack_require__(34),
+    mouse_shim: __webpack_require__(32),
+    double_click: __webpack_require__(33),
     checkbox: __webpack_require__(19),
     radio: __webpack_require__(20),
-    border: __webpack_require__(35),
+    border: __webpack_require__(34),
     curvedPlane: __webpack_require__(21),
-    colorPicker: __webpack_require__(36),
-    modal: __webpack_require__(37),
-    renderer: __webpack_require__(22),
-    yoga_properties: __webpack_require__(23),
+    colorPicker: __webpack_require__(35),
+    modal: __webpack_require__(36),
+    renderer: __webpack_require__(22)
 };
 //module.exports = UI;
 
