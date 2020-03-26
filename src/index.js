@@ -33,7 +33,7 @@ window.UI = {
 	a_ui_number_input: require( "./primitives/number-input" ),
 	a_ui_int_input: require( "./primitives/int-input" ),
 	a_ui_password_input: require( "./primitives/password-input" ),
-	a_ui_scroll_pane: require( "./primitives/scroll-pane" ),
+//	a_ui_scroll_pane: require( "./primitives/scroll-pane" ),
 	a_ui_renderer: require( "./primitives/renderer" ),
 
 	// Components
@@ -47,7 +47,7 @@ window.UI = {
 	number: require( "./components/number" ),
 	switch: require( "./components/switch" ),
 	toast: require( "./components/toast" ),
-	scroll_pane: require( "./components/scroll-pane" ),
+	//scroll_pane: require( "./components/scroll-pane" ),
 	mouse_shim: require( "./components/mouse-shim" ),
 	double_click: require( "./components/double-click" ),
 	checkbox: require( "./components/checkbox" ),

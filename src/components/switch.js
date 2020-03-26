@@ -167,5 +167,9 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 		}
 
+	},
+	remove() {
+		this.el.removeObject3D('ui-switch');
+		//this.el.object3D.geometry.dispose();
 	}
 } );

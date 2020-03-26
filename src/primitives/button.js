@@ -25,12 +25,10 @@ module.exports = AFRAME.registerPrimitive(
 			},
 			//   "ui-rounded": { borderRadius: 0.0025 },
 			//   "ui-ripple": { size: { x: 0.5, y: 0.175 }, clampToSquare: true, zIndex: 0.001 },
-			text: {
-				font: "roboto",
+			"text": {
 				align: "center",
-				zOffset: 0.02,
-				wrapCount: 10,
-				alphaTest: 0.4
+				zOffset: 0.025,
+				wrapCount: 10
 			}
 		},
 		mappings: {

@@ -13,7 +13,7 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 	},
 	init() {
 
-		let mesh = this.el.getObject3D( "mesh" );
+	/*	let mesh = this.el.getObject3D( "mesh" );
 		let roundedRectShape = new THREE.Shape();
 		// Draw the Rounded rectangle shape centered in the object - from three.js shapes example.
 		( function roundedRect( ctx, x, y, width, height, radius ) {
@@ -38,9 +38,13 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 		);
 		// Update the geometry.
 		mesh.geometry = new THREE.ShapeBufferGeometry( roundedRectShape, this.data.curveSegments );
-
+*/
 		// Emit rounded-loaded event once the geometry has been updated.
 		this.el.emit( "rounded-loaded", null, false );
 
+	}
+	,
+	remove() {
+		this.el.removeObject3D('ui-rounded');
 	}
 } );

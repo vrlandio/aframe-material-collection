@@ -153,12 +153,13 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 		let scroll_pos = isPerc ? min + ( max - min ) * positionX : THREE.Math.clamp( positionX, min, max );
 		this.scroll_perc = isPerc ? positionX : ( scroll_pos - min ) / ( max - min );
 		this.el.emit( "slide", this.scroll_perc );
-		this.progress.scale.set( this.scroll_perc || 0.0001, 1, 1 );
-		this.progress.position.set(
+		//this.progress.scale.set( this.scroll_perc || 0.0001, 1, 1 );
+		/*this.progress.position.set(
 			- ( this.data.width - this.data.handleRadius ) / 2 + this.scroll_perc * ( ( this.data.width - this.data.handleRadius ) / 2 ),
 			0,
 			0.0001
 		);
+		*/
 		this.handleEl.setAttribute( "position", /*((this.data.width/2)+this.data.scrollPadding)+' '+*/ scroll_pos + " 0 " + ( this.data.scrollZOffset + 0.0005 ) );
 
 	},
