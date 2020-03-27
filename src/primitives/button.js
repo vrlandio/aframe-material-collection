@@ -41,6 +41,7 @@ module.exports = AFRAME.registerPrimitive(
 			"text-value": "text.value",
 			"wrap-count": "text.wrapCount",
 			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
 			disabled: "ui-btn.disabled",
 			"hover-height": "ui-btn.hoverHeight",
 			"active-height": "ui-btn.activeHeight"

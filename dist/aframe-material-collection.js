@@ -131,6 +131,7 @@ module.exports = AFRAME.registerPrimitive(
 			"text-value": "text.value",
 			"wrap-count": "text.wrapCount",
 			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
 			disabled: "ui-btn.disabled",
 			"hover-height": "ui-btn.hoverHeight",
 			"active-height": "ui-btn.activeHeight"
@@ -247,7 +248,8 @@ module.exports = AFRAME.registerPrimitive(
 		},
 		mappings: {
 			value: "ui-switch.value",
-			disabled: "ui-switch.disabled"
+			disabled: "ui-switch.disabled",
+			courser2d: "ui-switch.courser2d",
 		}
 	} )
 );
@@ -1203,7 +1205,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		hoverHeight: { type: "number", default: 0.01 },
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
-		animated: { type: "boolean", default: true }
+		animated: { type: "boolean", default: true },
+		courser2d : { type: "boolean", default: false }
 	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
@@ -1246,10 +1249,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseEnter( e ) {
 
 		if ( this.data.animated ) {
-		
-			//this.el.sceneEl.classList.remove("initial-cursor");	
-            //this.el.sceneEl.classList.add("pointer-cursor");	
-			
+		    if (this.data.courser2d) {
+ 			this.el.sceneEl.classList.remove("initial-cursor");	
+            this.el.sceneEl.classList.add("pointer-cursor");	
+			}
 			const _this = this;
 			// Lift the button up for hover animation
 			this.tween(
@@ -1282,8 +1285,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Reset button state from hover
 		if ( this.data.animated ) {
 			this.resetAnimation( this.defaultZ + this.data.hoverHeight );
-			//this.el.sceneEl.classList.remove("pointer-cursor");	
-			//this.el.sceneEl.classList.add("initial-cursor");	
+			if (this.data.courser2d) {
+			  this.el.sceneEl.classList.remove("pointer-cursor");	
+			 // this.el.sceneEl.classList.add("initial-cursor");	
+			}
 		}
 		//UI.utils.preventDefault(e)
 
@@ -1660,7 +1665,8 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		handleZIndex: { type: "number", default: 0.01 },
 		intersectableClass: { default: "intersectable" },
 		width: { type: "number", default: 0.3 },
-		height: { type: "number", default: 0.1 }
+		height: { type: "number", default: 0.1 },
+		courser2d : { type: "boolean", default: false }
 	},
 	updateSchema() {
 
@@ -1730,7 +1736,48 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 			}
 
 		};
+        if ( ! this.data.disabled ) {
 
+		this.railEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
+        this.railEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+
+		}
+
+	},
+
+    update() {
+
+		if ( this.data.disabled ) {
+
+			this.railEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );		
+			this.railEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+
+		} else {
+
+			this.railEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.railEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+
+		}
+
+	},
+	mouseEnter(e) {
+
+		if (this.data.courser2d) {
+	
+		   this.el.sceneEl.classList.remove("initial-cursor");	
+		   this.el.sceneEl.classList.add("pointer-cursor");	
+	
+		}
+
+	},
+	mouseLeave() {
+		
+		if (this.data.courser2d) {
+
+		   this.el.sceneEl.classList.remove("pointer-cursor");	
+		  
+		}
+	   
 	},
 	setDisabled() {
 

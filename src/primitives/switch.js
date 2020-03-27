@@ -13,7 +13,8 @@ module.exports = AFRAME.registerPrimitive(
 		},
 		mappings: {
 			value: "ui-switch.value",
-			disabled: "ui-switch.disabled"
+			disabled: "ui-switch.disabled",
+			courser2d: "ui-switch.courser2d",
 		}
 	} )
 );

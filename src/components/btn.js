@@ -12,7 +12,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		hoverHeight: { type: "number", default: 0.01 },
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
-		animated: { type: "boolean", default: true }
+		animated: { type: "boolean", default: true },
+		courser2d : { type: "boolean", default: false }
 	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
@@ -55,10 +56,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseEnter( e ) {
 
 		if ( this.data.animated ) {
-		
-			//this.el.sceneEl.classList.remove("initial-cursor");	
-            //this.el.sceneEl.classList.add("pointer-cursor");	
-			
+		    if (this.data.courser2d) {
+ 			this.el.sceneEl.classList.remove("initial-cursor");	
+            this.el.sceneEl.classList.add("pointer-cursor");	
+			}
 			const _this = this;
 			// Lift the button up for hover animation
 			this.tween(
@@ -91,8 +92,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Reset button state from hover
 		if ( this.data.animated ) {
 			this.resetAnimation( this.defaultZ + this.data.hoverHeight );
-			//this.el.sceneEl.classList.remove("pointer-cursor");	
-			//this.el.sceneEl.classList.add("initial-cursor");	
+			if (this.data.courser2d) {
+			  this.el.sceneEl.classList.remove("pointer-cursor");	
+			 // this.el.sceneEl.classList.add("initial-cursor");	
+			}
 		}
 		//UI.utils.preventDefault(e)
 
