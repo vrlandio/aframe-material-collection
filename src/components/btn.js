@@ -57,7 +57,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		if ( this.data.animated ) {
 		    if (this.data.courser2d) {
- 			this.el.sceneEl.classList.remove("initial-cursor");	
+ 			this.el.sceneEl.classList.remove("grab-cursor");	
             this.el.sceneEl.classList.add("pointer-cursor");	
 			}
 			const _this = this;
@@ -94,7 +94,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.resetAnimation( this.defaultZ + this.data.hoverHeight );
 			if (this.data.courser2d) {
 			  this.el.sceneEl.classList.remove("pointer-cursor");	
-			 // this.el.sceneEl.classList.add("initial-cursor");	
+			  this.el.sceneEl.classList.add("grab-cursor");	
 			}
 		}
 		//UI.utils.preventDefault(e)

@@ -33,7 +33,8 @@ module.exports = AFRAME.registerPrimitive(
 			// "ripple-size": "ui-ripple.size",
 			// "ripple-z-index": "ui-ripple.zIndex",
 			disabled: "ui-btn.disabled",
-			animated: "ui-btn.animated"
+			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
 		}
 	} )
 );
