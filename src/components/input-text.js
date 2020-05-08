@@ -677,5 +677,9 @@ module.exports = AFRAME.registerComponent( "ui-input-text", {
 
 	},
 	updateSchema() {}
+	, remove() {
+
+		
+	}
 } );
 //

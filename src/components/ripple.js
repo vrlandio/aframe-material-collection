@@ -27,6 +27,7 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 			new THREE.MeshBasicMaterial( { color: this.data.color, transparent: false, opacity: 0.4, alphaTest: 0.1 } )
 		);
 		this.ripple.scale.set( 0.00001, 0.00001, 0.00001 );
+		
 		this.el.object3D.add( this.ripple );
 		this.el.addEventListener( "mousedown", this.click.bind( this ) );
 		this.ripple.position.set( 0, 0, this.data.zIndex );
@@ -124,5 +125,20 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
 
+	},
+	remove() {
+		
+		this.el.removeObject3D('ui-ripple');
+		
+	//	this.ripple.dispose();
+	
+		this.el.remove(this.rippleGeometry)
+		this.el.remove(this.ripple )
+		this.el.remove(self )
+		this.el.remove(this.object3D )
+		//this.rippleGeometry.dispose();
+		console.error(this.el)
+		//this.el.dispose();
+		//this.el.object3D.geometry.dispose();
 	}
 } );

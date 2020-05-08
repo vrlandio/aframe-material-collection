@@ -161,8 +161,8 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 	},
 	remove() {
 		this.el.removeObject3D("ui-radio")
-		this.el.remove(this.backing)
-		this.el.remove(this.filled_circle )
+		this.el.object3D.remove(this.backing)
+		this.el.object3D.remove(this.filled_circle )
 	
 	}
 } );

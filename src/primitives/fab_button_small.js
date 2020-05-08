@@ -30,7 +30,7 @@ module.exports = AFRAME.registerPrimitive(
 			src: "ui-icon.src",
 			//  "ripple-color": "ui-ripple.color",
 			//  "ripple-size": "ui-ripple.size",
-			"ripple-z-index": "ui-ripple.zIndex",
+			//"ripple-z-index": "ui-ripple.zIndex",
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",

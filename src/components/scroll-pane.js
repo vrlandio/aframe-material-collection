@@ -12,7 +12,7 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		width: { type: "number", default: 2.9 },
 		scrollPadding: { type: "number", default: 0.05 },
 		scrollZOffset: { type: "number", default: 0 },
-		scrollHandleColor: { default: "#009688" },
+		scrollHandleColor: { default: "#000000" },
 		intersectableClass: { default: "intersectable" },
 		cameraEl: { type: "selector" },
 		lookControlsComponent: { default: "look-controls" }
@@ -30,9 +30,10 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		}
 		// Setup scroll bar.
 		this.scrollBarWidth = this.rail.getAttribute( "width" );
-		this.container.setAttribute( "position", - this.data.width / 2 + " " + this.data.height / 2 + " 0" );
-		this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 0 " + ( this.data.scrollZOffset + 0.0002 ) );
-		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 0 " + ( this.data.scrollZOffset + 0.0005 ) );
+		const position = this.container.getAttribute("position");
+	//	this.container.setAttribute( "position", - this.data.width / 2 + " " + position.y +  " " + this.data.height / 2 + " " + position.z );
+		this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0002 ) );
+		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0005 ) );
 		this.el.sceneEl.renderer.localClippingEnabled = true;
 
 		// Setup content clips.
@@ -61,13 +62,14 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		const mousemove = e => this.mouseMove( e );
 		// Start scroll
 		this.handle.addEventListener( "mousedown", e => {
-
+			console.error("mousedown handle")
 			// Pause look controls to allow scrolling
 			playPauseCamera( "pause" );
 			this.isDragging = true;
 			// Store the start point offset
-			this.handlePos = this.handle.object3D.worldToLocal( e.detail.intersection.point ).y;
+			this.handlePos = this.handle.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y;
 			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
+		
 			// Start changes
 			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
 			// Prevent default behaviour of event
@@ -95,14 +97,15 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		this.backgroundPanel.addEventListener( "mouseleave", endScroll );
 		// // Handle clicks on rail to scroll
 		this.rail.addEventListener( "mousedown", e => {
-
+console.error("mousedown rail")
 			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
 			// Pause look controls
 			this.isDragging = true;
 			// Reset handle pos to center of handle
 			this.handlePos = 0;
 			// Scroll immediately and register mouse move events.
-			this.scroll( this.rail.object3D.worldToLocal( e.detail.intersection.point ).y );
+			this.scroll( this.rail.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
+			//this.scoll(10)
 			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
 			// Prevent default behaviour of event
 			UI.utils.preventDefault( e );
@@ -186,18 +189,18 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		this.updateContentClips();
 		this.currentUuid = THREE.Math.generateUUID();
 		UI.utils.isChanging( this.el.sceneEl, this.currentUuid );
-		this.setChildClips();
-		if ( typeof Yoga !== "undefined" ) this.initialiseYoga( this.container, this.data.width * 100 );
-		this.container.yoga_node.calculateLayout( this.data.width * 100, "auto", Yoga.DIRECTION_LTR );
-		this.content_height = Number.NEGATIVE_INFINITY;
-		if ( typeof Yoga !== "undefined" ) this.updateYoga( this.container );
+		//this.setChildClips();
+		//if ( typeof Yoga !== "undefined" ) this.initialiseYoga( this.container, this.data.width * 100 );
+		//this.container.yoga_node.calculateLayout( this.data.width * 100, "auto", Yoga.DIRECTION_LTR );
+		this.content_height = 10; //Number.NEGATIVE_INFINITY;
+		//if ( typeof Yoga !== "undefined" ) this.updateYoga( this.container );
 
 		this.handleSize = THREE.Math.clamp( this.data.height / this.content_height, 0.1, 1 );
 		this.handle.setAttribute( "width", this.handleSize === 1 ? 0.00000001 : 0.1 );
 		this.rail.setAttribute( "width", this.handleSize === 1 ? 0.00000001 : 0.1 );
 		this.rail.setAttribute( "color", this.handleSize === 1 ? "#efefef" : "#fff" );
 		this.handle.setAttribute( "height", this.data.height * this.handleSize );
-		if ( ! should_not_scroll ) {
+		/*if ( ! should_not_scroll ) {
 
 			this.container.object3D.position.y = this.data.height / 2;
 			this.handle.setAttribute(
@@ -210,11 +213,11 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
           ( this.data.scrollZOffset + 0.0005 )
 			);
 
-		}
+		}*/
 
 	},
 	mouseMove( e ) {
-
+console.error("mouseMove")
 		if ( this.isDragging ) {
 
 			let pos = this.rail.object3D.worldToLocal( e.detail.intersection.point );
@@ -223,13 +226,18 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		}
 
 	},
-	scroll( positionY ) {
 
+
+
+
+	scroll( positionY ) {
+console.error(positionY)
 		let min = - this.data.height / 2 + ( this.data.height * this.handleSize ) / 2;
 		let max = this.data.height / 2 - ( this.data.height * this.handleSize ) / 2;
 		// Set scroll position with start point offset.
 		let scroll_pos = THREE.Math.clamp( positionY, min, max );
 		let scroll_perc = this.handleSize === 1 ? 0 : 1 - ( scroll_pos - min ) / ( max - min );
+		console.error(( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2)
 		this.container.object3D.position.y = ( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2;
 		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " " + scroll_pos + " " + ( this.data.scrollZOffset + 0.0005 ) );
 
@@ -256,257 +264,36 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
 		this.backgroundPanel = document.createElement( "a-plane" );
-		this.backgroundPanel.setAttribute( "class", "background " + this.data.intersectableClass );
+		this.backgroundPanel.setAttribute( "class", "ui background " + this.data.intersectableClass );
 		this.backgroundPanel.setAttribute( "width", this.data.width + 1 );
 		this.backgroundPanel.setAttribute( "height", this.data.height + 1 );
-		this.backgroundPanel.setAttribute( "position", "0 0 -0.013" );
-		this.backgroundPanel.setAttribute( "opacity", 0.0001 ); //
-		this.backgroundPanel.setAttribute( "transparent", true );
+		this.backgroundPanel.setAttribute( "position", "0 1 -0.013" );
+		this.backgroundPanel.setAttribute( "opacity", 0.000001 ); //
+		//this.backgroundPanel.setAttribute( "transparent", true );
 
 		this.el.appendChild( this.backgroundPanel );
 
 		// Add scroll bar rail.
 		this.rail = document.createElement( "a-plane" );
-		this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );
+		//this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );
 		this.rail.setAttribute( "width", 0.1 );
 		this.rail.setAttribute( "height", this.data.height );
 		this.rail.setAttribute( "shader", "flat" );
+		this.rail.setAttribute( "class", "ui" );
 		this.el.appendChild( this.rail );
 
 		// Add scroll bar handle.
 		this.handle = document.createElement( "a-plane" );
-		this.handle.setAttribute( "class", "handle " + this.data.intersectableClass );
+		//this.handle.setAttribute( "class", "ui handle " + this.data.intersectableClass );
 		this.handle.setAttribute( "width", 0.1 );
 		this.handle.setAttribute( "height", this.data.height );
 		this.handle.setAttribute( "color", this.data.scrollHandleColor );
 		this.handle.setAttribute( "shader", "flat" );
+		this.handle.setAttribute( "class", "ui" );
 		this.el.appendChild( this.handle );
 
 	},
-	setupYogaNode( node, width, height, properties ) {
 
-		// Parse yoga properties and call the yoga methods to setup this layout node.
-		if ( ! properties.hasOwnProperty( "setWidth" ) ) node.setWidth( width );
-		if ( ! properties.hasOwnProperty( "setHeight" ) ) node.setHeight( height );
-		for ( let method in properties ) {
-
-			if ( properties.hasOwnProperty( method ) && method.indexOf( "Edge" ) === - 1 ) {
-
-				if ( [ "setMarginLeft", "setMarginPercentLeft", "setPaddingLeft", "setBorderLeft", "setPositionLeft", "setPositionPercentLeft" ].indexOf( method ) > - 1 ) {
-
-					node[ method ]( Yoga.EDGE_LEFT, properties[ method ] );
-
-				} else if (
-					[ "setMarginRight", "setMarginPercentRight", "setPaddingRight", "setBorderRight", "setPositionRight", "setPositionPercentRight" ].indexOf( method ) > - 1
-				) {
-
-					node[ method ]( Yoga.EDGE_RIGHT, properties[ method ] );
-
-				} else if ( [ "setMarginTop", "setMarginPercentTop", "setPaddingTop", "setBorderTop", "setPositionTop", "setPositionPercentTop" ].indexOf( method ) > - 1 ) {
-
-					node[ method ]( Yoga.EDGE_TOP, properties[ method ] );
-
-				} else if (
-					[ "setMarginBottom", "setMarginPercentBottom", "setPaddingBottom", "setBorderBottom", "setPositionBottom", "setPositionPercentBottom" ].indexOf(
-						method
-					) > - 1
-				) {
-
-					node[ method ]( Yoga.EDGE_BOTTOM, properties[ method ] );
-
-				} else if ( [ "setMargin", "setMarginPercent", "setPadding", "setBorder", "setPosition", "setPositionPercent" ].indexOf( method ) > - 1 ) {
-
-					node[ method ]( Yoga.EDGE_ALL, properties[ method ] );
-
-				} else if ( method.indexOf( "setMarginAuto" ) > - 1 ) {
-
-					let side = method.replace( "setMarginAuto", "" );
-					switch ( side ) {
-
-						case "":
-							node[ method ]( Yoga.EDGE_ALL );
-							break;
-						case "Left":
-							node[ method ]( Yoga.EDGE_LEFT );
-							break;
-						case "Right":
-							node[ method ]( Yoga.EDGE_RIGHT );
-							break;
-						case "Top":
-							node[ method ]( Yoga.EDGE_TOP );
-							break;
-						case "Bottom":
-							node[ method ]( Yoga.EDGE_BOTTOM );
-							break;
-
-					}
-
-				} else if ( [ "setWidthAuto", "setHeightAuto" ].indexOf( method ) > - 1 ) {
-
-					node[ method ]();
-
-				} else {
-
-					node[ method ]( properties[ method ] );
-
-				}
-
-			}
-
-		}
-
-	},
-	initialiseYoga( parent ) {
-
-		// Traverse the tree and setup Yoga layout nodes with default settings
-		// or settings specified in the elements yoga properties component.
-		parent = parent || this.container;
-		// Automatically detect the entity width / height by the element tagname.
-		let width = 0,
-			height = 0;
-		let geo = parent.getAttribute( "geometry" );
-		switch ( parent.tagName ) {
-
-			case "A-TEXT":
-			case "A-TRIANGLE":
-			case "A-UI-TEXT-INPUT":
-			case "A-UI-NUMBER-INPUT":
-			case "A-UI-INT-INPUT":
-			case "A-UI-INPUT-TEXT":
-			case "A-UI-PASSWORD-INPUT":
-				width = parent.getAttribute( "width" );
-				height = parent.getAttribute( "height" );
-				break;
-			case "A-UI-BUTTON":
-			case "A-PLANE":
-			case "A-ENTITY":
-				width = Number( geo ? geo.width : parent.getAttribute( "width" ) );
-				height = Number( geo ? geo.height : parent.getAttribute( "height" ) );
-				break;
-			case "A-UI-FAB-BUTTON":
-			case "A-UI-FAB-BUTTON-SMALL":
-			case "A-CIRCLE":
-				width = Number( geo ? geo.radius * 2 : ( parent.getAttribute( "radius" ) || 0 ) * 2 );
-				height = width;
-				break;
-			case "A-RING":
-				width = Number( geo ? geo[ "radius-outer" ] * 2 : ( parent.getAttribute( "radius-outer" ) || 0 ) * 2 );
-				height = width;
-				break;
-			case "A-UI-SLIDER":
-			case "A-UI-NUMBER":
-			case "A-UI-SWITCH":
-			case "A-UI-CHECKBOX":
-			case "A-UI-RADIO":
-				let componentName = parent.tagName.substr( 2 ).toLowerCase();
-				width = parent.getAttribute( componentName ).width;
-				height = parent.getAttribute( componentName ).height;
-				break;
-
-		}
-
-		if ( ! parent.yoga_node ) {
-
-			parent.yoga_node = Yoga.Node.create();
-			let ui_yoga = parent.getAttribute( "ui-yoga" );
-			if ( ui_yoga && parent.getYogaProperties ) {
-
-				this.setupYogaNode( parent.yoga_node, width ? width * 100 : "auto", height ? height * 100 : "auto", parent.getYogaProperties() );
-
-			} else {
-
-				parent.yoga_node.setWidth( width ? width * 100 : "auto" );
-				parent.yoga_node.setHeight( height ? height * 100 : "auto" );
-				parent.yoga_node.setJustifyContent( Yoga.JUSTIFY_FLEX_START );
-				parent.yoga_node.setFlexDirection( Yoga.FLEX_DIRECTION_ROW );
-				parent.yoga_node.setAlignContent( Yoga.ALIGN_AUTO );
-				parent.yoga_node.setFlexWrap( Yoga.WRAP_WRAP );
-
-			}
-			// Add the yoga node to the Yoga tree.
-			if ( parent.parentElement && parent.parentElement.yoga_node ) {
-
-				// Default margin if none set;
-				if ( ! ui_yoga ) {
-
-					parent.yoga_node.setMargin( Yoga.EDGE_RIGHT, 5 );
-					parent.yoga_node.setMargin( Yoga.EDGE_BOTTOM, 5 );
-
-				}
-				parent.parentElement.yoga_node.insertChild( parent.yoga_node, parent.parentElement.yoga_node.getChildCount() );
-
-			} else {
-
-				// Default root padding if none set;
-				if ( ! ui_yoga ) {
-
-					parent.yoga_node.setPadding( Yoga.EDGE_ALL, 2 );
-
-				}
-
-			}
-
-		}
-		for ( let i = 0; i < parent.childNodes.length; i ++ ) {
-
-			let child = parent.childNodes[ i ];
-			if ( child.nodeType === 1 ) {
-
-				if ( child.classList.contains( "no-yoga-layout" ) ) {
-
-					return;
-
-				}
-				this.initialiseYoga( child );
-
-			}
-
-		}
-
-	},
-	updateYoga( parent ) {
-
-		// Update the entity positions from the Yoga layout.
-		for ( let i = 0; i < parent.childNodes.length; i ++ ) {
-
-			let child = parent.childNodes[ i ];
-			if ( child.nodeType === 1 ) {
-
-				if ( child.classList.contains( "no-yoga-layout" ) ) {
-
-					return;
-
-				}
-				let position;
-				if ( child.tagName === "A-ENTITY" ) {
-
-					position = {
-						x: child.yoga_node.getComputedLeft() / 100,
-						y: child.yoga_node.getComputedTop() / 100
-					};
-
-				} else {
-
-					position = {
-						x: child.yoga_node.getComputedLeft() / 100 + child.yoga_node.getComputedWidth() / 200,
-						y: child.yoga_node.getComputedTop() / 100 + child.yoga_node.getComputedHeight() / 200
-					};
-
-				}
-				let highest = child.yoga_node.getComputedTop() / 100 + child.yoga_node.getComputedHeight() / 100;
-				if ( highest > this.content_height ) {
-
-					this.content_height = highest;
-
-				}
-				child.setAttribute( "position", position.x + " " + - position.y + " 0.0001" ); //+child.getAttribute('position').z);
-
-			}
-			this.updateYoga( child );
-
-		}
-
-	},
 
 	setChildClips( parent ) {
 

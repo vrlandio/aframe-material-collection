@@ -20,11 +20,7 @@ module.exports = AFRAME.registerPrimitive(
 				shader: "flat",
 				color: "#afafaf"
 			},
-			"ui-ripple": {
-				size: { x: 0.1, y: 0.1 },
-				zIndex: - 0.001,
-				color: "#afafaf"
-			}
+			
 		},
 		mappings: {
 			color: "ui-radio.selectedColor",

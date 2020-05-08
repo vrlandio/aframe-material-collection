@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 36);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -222,7 +222,7 @@ module.exports = AFRAME.registerPrimitive(
 			src: "ui-icon.src",
 			//  "ripple-color": "ui-ripple.color",
 			//  "ripple-size": "ui-ripple.size",
-			"ripple-z-index": "ui-ripple.zIndex",
+			//"ripple-z-index": "ui-ripple.zIndex",
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
@@ -289,79 +289,6 @@ module.exports = AFRAME.registerPrimitive(
 
 /* global AFRAME */
 /**
- * Number Widget Primitive for aframe-material-collection.
- * @namespace aframe-material-collection
- * @primitive a-ui-number
- * @author Shane Harris
- */
-module.exports = AFRAME.registerPrimitive(
-	"a-ui-number",
-	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
-		defaultComponents: {
-			"ui-number": {}
-		},
-		mappings: {}
-	} )
-);
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * Toast Message Primitive for aframe-material-collection.
- * @namespace aframe-material-collection
- * @primitive a-ui-toast
- * @author Shane Harris
- */
-
-module.exports = AFRAME.registerPrimitive(
-	"a-ui-toast",
-	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
-		defaultComponents: {
-			geometry: {
-				primitive: "plane",
-				width: 0.5,
-				height: 0.2
-			},
-			material: {
-				color: "#010e0f",
-				shader: "flat",
-				transparent: true,
-				opacity: 0.8
-			},
-			"ui-rounded": { borderRadius: 0.01, curveSegments: 3 },
-			text: {
-				font: "roboto",
-				value: "Toast Message!",
-				align: "center",
-				zOffset: 0.002,
-				wrapCount: 20
-			}
-		},
-		mappings: {
-			height: "geometry.height",
-			width: "geometry.width",
-			color: "material.color",
-			transparent: "material.transparent",
-			"font-color": "text.color",
-			"text-value": "text.value",
-			"wrap-count": "text.wrapCount",
-			"border-radius": "ui-rounded.borderRadius",
-			"curve-segments": "ui-rounded.curveSegments"
-		}
-	} )
-);
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
  * Checkbox Primitive for aframe-material-collection.
  * @namespace aframe-material-collection
  * @primitive a-ui-checkbox
@@ -389,7 +316,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -414,11 +341,7 @@ module.exports = AFRAME.registerPrimitive(
 				shader: "flat",
 				color: "#afafaf"
 			},
-			"ui-ripple": {
-				size: { x: 0.1, y: 0.1 },
-				zIndex: - 0.001,
-				color: "#afafaf"
-			}
+			
 		},
 		mappings: {
 			color: "ui-radio.selectedColor",
@@ -431,7 +354,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -470,727 +393,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * Renderer Primitive for aframe-material-collection.
- * @namespace aframe-material-collection
- * @primitive a-ui-renderer
- * @author Shane Harris
- */
-module.exports = AFRAME.registerPrimitive(
-	"a-ui-renderer",
-	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
-		defaultComponents: {
-			"ui-renderer": {}
-		},
-		mappings: {
-			"ui-panel": "ui-renderer.uiPanel",
-			"look-controls-el": "ui-renderer.lookControlsEl",
-			"look-controls-component": "ui-renderer.lookControlsComponent",
-			"panel-position": "ui-renderer.panelPosition",
-			"panel-size": "ui-renderer.panelSize",
-			"render-resolution": "ui-renderer.renderResolution",
-			"debug-raycaster": "ui-renderer.debugRaycaster",
-			fps: "ui-renderer.fps",
-			"intersectable-class": "ui-renderer.intersectableClass",
-			"render-debug": "ui-renderer.debug"
-		}
-	} )
-);
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,TWEEN,THREE */
-/**
- * Text input component Component for aframe-material-collection. Includes support for number/int only input.
- * @namespace aframe-material-collection
- * @component ui-text-input
- * @author Shane Harris
- */
-
-module.exports = AFRAME.registerComponent( "ui-input-text", {
-	depends: [ "text" ],
-	schema: {
-		value: { default: "" },
-		disabled: { type: "boolean", default: false },
-		type: { default: "text" },
-		cameraEl: { type: "selector" },
-		rigEl: { type: "selector" },
-		width: { type: "number", default: 1 },
-		height: { type: "number", default: 0.2 },
-		backgroundColor: { default: "white" },
-		lookControlsComponent: { default: "look-controls" },
-		wasdControlsComponent: { default: "wasd-controls" },
-		placeHolder: { default: "Text..." }
-	},
-	init() {
-
-		this.setupElements();
-		this.setupScrollClips();
-		this.text.addEventListener( "textfontset", () => {
-
-			this.text.selectionStart = 0;
-			this.text.selectionLength = 0;
-			this.startSelection = 0;
-			this.scrollOffset = 0;
-			this.alphabet = {};
-			this.scrollIndex = 0;
-			let chars = this.data.value.split( "" );
-			this.chars = [];
-			this.charsAllowed = [ "-", "_", "+", "=", "{", "}", "[", "]", ":", ";", "'", "@", "~", "#", "<", ">", ",", ".", "?", "/", "|", "\\", "`", "¬" ];
-			for ( let i = 0; i < chars.length; i ++ ) {
-
-				this.chars.push( { char: chars[ i ] } );
-
-			}
-			this.blurHandler = () => this.blur();
-			this.isMoving = false;
-			let mousemove = this.onMousemove.bind( this );
-			this.keydown = e => this.handleKeyboardEvent( e );
-			this.backing.addEventListener( "mousedown", () => {
-
-				this.focus();
-				this.playPauseCamera( "pause" );
-				this.backing.addEventListener( "ui-mousemove", mousemove );
-
-			} );
-			this.el.sceneEl.addEventListener( "mouseup", () => {
-
-				this.backing.removeEventListener( "ui-mousemove", mousemove );
-				this.isMoving = false;
-				this.setSelection( this.text.selectionStart, this.text.selectionLength );
-
-			} );
-			this.el.setAttribute( "visible", false );
-			setTimeout( () => {
-
-				this.setValue();
-				this.el.setAttribute( "visible", true );
-				this.setScrollClips();
-
-			}, 150 );
-
-		} );
-		this.el.getValue = this.getValue.bind( this );
-		this.el.value = this.value.bind( this );
-		this.el.focus = this.focus.bind( this );
-
-	},
-	setupScrollClips() {
-
-		this.content_clips = [ new THREE.Plane( new THREE.Vector3( - 1, 0, 0 ), 0 ), new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), 0 ) ];
-		//this.setScrollClips();
-
-	},
-	selectAll() {
-
-		this.text.selectionStart = 0;
-		this.text.selectionLength = this.chars.length;
-		this.setValue();
-
-	},
-	increaseWrap() {
-
-		let child = this.text.object3D.children[ this.text.object3D.children.length - 1 ];
-		if ( ! child ) return;
-		if ( child.geometry.layout._linesTotal > 1 ) {
-
-			this.text.setAttribute( "width", this.text.getAttribute( "width" ) * 1.2 );
-			this.text.setAttribute( "wrap-pixels", this.text.getAttribute( "width" ) * 500 );
-			this.text.setAttribute( "x-offset", ( this.text.getAttribute( "width" ) - this.data.width ) / 2 );
-			this.increaseWrap();
-
-		}
-
-	},
-	setScrollClips() {
-
-		//this.text.object3D.updateMatrixWorld();
-		//this.backing.object3D.parent.updateMatrixWorld();
-		this.content_clips[ 0 ].set( new THREE.Vector3( - 1, 0, 0 ), this.data.width / 2 + 0.005 );
-		this.content_clips[ 1 ].set( new THREE.Vector3( 1, 0, 0 ), this.data.width / 2 + 0.005 );
-		this.content_clips[ 0 ].applyMatrix4( this.backing.object3D.matrixWorld );
-		this.content_clips[ 1 ].applyMatrix4( this.backing.object3D.matrixWorld );
-		setTimeout( () => {
-
-			let child = this.text.object3D.children[ this.text.object3D.children.length - 1 ];
-			if ( child ) child.material.clippingPlanes = this.text._content_clips ? this.text._content_clips.concat( this.content_clips ) : this.content_clips;
-
-		}, 0 );
-		let selectionHeight = this.selectionHighlight.getObject3D( "mesh" );
-		if ( selectionHeight ) {
-
-			selectionHeight.material.clippingPlanes = this.text._content_clips ? this.text._content_clips.concat( this.content_clips ) : this.content_clips;
-
-		}
-		let carret = this.carret.getObject3D( "mesh" );
-		if ( carret ) {
-
-			carret.material.clipShadows = true;
-			carret.material.needsUpdate = true;
-			carret.material.clippingPlanes = this.text._content_clips ? this.text._content_clips.concat( this.content_clips ) : this.content_clips;
-
-		}
-
-	},
-	numberOnly( e, is_float ) {
-
-		// Stolen from stack overflow.
-		if (
-			[ 46, 8, 9, 27, 13, 110 ].indexOf( e.keyCode ) !== - 1 ||
-      // Allow: Ctrl/cmd+A
-      ( e.keyCode === 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
-      // Allow: Ctrl/cmd+C
-      ( e.keyCode === 67 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
-      // Allow: Ctrl/cmd+X
-      ( e.keyCode === 88 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
-      // Allow: home, end, left, right
-      ( e.keyCode >= 35 && e.keyCode <= 39 )
-		) {
-
-			// let it happen, don't do anything
-			return true;
-
-		}
-		// Regex to allow float/int input - float inpit allows "0." for as you type numbers - need to remove on blur.
-		// TODO: Need to remove trailing dot on blur to make a valid number.
-		let output = this.getValue();
-		if ( e ) {
-
-			return ( is_float ? /^\d*((\.)|(\.\d+))?$/g : /^\d*?$/g ).test( output + e.key );
-
-		}
-
-	},
-	floatOnly( e ) {
-
-		return this.numberOnly( e, true );
-
-	},
-	focus() {
-
-		if ( this.isFocused ) return;
-		this.isFocused = true;
-		this.setupCarret();
-		this.setValue();
-		this.setScrollClips();
-		setTimeout( () => this.el.sceneEl.addEventListener( "mousedown", this.blurHandler ), 50 );
-		window.addEventListener( "keydown", this.keydown );
-		this.underline.setAttribute( "height", 0.008 );
-		this.underline.setAttribute( "color", "#009688" );
-
-	},
-	blur() {
-
-		this.isFocused = false;
-		clearInterval( this.carretInterval );
-		this.carret.getObject3D( "mesh" ).material.opacity = 0;
-		this.el.sceneEl.removeEventListener( "mousedown", this.blurHandler );
-		this.playPauseCamera( "play" );
-		window.removeEventListener( "keydown", this.keydown );
-		UI.utils.stoppedChanging( this.text.object3D.uuid );
-		this.underline.setAttribute( "height", 0.005 );
-		this.underline.setAttribute( "color", "#bfbfbf" );
-		if ( this.chars.length && this.chars[ this.chars.length - 1 ].char === "." && this.data.type === "number" ) {
-
-			this.chars.pop();
-			this.setValue();
-
-		}
-
-	},
-	handleKeyboardEvent( e ) {
-
-		if ( e.keyCode === 88 && e.ctrlKey ) {
-			//CTRL + X
-			// let selection = window.getSelection();
-			// selection.removeAllRanges();
-			//
-			// let textNode = document.createTextNode('lol')
-			// document.body.appendChild(textNode)
-			//
-			// let range = document.createRange();
-			// range.setStart(textNode, 1);
-			// range.setEnd(textNode, 3);
-			//
-			// selection.addRange(range)
-			//
-			// document.execCommand('copy')
-			//
-			// document.body.removeChild(textNode)
-			// TODO: Clipboard API?? - https://stackoverflow.com/questions/6413036/get-current-clipboard-content
-			// const modifyCopy = e => {
-			//     console.log('copy executed!')
-			//     e.clipboardData.setData('text/plain', 'Please don\'t copy our work!');
-			//     e.preventDefault();
-			// };
-			//
-			// document.addEventListener('copy', modifyCopy);
-		}
-		if ( e.keyCode === 67 && e.ctrlKey ) {
-			//CTRL + C
-		} else if ( e.keyCode === 86 && e.ctrlKey ) {
-			//CTRL + V
-		} else if ( e.keyCode === 65 && e.ctrlKey ) {
-
-			//CTRL + A
-			this.text.selectionStart = 0;
-			this.text.selectionLength = this.chars.length;
-
-		} else if ( e.code.indexOf( "Key" ) > - 1 || e.code.indexOf( "Digit" ) > - 1 || this.charsAllowed.indexOf( e.key ) > - 1 ) {
-
-			let check = true;
-			switch ( this.data.type ) {
-
-				case "number":
-					check = this.floatOnly( e );
-					break;
-				case "int":
-					console.log( this.numberOnly( e ) );
-					check = this.numberOnly( e );
-					break;
-
-			}
-			if ( check ) {
-
-				this.chars.splice( this.text.selectionStart, this.text.selectionLength, { char: e.key } );
-				this.text.selectionStart ++;
-				this.text.selectionLength = 0;
-
-			}
-
-		} else if ( e.keyCode === 46 ) {
-
-			// Delete
-			this.chars.splice( this.text.selectionStart, this.text.selectionLength || 1 );
-			this.text.selectionStart = this.text.selectionStart > this.chars.length ? this.chars.length : this.text.selectionStart;
-			this.text.selectionLength = 0;
-
-		} else if ( e.keyCode === 39 ) {
-
-			if ( ! e.shiftKey ) {
-
-				if ( this.text.selectionLength ) {
-
-					this.text.selectionStart += this.text.selectionLength;
-
-				} else {
-
-					this.text.selectionStart ++;
-
-				}
-				this.text.selectionLength = 0;
-				if ( this.text.selectionStart > this.chars.length ) this.text.selectionStart = this.chars.length;
-				delete this.shiftStartPos;
-
-			} else {
-
-				if ( ! this.shiftStartPos ) {
-
-					this.shiftStartPos = this.text.selectionStart;
-
-				}
-				if ( this.text.selectionStart < this.shiftStartPos ) {
-
-					this.text.selectionStart ++;
-					this.text.selectionLength = Math.abs( this.shiftStartPos - this.text.selectionStart );
-
-				} else {
-
-					this.text.selectionLength ++;
-
-				}
-
-			}
-
-		} else if ( e.keyCode === 37 ) {
-
-			if ( ! e.shiftKey ) {
-
-				if ( ! this.text.selectionLength ) {
-
-					this.text.selectionStart --;
-
-				}
-				this.text.selectionLength = 0;
-				if ( this.text.selectionStart < 0 ) this.text.selectionStart = 0;
-				delete this.shiftStartPos;
-
-			} else {
-
-				if ( ! this.shiftStartPos ) {
-
-					this.shiftStartPos = this.text.selectionStart;
-
-				}
-				if ( this.text.selectionStart + this.text.selectionLength > this.shiftStartPos ) {
-
-					this.text.selectionLength --;
-
-				} else {
-
-					this.text.selectionStart --;
-					this.text.selectionLength = Math.abs( this.shiftStartPos - this.text.selectionStart );
-
-				}
-
-			}
-
-		} else {
-
-			if ( this.text.selectionLength ) {
-
-				if ( e.keyCode === 8 ) {
-
-					// Backspace
-					this.chars.splice( this.text.selectionStart, this.text.selectionLength );
-					this.text.selectionLength = 0;
-
-				}
-
-			} else {
-
-				if ( e.keyCode === 8 ) {
-
-					// Backspace
-					if ( this.text.selectionStart ) {
-
-						this.chars.splice( this.text.selectionStart - 1, this.text.selectionLength || 1 );
-						this.text.selectionStart = this.text.selectionStart - 1;
-
-					}
-
-				} else if ( e.keyCode === 32 ) {
-
-					// Space
-					this.chars.splice( this.text.selectionStart, 0, { char: " " } );
-					this.text.selectionStart ++;
-
-				}
-
-			}
-
-		}
-		this.el.emit( "ui-keypress", e );
-		this.setValue();
-		this.carret.getObject3D( "mesh" ).material.opacity = 1;
-		e.preventDefault();
-		e.stopPropagation();
-
-	},
-	setValue() {
-
-		this.setScrolledValue();
-		this.setCharacters();
-		this.setSelection( this.text.selectionStart, this.text.selectionLength );
-		this.increaseWrap();
-
-	},
-	setScrolledValue() {
-
-		let output = this.getValue();
-		this.text.setAttribute( "value", output );
-		if ( ! this.chars.length ) {
-
-			this.text.setAttribute( "color", "#bfbfbf" );
-			this.text.setAttribute( "value", this.data.placeHolder );
-
-		} else {
-
-			this.text.setAttribute( "value", output );
-			this.text.setAttribute( "color", "#2f2f2f" );
-
-		}
-
-	},
-	onMousemove( e ) {
-
-		let currentSelection = this.getSelectionPosition( e );
-		if ( ! this.isMoving ) {
-
-			this.isMoving = true;
-			this.startSelection = currentSelection;
-
-		}
-		let selection = this.getNearestGlyph( this.startSelection, currentSelection );
-		this.selectionHighlight.setAttribute( "scale", selection.end - selection.start + " 1 1" );
-		this.selectionHighlight.setAttribute( "position", selection.start + ( selection.end - selection.start ) / 2 + " 0 0.001" );
-		this.carret.setAttribute( "position", selection.end + " 0 0.001" );
-
-	},
-	setupElements() {
-
-		this.container = document.createElement( "a-entity" );
-		this.container.setAttribute( "position", this.data.width / 2 + " 0 0" );
-
-		this.text = document.createElement( "a-text" );
-		this.text.setAttribute( "color", "#2f2f2f" );
-		this.text.setAttribute( "anchor", "center" );
-		this.text.setAttribute( "align", "left" );
-		this.text.setAttribute( "width", this.data.width );
-		this.text.setAttribute( "wrap-pixels", this.data.width * 500 );
-		this.text.className = "no-yoga-layout";
-		this.text.setAttribute( "height", this.data.height );
-		this.text.setAttribute( "value", this.data.value );
-		this.container.appendChild( this.text );
-
-		this.selectionHighlight = document.createElement( "a-plane" );
-		this.selectionHighlight.setAttribute( "width", 1 );
-		this.selectionHighlight.setAttribute( "scale", "0 1 1" );
-		this.selectionHighlight.setAttribute( "height", 0.16 );
-		this.selectionHighlight.setAttribute( "transparent", true );
-		this.selectionHighlight.className = "no-yoga-layout";
-		this.selectionHighlight.setAttribute( "color", "#009688" );
-		this.selectionHighlight.setAttribute( "shader", "flat" );
-		this.selectionHighlight.setAttribute( "opacity", 0.3 );
-		this.selectionHighlight.setAttribute( "position", "0 0 0.001" );
-		this.text.appendChild( this.selectionHighlight );
-
-		this.carret = document.createElement( "a-plane" );
-		this.carret.setAttribute( "width", 0.01 );
-		this.carret.setAttribute( "height", 0.12 );
-		this.carret.setAttribute( "transparent", true );
-		this.carret.setAttribute( "opacity", 0 );
-		this.carret.setAttribute( "shader", "flat" );
-		this.carret.className = "no-yoga-layout";
-		this.carret.setAttribute( "color", "#009688" );
-		this.carret.setAttribute( "position", - ( this.data.width / 2 ) + " 0 0.001" );
-		this.text.appendChild( this.carret );
-
-		this.backing = document.createElement( "a-plane" );
-		this.backing.className = "intersectable no-yoga-layout";
-		this.backing.setAttribute( "width", this.data.width + 0.1 );
-		this.backing.setAttribute( "height", this.data.height );
-		this.backing.setAttribute( "color", this.data.backgroundColor );
-		this.backing.setAttribute( "shader", "flat" );
-		this.container.appendChild( this.backing );
-
-		this.underline = document.createElement( "a-plane" );
-		this.underline.setAttribute( "width", this.data.width );
-		this.underline.setAttribute( "height", 0.005 );
-		this.underline.className = "no-yoga-layout";
-		this.underline.setAttribute( "shader", "flat" );
-		this.underline.setAttribute( "color", "#bfbfbf" );
-		this.underline.setAttribute( "position", "0 -0.072 0.001" );
-		this.container.appendChild( this.underline );
-
-		this.el.appendChild( this.container );
-
-	},
-	setupCarret() {
-
-		let material = this.carret.getObject3D( "mesh" ).material;
-		this.carretInterval = setInterval( () => {
-
-			material.opacity = material.opacity ? 0 : 1;
-			UI.utils.isChanging( this.el.sceneEl, this.text.object3D.uuid );
-
-		}, 350 );
-
-	},
-	value( text ) {
-
-		if ( text || text === "" ) {
-
-			this.chars = text.split( "" ).map( char => ( { char: char } ) );
-			this.setValue();
-			// set value
-
-		} else {
-
-			return this.chars.map( c => c.char ).join( "" );
-
-		}
-
-	},
-	getValue() {
-
-		let output = "";
-		for ( let i = 0; i < this.chars.length; i ++ ) {
-
-			output += this.data.type === "password" ? "*" : this.chars[ i ].char;
-
-		}
-		return output;
-
-	},
-	getSelectionPosition( e ) {
-
-		this.el.object3D.updateMatrixWorld();
-		return this.text.object3D.worldToLocal( e.detail.intersection.point.clone() ).x;
-
-	},
-	playPauseCamera( method ) {
-
-		let el = this.data.cameraEl;
-		if ( el && el.components[ this.data.lookControlsComponent ] ) {
-
-			el.components[ this.data.lookControlsComponent ][ method ]();
-
-		}
-
-		if ( this.data.rigEl ) {
-
-			el = this.data.rigEl;
-
-		}
-
-		if ( el && el.components[ this.data.wasdControlsComponent ] ) {
-
-			el.components[ this.data.wasdControlsComponent ][ method ]();
-
-		}
-
-	},
-	setCharacters() {
-
-		this.positions = [];
-		let child = this.text.object3D.children[ this.text.object3D.children.length - 1 ];
-		if ( ! this.chars.length || ! child ) return;
-		let glyphs = child.geometry.layout.glyphs;
-		let scale = child.scale.x;
-		let lastPosition = 0;
-		for ( let i = 0; i < glyphs.length; i ++ ) {
-
-			let glyph = glyphs[ i ];
-			let currentWidth = this.chars[ i ].char === " " ? 20 : glyph.data.width;
-			let current = ( glyph.position[ 0 ] + currentWidth + glyph.position[ 1 ] ) * scale + 0.08;
-			if ( i === 0 ) {
-
-				lastPosition = ( glyph.position[ 0 ] + glyph.position[ 1 ] ) * scale + 0.08;
-
-			}
-			if ( ! this.chars[ i ].id ) {
-
-				this.chars[ i ].id = glyph.data.id;
-				this.chars[ i ].width = current - lastPosition;
-
-			}
-			this.chars[ i ].left = lastPosition;
-			lastPosition = current;
-
-		}
-
-	},
-	getNearestGlyph( startPosition, endPosition ) {
-
-		let width = Number( this.text.getAttribute( "width" ) );
-		let parentWidth = this.data.width;
-		if ( endPosition < startPosition ) {
-
-			let tempPosition = endPosition;
-			endPosition = startPosition;
-			startPosition = tempPosition;
-
-		}
-		if ( startPosition < - parentWidth / 2 ) {
-
-			startPosition = - parentWidth / 2;
-
-		}
-		if ( endPosition > width - parentWidth / 2 ) {
-
-			endPosition = width - parentWidth / 2;
-
-		}
-		let startDiff = Number.POSITIVE_INFINITY;
-		let endDiff = Number.POSITIVE_INFINITY;
-		let output = { start: 0, end: 0 };
-		if ( this.chars.length ) {
-
-			for ( let i = 0; i <= this.chars.length; i ++ ) {
-
-				let position = this.chars[ i === this.chars.length ? i - 1 : i ];
-				let currentPosition = ( i === this.chars.length ? position.left + position.width : position.left ) - parentWidth / 2;
-				if ( Math.abs( startPosition - currentPosition ) < startDiff ) {
-
-					startDiff = Math.abs( startPosition - currentPosition );
-					output.start = currentPosition;
-					this.text.selectionStart = i;
-
-				}
-				if ( Math.abs( endPosition - currentPosition ) < endDiff ) {
-
-					endDiff = Math.abs( endPosition - currentPosition );
-					output.end = currentPosition;
-					this.text.selectionLength = i - this.text.selectionStart;
-
-				}
-
-			}
-
-		}
-		return output;
-
-	},
-	setSelection( start, length ) {
-
-		this.text.selectionStart = start;
-		this.text.selectionLength = length;
-		let right = 0,
-			left = 0;
-		for ( let i = 0; i < this.chars.length; i ++ ) {
-
-			let position = this.chars[ i ];
-			if ( i >= start && i < start + length + 1 ) {
-
-				let current = position.left;
-				if ( i === start ) {
-
-					left = current;
-
-				}
-				right = current;
-
-			}
-
-		}
-		let end = this.chars.length ? this.chars[ this.chars.length - 1 ].left + this.chars[ this.chars.length - 1 ].width : 0;
-		if ( start + length === this.chars.length ) {
-
-			right = end;
-
-		}
-		if ( start === this.chars.length ) {
-
-			left = right = end;
-
-		}
-		let parentWidth = this.data.width;
-		this.selectionHighlight.setAttribute( "scale", right - left + " 1 1" );
-		this.selectionHighlight.setAttribute( "position", left + ( right - left ) / 2 - parentWidth / 2 + " 0 0.001" );
-		let carretPosition = right - parentWidth / 2;
-		this.carret.setAttribute( "position", carretPosition + " 0 0.001" );
-
-		if ( carretPosition > parentWidth / 2 - this.scrollOffset ) {
-
-			this.scrollOffset = - ( carretPosition - parentWidth / 2 );
-			this.text.setAttribute( "position", this.scrollOffset + " 0 0" );
-
-		}
-
-		if ( carretPosition + parentWidth / 2 < - this.scrollOffset ) {
-
-			this.scrollOffset += - this.scrollOffset - ( carretPosition + parentWidth / 2 );
-			if ( this.scrollOffset > 0 ) this.scrollOffset = 0;
-			this.text.setAttribute( "position", this.scrollOffset + " 0 0" );
-
-		}
-
-	},
-	updateSchema() {}
-} );
-//
-
-
-/***/ }),
-/* 12 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -1363,7 +566,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 
 /***/ }),
-/* 13 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -1562,7 +765,7 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -1644,7 +847,7 @@ module.exports = AFRAME.registerComponent( "ui-number", {
 
 
 /***/ }),
-/* 15 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -1861,86 +1064,15 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 	},
 	remove() {
 		this.el.removeObject3D('ui-switch');
+	//	this.el.remove(this.handleEl)
+       // this.el.remove(this.railEl)  
 		//this.el.object3D.geometry.dispose();
 	}
 } );
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,TWEEN,THREE */
-/**
- * Toast Component for aframe-material-collection.
- * @namespace aframe-material-collection
- * @component ui-toast
- * @author Shane Harris
- */
-
-module.exports = AFRAME.registerComponent( "ui-toast", {
-	schema: {
-		toastEl: { type: "selector" },
-		message: { default: "Hello from toast!" }
-	},
-	init() {
-
-		this.originalPosition = this.data.toastEl.getAttribute( "position" ).clone();
-		this.el.addEventListener( "mousedown", () => {
-
-			if ( this.closeTween ) this.closeTween.stop();
-			UI.utils.isChanging( this.el.sceneEl, this.data.toastEl.object3D.uuid );
-			this.data.toastEl.setAttribute( "visible", true );
-			this.data.toastEl.setAttribute( "text-value", UI.utils.shorten( this.data.message, 85 ) );
-			let _this = this;
-			new TWEEN.Tween( { x: this.originalPosition.x, y: this.originalPosition.y - 0.1, z: this.originalPosition.z } )
-				.to( this.originalPosition, 350 )
-				.onUpdate( function () {
-
-					_this.data.toastEl.setAttribute( "position", this );
-
-				} )
-				.onComplete( () => {
-
-					// Stop changes
-					this.closeTween = new TWEEN.Tween( { x: 0.8 } )
-						.delay( 2000 )
-						.to( { x: 0.0001 }, 350 )
-						.onUpdate( function () {
-
-							_this.data.toastEl.setAttribute( "opacity", this.x );
-
-						} )
-						.onComplete( () => {
-
-							this.data.toastEl.setAttribute( "visible", false );
-							UI.utils.stoppedChanging( this.data.toastEl.object3D.uuid );
-
-						} )
-						.easing( TWEEN.Easing.Exponential.Out )
-						.start();
-
-				} )
-				.easing( TWEEN.Easing.Exponential.Out )
-				.start();
-			new TWEEN.Tween( { x: 0.0001 } )
-				.to( { x: 0.8 }, 350 )
-				.onUpdate( function () {
-
-					_this.data.toastEl.setAttribute( "opacity", this.x );
-
-				} )
-				.easing( TWEEN.Easing.Exponential.Out )
-				.start();
-
-		} );
-
-	}
-} );
-
-
-/***/ }),
-/* 17 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -2163,7 +1295,7 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 
 
 /***/ }),
-/* 18 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -2329,391 +1461,21 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 	},
 	remove() {
 		this.el.removeObject3D("ui-radio")
-		this.el.remove(this.backing)
-		this.el.remove(this.filled_circle )
+		this.el.object3D.remove(this.backing)
+		this.el.object3D.remove(this.filled_circle )
 	
 	}
 } );
 
 
 /***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * A curved-plane component to curve a plane primitive.
- * @namespace aframe-material-collection
- * @component ui-curved-plane
- * @author Shane Harris
- */
-
-module.exports = AFRAME.registerComponent( "ui-curved-plane", {
-	schema: {
-		depth: { type: "number", default: 0.03 }
-	},
-	init() {
-
-		let mesh = this.el.getObject3D( "mesh" );
-		let width = this.el.getAttribute( "width" );
-		let height = this.el.getAttribute( "height" );
-		let browser_pane = new THREE.PlaneGeometry( width, height, 5, 1 );
-		let curve = new THREE.CubicBezierCurve3(
-			browser_pane.vertices[ 0 ],
-			new THREE.Vector3( 0.375 * width, 0, - this.data.depth * width ),
-			new THREE.Vector3( 0.625 * width, 0, - this.data.depth * width ),
-			browser_pane.vertices[ browser_pane.vertices.length / 2 - 1 ]
-		);
-		let planePoints = curve.getPoints( Math.abs( browser_pane.vertices.length / 2 ) - 1 );
-		for ( let edgeI = 1; edgeI < 3; edgeI ++ ) {
-
-			for ( let pointI = 0; pointI < planePoints.length; pointI ++ ) {
-
-				browser_pane.vertices[ edgeI === 2 ? planePoints.length + pointI : pointI ].z = planePoints[ pointI ].z;
-
-			}
-
-		}
-		mesh.geometry = browser_pane;
-
-	}
-} );
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * A component to render the UI to a flat plane, removing the objects from the scene and rendering them separately to a
- * render target.
- * @namespace aframe-material-collection
- * @component ui-renderer
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-renderer", {
-	schema: {
-		uiPanel: { type: "selector" },
-		lookControlsEl: { type: "selector" },
-		lookControlsComponent: { default: "look-controls" },
-		panelPosition: { type: "vec3", default: { x: 0, y: 1.6, z: - 1 } },
-		panelSize: { type: "vec2", default: { x: 6, y: 3 } },
-		renderResolution: { type: "vec2", default: { x: 2048, y: 1024 } },
-		debugRaycaster: { type: "boolean", default: false },
-		fps: { type: "number", default: 60 },
-		intersectableClass: { default: "intersectable" },
-		debug: { type: "boolean", default: false },
-		initDelay: { type: "int", default: 0 }
-	},
-	init() {
-
-		this.setupBackDrop();
-		if ( ! this.data.uiPanel ) {
-
-			this.meshEl = this.setupUIPanel();
-
-		} else {
-
-			this.meshEl = this.data.uiPanel;
-
-		}
-		// Remove this object from the scene to be rendered separately.
-		this.el.object3D.parent.remove( this.el.object3D );
-		// Setup fixed camera nd render target.
-		this.camera = new THREE.PerspectiveCamera( 100, 2, 0.1, 1000 );
-		// Setup render target
-		this.renderTarget = new THREE.WebGLRenderTarget( this.data.renderResolution.x, this.data.renderResolution.y, { antialias: true } );
-		// Set the texture to the ui panel mesh.
-		this.meshEl.getObject3D( "mesh" ).material.map = this.renderTarget.texture;
-		// emit ready event for anythng wanting to use this texture.
-		this.meshEl.emit( "texture-ready", this.renderTarget.texture );
-		// Listen for change events to enable rendering.
-		this.stoppedRendering = false;
-		this.isRendering = true;
-		// Listen for change events to enable/disable rendering
-		this.el.sceneEl.addEventListener( "ui-changing", () => {
-
-			//console.log(JSON.stringify(new Date()),'ui-changing');
-			this.stoppedRendering = false;
-			this.isRendering = true;
-
-		} );
-		this.el.sceneEl.addEventListener( "ui-changing-stopped", () => {
-
-			//console.log(JSON.stringify(new Date()),'ui-changing-stopped');
-			this.isRendering = false;
-
-		} );
-		// Setup raycaster for relaying mouse/keyboard events
-		this.raycaster = new THREE.Raycaster();
-		this.helper = new THREE.Mesh( new THREE.SphereGeometry( 0.01 ), new THREE.MeshBasicMaterial( { color: "#ff0000" } ) );
-		// Add cursor helper to object
-		if ( this.data.debugRaycaster ) this.el.object3D.add( this.helper );
-		// Set last render time
-		this.lastRenderTime = 0;
-		this.isFrozen = false;
-
-		// Expose methods to the element to pause/play the renderer.
-		this.el.pauseRender = this.pauseRender.bind( this );
-		this.el.playRender = this.playRender.bind( this );
-		this.isReady = false;
-		setTimeout( () => {
-
-			this.isReady = true;
-
-		}, this.data.initDelay );
-
-	},
-	pauseRender( time ) {
-
-		return this.playRender( time, true );
-
-	},
-	playRender( time, isPaused ) {
-
-		let _this = this;
-		return new Promise( resolve => {
-
-			if ( _this.isFrozen === isPaused || _this.isAnimatingBackground ) return resolve();
-			_this.isAnimatingBackground = true;
-			if ( ! _this.isFrozen ) this.backdrop.setAttribute( "scale", "1 1 1" );
-			let fromScale = _this.isFrozen ? 0.9 : 0.000001;
-			let toScale = _this.isFrozen ? 0.000001 : 0.9;
-			let duration = _this.isFrozen ? time || 350 : time || 500;
-			if ( _this.isFrozen ) {
-
-				_this.isFrozen = isPaused;
-				_this.play();
-
-			}
-			UI.utils.isChanging( _this.el.sceneEl, _this.backdrop.uuid );
-			new TWEEN.Tween( { x: fromScale } )
-				.to( { x: toScale }, duration )
-				.onUpdate( function () {
-
-					_this.backdrop.setAttribute( "opacity", this.x );
-
-				} )
-				.onComplete( () => {
-
-					_this.isFrozen = isPaused;
-					_this.isAnimatingBackground = false;
-					if ( _this.isFrozen ) {
-
-						_this.pause();
-
-					} else {
-
-						this.backdrop.setAttribute( "scale", "0.000001 0.000001 0.000001" );
-
-					}
-					// Stop changes
-					UI.utils.stoppedChanging( this.backdrop.uuid );
-					resolve();
-
-				} )
-				.easing( TWEEN.Easing.Exponential.Out )
-				.start();
-
-		} );
-
-	},
-	setupBackDrop() {
-
-		this.backdrop = document.createElement( "a-plane" );
-		this.backdrop.setAttribute( "transparent", true );
-		this.backdrop.setAttribute( "opacity", 0.000001 );
-		this.backdrop.setAttribute( "color", "#000" );
-		this.backdrop.setAttribute( "shader", "flat" );
-		this.backdrop.setAttribute( "position", { x: 0, y: 0, z: - 0.2 } );
-		this.backdrop.setAttribute( "width", 1 );
-		this.backdrop.setAttribute( "height", 1 );
-		this.backdrop.setAttribute( "scale", "0.000001 0.000001 0.000001" );
-		this.el.appendChild( this.backdrop );
-
-	},
-	play() {
-
-		this.lastMouseMoveTime = 0;
-		// Register event listeners
-		// Mousedown and mouseup do not have the correct intersection point. Use last mouse move event if available instead.
-		// TODO: raise issue with aframe / submit PR;
-		this.click = e => this.mouseEvent( "click", this.lastMoveEvent || e );
-		this.mousedown = e => this.mouseEvent( "mousedown", this.lastMoveEvent || e );
-		this.mouseup = e => this.mouseEvent( "mouseup", this.lastMoveEvent || e );
-		this.mousewheel = e => this.mouseEvent( "ui-mousewheel", e.detail.evt );
-		this.mousemove = e => {
-
-			// Save mousemove event for mousedown/mouseup events.
-			this.lastMoveEvent = e;
-			this.mouseEvent( "ui-mousemove", e );
-
-		};
-		this.meshEl.addEventListener( "mousedown", this.mousedown );
-		this.meshEl.addEventListener( "mouseup", this.mouseup );
-		this.meshEl.addEventListener( "click", this.click );
-		this.meshEl.addEventListener( "ui-mousemove", this.mousemove );
-		this.meshEl.addEventListener( "ui-mousewheel", this.mousewheel );
-
-	},
-	pause() {
-
-		this.meshEl.removeEventListener( "mousedown", this.mousedown );
-		this.meshEl.removeEventListener( "mouseup", this.mouseup );
-		this.meshEl.removeEventListener( "click", this.click );
-		this.meshEl.removeEventListener( "ui-mousemove", this.mousemove );
-		this.meshEl.removeEventListener( "ui-mousewheel", this.mousewheel );
-
-	},
-	setupUIPanel() {
-
-		let uiPanel = document.createElement( "a-plane" );
-		uiPanel.setAttribute( "position", this.data.panelPosition );
-		uiPanel.setAttribute( "width", this.data.panelSize.x );
-		uiPanel.setAttribute( "height", this.data.panelSize.y );
-		this.el.sceneEl.appendChild( uiPanel );
-		return uiPanel;
-
-	},
-	mouseEvent( type, e ) {
-
-		let mouse = { x: 0, y: 0 };
-		if ( e.detail.intersection ) {
-
-			let localPoint = this.meshEl.object3D.worldToLocal( e.detail.intersection.point.clone() );
-
-			mouse = {
-				x: ( localPoint.x / this.meshEl.getAttribute( "width" ) ) * 2,
-				y: ( localPoint.y / this.meshEl.getAttribute( "height" ) ) * 2
-			};
-
-		}
-		if ( type === "ui-mousewheel" && e.detail.evt ) {
-
-			mouse.deltaY = e.detail.deltaY;
-			mouse.deltaX = e.detail.deltaX;
-
-		}
-		if ( type === "mousedown" && this.lookControlsEl && this.lookControlsEl.components[ "look-controls" ] ) {
-
-			this.lookControlsEl.components[ this.data.lookControlsComponent ].pause();
-
-		}
-		if ( type === "mouseup" && this.lookControlsEl && this.lookControlsEl.components[ "look-controls" ] ) {
-
-			this.lookControlsEl.components[ this.data.lookControlsComponent ].play();
-
-		}
-		this.raycastIntersections( e, mouse, type );
-
-	},
-	raycastIntersections( e, mouse, type ) {
-
-		if ( ! this.camera ) return;
-		//console.log(mouse);
-		this.raycaster.setFromCamera( mouse, this.camera );
-		// this.helper.setDirection(this.raycaster.ray.direction);
-		let intersections = this.raycaster.intersectObjects( this.el.object3D.children, true );
-		this.prevIntersectionEls = this.prevIntersectionEls || [];
-		let intersectionEls = [];
-		if ( intersections.length && this.data.debugRaycaster ) {
-
-			let intersectionPoint = intersections[ 0 ].point;
-			if ( intersections[ 0 ].object === this.helper && intersections.length > 1 ) {
-
-				intersectionPoint = intersections[ 1 ].point;
-
-			}
-			this.helper.position.copy( intersectionPoint );
-			this.helper.position.x -= 0.03;
-
-		}
-		let defaultPrevented = false;
-		for ( let i = 0; i < intersections.length; i ++ ) {
-
-			let intersection = intersections[ i ];
-			// Only emit events on objecst with an element attached
-			if ( intersection.object.el && intersection.object.el.classList.contains( this.data.intersectableClass ) ) {
-
-				let currentEvent = {
-					intersection: intersection,
-					evt: e,
-					preventDefault: () => {
-
-						defaultPrevented = true;
-
-					}
-				};
-				// If this is the first time weve seen this element then emit the mouseenter event.
-				if ( this.prevIntersectionEls.indexOf( intersection.object.el ) === - 1 && ! defaultPrevented ) {
-
-					intersection.object.el.emit( "mouseenter", currentEvent );
-
-				}
-				// Emit the mouse event received
-				if ( ! defaultPrevented || type === "ui-mousewheel" ) {
-
-					intersection.object.el.emit( type, currentEvent );
-
-				}
-				// Store the intersection on the element.
-				intersection.object.el.intersection = intersection;
-				// Add the current el to the list to check against previous intersection els.
-				intersectionEls.push( intersection.object.el );
-
-			}
-
-		}
-		// Find any intersections that have disappeared to emit the mouse leave event.
-		for ( let i = 0; i < this.prevIntersectionEls.length; i ++ ) {
-
-			let intersectionEl = this.prevIntersectionEls[ i ];
-			if ( intersectionEls.indexOf( intersectionEl ) === - 1 ) {
-
-				intersectionEl.emit( "mouseleave", { intersection: intersectionEl.intersection } );
-
-			}
-
-		}
-		// Store the current intersected elements for the next iteration.
-		this.prevIntersectionEls = intersectionEls;
-
-	},
-	tick( delta ) {
-
-		if ( this.isFrozen || this.stoppedRendering || ! this.isReady ) return;
-		if ( delta - this.lastRenderTime < 1000 / this.data.fps && this.isRendering ) return;
-		this.el.object3D.traverse( child => {
-
-			child.updateMatrixWorld();
-
-		} );
-
-		let renderer = this.el.sceneEl.renderer;
-		let vrModeEnabled = renderer.vr.enabled;
-		renderer.vr.enabled = false;
-		renderer.render( this.el.object3D, this.camera, this.renderTarget );
-		renderer.vr.enabled = vrModeEnabled;
-		this.lastRenderTime = delta;
-		if ( ! this.isRendering ) {
-
-			this.stoppedRendering = true;
-
-		}
-
-	}
-} );
-
-
-/***/ }),
-/* 21 */
+/* 14 */
 /***/ (function(module) {
 
 module.exports = {"name":"aframe-material-collection","version":"0.4.40","description":"Material UI based primitives and components for use in your aframe projects.","homepage":"https://github.com/shaneharris/aframe-material-collection","keywords":["AFRAME","UI","Material"],"scripts":{"start":"webpack-dev-server --mode development","build":"webpack --mode production"},"repository":{"type":"git","url":"git@github.com:shaneharris/aframe-material-collection.git"},"bugs":{"url":"https://github.com/shaneharris/aframe-material-collection/issues"},"devDependencies":{"uglifyjs-webpack-plugin":"^1.2.7","webpack":"^4.16.1","webpack-cli":"^3.1.0","webpack-dev-server":"^3.1.4"},"author":"Shane Harris","license":"MIT","dependencies":{}};
 
 /***/ }),
-/* 22 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -2743,138 +1505,37 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 23 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
 /**
- * Number Input Primitive for aframe-material-collection.
+ * Scroll Pane Primitive for aframe-material-collection.
  * @namespace aframe-material-collection
- * @primitive a-ui-number-input
+ * @primitive a-ui-scroll-pane
  * @author Shane Harris
  */
 module.exports = AFRAME.registerPrimitive(
-	"a-ui-number-input",
+	"a-ui-scroll-pane",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			"ui-text": {
-				type: "number",
-				placeHolder: "Number..."
-			},
-			"ui-double-click": {}
+			"ui-scroll-pane": {}
 		},
 		mappings: {
-			width: "ui-text.width",
-			height: "ui-text.height",
-			value: "ui-text.value",
-			"place-holder": "ui-text.placeHolder"
+			width: "ui-scroll-pane.width",
+			height: "ui-scroll-pane.height",
+			"scroll-z-offset": "ui-scroll-pane.scrollZOffset",
+			"handle-color": "ui-scroll-pane.scrollHandleColor",
+			"scroll-padding": "ui-scroll-pane.scrollPadding",
+			"look-controls-el": "ui-scroll-pane.cameraEl",
+			"look-controls-component": "ui-scroll-pane.lookControlsComponent"
 		}
 	} )
 );
 
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * Integer Input Primitive for aframe-material-collection.
- * @namespace aframe-material-collection
- * @primitive a-ui-int-input
- * @author Shane Harris
- */
-module.exports = AFRAME.registerPrimitive(
-	"a-ui-int-input",
-	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
-		defaultComponents: {
-			"ui-text": {
-				type: "int",
-				placeHolder: "Whole Number..."
-			},
-			"ui-double-click": {}
-		},
-		mappings: {
-			width: "ui-text.width",
-			height: "ui-text.height",
-			value: "ui-text.value",
-			"place-holder": "ui-text.placeHolder"
-		}
-	} )
-);
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- *  Password Primitive for aframe-material-collection.
- * @namespace aframe-material-collection
- * @primitive a-ui-password-input
- * @author Shane Harris
- */
-module.exports = AFRAME.registerPrimitive(
-	"a-ui-password-input",
-	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
-		defaultComponents: {
-			"ui-text": {
-				type: "password",
-				placeHolder: ""
-			},
-			"ui-double-click": {}
-		},
-		mappings: {
-			width: "ui-text.width",
-			height: "ui-text.height",
-			value: "ui-text.value",
-			"place-holder": "ui-text.placeHolder"
-		}
-	} )
-);
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,THREE */
-/**
- * Text input component Component for aframe-material-collection. Includes support for number/int only input.
- * @namespace aframe-material-collection
- * @component ui-text
- * @author Shane Harris
- */
-
-module.exports = AFRAME.registerComponent( "ui-text", {
-	schema: {
-		width: { type: "number", default: 0.5 },
-		height: { type: "number", default: 0.1 },
-		value: { default: "" },
-		type: { default: "text" },
-		lineFocusColor: { default: "#009688" },
-		lineBlurColor: { default: "#cfcfcf" },
-		disabledColor: { default: "#afafaf" },
-		disabled: { type: "boolean", default: false },
-		fontFamily: { default: "Roboto" },
-		fontColor: { default: "#4f4f4f" },
-		placeHolder: { default: "Text..." },
-		intersectableClass: { default: "intersectable" }
-	},
-	init() {
-
-		// if (typeof CanvasInput === 'undefined') {
-		//     throw 'aframe-material-collection requires CanvasInput to be loaded first - <script src="https://cdn.rawgit.com/shaneharris/CanvasInput/master/CanvasInput.js"></script>';
-		// }
-		console.warn( "ui-text is deprecated. please use ui-input-text instead. Thanks!" );
-
-	}
-} );
-
-
-/***/ }),
-/* 27 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2900,24 +1561,36 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 		this.icon.position.set( 0, 0, this.data.zIndex );
 		this.el.object3D.add( this.icon );
 */
+     this.icon = null;
+
 	}
 
 	,
 	update() {
-	
 		this.icon = new THREE.Mesh(
 			new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
 			new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
 		);
 		this.icon.position.set( 0, 0, this.data.zIndex );
 		this.el.object3D.add( this.icon );
+	
+		
+	},
+	remove() {
+		this.el.removeObject3D( "mesh" );
+		this.icon.geometry.dispose();
+        this.icon.material.dispose();
+	  
+		this.el.object3D.remove(this.icon)
+		this.el.remove(this.icon)
+		delete this.icon
 
 	}
 } );
 
 
 /***/ }),
-/* 28 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2973,7 +1646,7 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 
 
 /***/ }),
-/* 29 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -3005,6 +1678,7 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 			new THREE.MeshBasicMaterial( { color: this.data.color, transparent: false, opacity: 0.4, alphaTest: 0.1 } )
 		);
 		this.ripple.scale.set( 0.00001, 0.00001, 0.00001 );
+		
 		this.el.object3D.add( this.ripple );
 		this.el.addEventListener( "mousedown", this.click.bind( this ) );
 		this.ripple.position.set( 0, 0, this.data.zIndex );
@@ -3102,754 +1776,417 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
 
-	}
-} );
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * A component shim the mouse move event for the AFRAME cursor raycaster.
- * @namespace aframe-material-collection
- * @component ui-mouse-shim
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-mouse-shim", {
-	schema: {
-		fps: { type: "number", default: 45 }
-	},
-	init() {
-
-		if ( ! this.el.components.raycaster ) {
-
-			throw "ui-mouse-move component needs the raycaster component to be added.";
-
-		}
-		// Add support for mouse wheel
-		this.el.sceneEl.renderer.domElement.addEventListener( "wheel", this.onMouseWheel.bind( this ), false );
-
-	},
-	onMouseWheel( e ) {
-
-		this.emitMouseEvent( "ui-mousewheel", e );
-
-	},
-	tick() {
-
-		if ( new Date().getTime() - this.lastMouseMoveTime < 1000 / this.data.fps ) return;
-		this.emitMouseEvent( "ui-mousemove" );
-		this.lastMouseMoveTime = new Date().getTime();
-
-	},
-	emitMouseEvent( eventType, event ) {
-
-		// Get current intersections from raycaster component.
-		this.el.components.raycaster.intersections.forEach( intersection => {
-
-			if ( intersection.object.el ) {
-
-				// Emit custom mouse move event ont he intersected element.
-				intersection.object.el.emit( eventType, { cursorEl: this.el, intersection: intersection, evt: event } );
-
-			}
-
-		} );
-
-	}
-} );
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * Checkbox A simple component to listen for two click events in quick succession.
- * @namespace aframe-material-collection
- * @component ui-double-click
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-double-click", {
-	schema: {
-		timeout: { type: "int", default: 200 }
-	},
-	init() {
-
-		let last_click = 0;
-		// Add click event for listening for two clicks within the specified timespan.
-		this.el.addEventListener( "mousedown", e => {
-
-			let now = new Date().getTime();
-			if ( now - last_click < this.data.timeout ) {
-
-				this.el.emit( "dblclick", e );
-				// Reset last click
-				last_click = 0;
-				e.preventDefault();
-
-			}
-			last_click = now;
-
-		} );
-
-	}
-} );
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,THREE */
-/**
- * Rounded borders Component for aframe-material-collection. Expects an a-plane entity.
- * @namespace aframe-material-collection
- * @component ui-border
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-border", {
-	schema: {
-		borderRadius: { type: "number", default: 0.01 },
-		curveSegments: { type: "int", default: 5 },
-		borderWidth: { type: "number", default: 0.008 },
-		color: { default: "#5f5f5f" },
-		numberOfPoints: { type: "int", default: 180 }
-	},
-	init() {
-
-		let mesh = this.el.getObject3D( "mesh" );
-		let roundedRectShape = new THREE.Shape();
-		this.roundedRect( roundedRectShape, mesh.geometry.metadata.parameters.width, mesh.geometry.metadata.parameters.height, this.data.borderRadius );
-		this.roundedRect(
-			roundedRectShape,
-			mesh.geometry.metadata.parameters.width - this.data.borderWidth * 2,
-			mesh.geometry.metadata.parameters.height - this.data.borderWidth * 2,
-			this.data.borderRadius,
-			true
-		);
-
-		this.el.setObject3D(
-			"mesh",
-			new THREE.Mesh( new THREE.ShapeGeometry( roundedRectShape, this.data.curveSegments ), new THREE.MeshBasicMaterial( { color: this.data.color } ) )
-		);
-
-	},
-	roundedRect( ctx, width, height, radius, isHole ) {
-
-		let x = - width / 2,
-			y = - height / 2;
-		// Draw the Rounded rectangle shape centered in the object - from three.js shapes example.
-		let shapeCtx;
-		if ( isHole ) {
-
-			shapeCtx = ctx;
-			ctx = new THREE.Path();
-
-		}
-		ctx.moveTo( x, y + radius );
-		ctx.lineTo( x, y + height - radius );
-		ctx.quadraticCurveTo( x, y + height, x + radius, y + height );
-		ctx.lineTo( x + width - radius, y + height );
-		ctx.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
-		ctx.lineTo( x + width, y + radius );
-		ctx.quadraticCurveTo( x + width, y, x + width - radius, y );
-		ctx.lineTo( x + radius, y );
-		ctx.quadraticCurveTo( x, y, x, y + radius );
-		if ( isHole ) {
-
-			shapeCtx.holes.push( ctx );
-
-		}
-
-	}
-} );
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-/* global AFRAME */
-/**
- * A component to pick a color - based on https://github.com/mokargas/aframe-colorwheel-component
- * @namespace aframe-material-collection
- * @component ui-renderer
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-color-picker", {
-	schema: {
-		backingColor: { default: "#dfdfdf" },
-		backingColorBottom: { default: "#4db6ac" },
-		targetEl: { type: "selector" }
-	},
-	init() {
-
-		this.setupColorWheel();
-		this.setupBrightnessSlider();
-		this.setupColorPreview();
-		this.setupBacking();
-		this.setupEvents();
-		this.el.setAttribute( "visible", false );
-		this.el.setAttribute( "scale", "0.00001 0.00001 0.00001" );
-		// Expose methods to open/close the color picker.
-		this.el.open = this.open.bind( this );
-		this.el.close = this.close.bind( this );
-
-	},
-	open() {
-
-		return new Promise( resolve => {
-
-			this.selectCallback = resolve;
-			this.el.setAttribute( "visible", true );
-			this.tweenPickerScale( 0.00001, 0.5 );
-
-		} );
-
-	},
-	close() {
-
-		this.tweenPickerScale( 0.5, 0.00001 ).then( () => this.el.setAttribute( "visible", false ) );
-
-	},
-	tweenPickerScale( from, to ) {
-
-		UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
-		return new Promise( r => {
-
-			let _this = this;
-			new TWEEN.Tween( { x: from } )
-				.to( { x: to }, 250 )
-				.onUpdate( function () {
-
-					_this.el.setAttribute( "scale", this.x + " " + this.x + " " + this.x );
-
-				} )
-				.onComplete( () => {
-
-					UI.utils.stoppedChanging( this.el.object3D.uuid );
-					r();
-
-				} )
-				.easing( TWEEN.Easing.Exponential.Out )
-				.start();
-
-		} );
-
-	},
-	setupBacking() {
-
-		let circleBacking = document.createElement( "a-circle" );
-		circleBacking.className = "no-yoga-layout";
-		circleBacking.setAttribute( "position", "0 0 -0.001" );
-		circleBacking.setAttribute( "material", {
-			color: this.data.backingColor,
-			flatShading: true,
-			shader: "flat",
-			fog: false,
-			side: "double"
-		} );
-		circleBacking.setAttribute( "radius", 0.65 );
-		circleBacking.setAttribute( "theta-length", 180 );
-
-		this.el.appendChild( circleBacking );
-
-		let planeBacking = document.createElement( "a-plane" );
-		planeBacking.setAttribute( "position", "0 -0.375 -0.001" );
-		planeBacking.className = "no-yoga-layout";
-		planeBacking.setAttribute( "material", {
-			color: this.data.backingColor,
-			flatShading: true,
-			shader: "flat",
-			fog: false,
-			side: "double"
-		} );
-		planeBacking.setAttribute( "width", 1.3 );
-		planeBacking.setAttribute( "height", 0.75 );
-
-		this.el.appendChild( planeBacking );
-
-		let planeBackingBottom = document.createElement( "a-plane" );
-		planeBackingBottom.setAttribute( "position", "0 -1.05 -0.001" );
-		planeBackingBottom.className = "no-yoga-layout";
-		planeBackingBottom.setAttribute( "material", {
-			color: this.data.backingColorBottom,
-			flatShading: true,
-			shader: "flat",
-			fog: false,
-			side: "double"
-		} );
-		planeBackingBottom.setAttribute( "width", 1.3 );
-		planeBackingBottom.setAttribute( "height", 0.6 );
-		this.el.appendChild( planeBackingBottom );
-
-		let buttonConfirm = document.createElement( "a-ui-button" );
-		buttonConfirm.setAttribute( "position", "0.315 -1.17 0.001" );
-		buttonConfirm.className = "intersectable no-yoga-layout";
-		buttonConfirm.setAttribute( "text-value", "SAVE" );
-		buttonConfirm.setAttribute( "color", "#ffffff" );
-		buttonConfirm.setAttribute( "wrap-count", "9" );
-		buttonConfirm.setAttribute( "ripple-color", "#009688" );
-		buttonConfirm.setAttribute( "font-color", "#009688" );
-		buttonConfirm.setAttribute( "ripple-size", "0.5 0.18" );
-		buttonConfirm.setAttribute( "width", 0.5 );
-		buttonConfirm.setAttribute( "height", 0.18 );
-		if ( this.data.targetEl )
-			this.data.targetEl.addEventListener( "mousedown", () => {
-
-				this.el.open();
-
-			} );
-		this.el.appendChild( buttonConfirm );
-		buttonConfirm.addEventListener( "mousedown", e => {
-
-			let hex = this.getHex();
-			this.el.emit( "color-selected", hex );
-			this.el.close();
-			UI.utils.preventDefault( e );
-			if ( this.data.targetEl ) {
-
-				this.data.targetEl.setAttribute( "color", hex );
-
-			}
-			if ( this.selectCallback && typeof this.selectCallback === "function" ) {
-
-				this.selectCallback( hex );
-
-			}
-
-		} );
-
-		let buttonCancel = document.createElement( "a-ui-button" );
-		buttonCancel.setAttribute( "position", "-0.315 -1.17 0.001" );
-		buttonCancel.className = "intersectable no-yoga-layout";
-		buttonCancel.setAttribute( "text-value", "CANCEL" );
-		buttonCancel.setAttribute( "color", "#ffffff" );
-		buttonCancel.setAttribute( "wrap-count", "9" );
-		buttonCancel.setAttribute( "ripple-color", "#ff9800" );
-		buttonCancel.setAttribute( "font-color", "#ff9800" );
-		buttonCancel.setAttribute( "ripple-size", "0.5 0.18" );
-		buttonCancel.setAttribute( "width", 0.5 );
-		buttonCancel.setAttribute( "height", 0.18 );
-
-		this.el.appendChild( buttonCancel );
-		buttonCancel.addEventListener( "mousedown", e => {
-
-			this.el.emit( "color-cancelled" );
-			this.el.close();
-			UI.utils.preventDefault( e );
-
-		} );
-		this.hexValue = document.createElement( "a-text" );
-		this.hexValue.setAttribute( "value", "#ffffff" );
-		this.hexValue.setAttribute( "align", "center" );
-		this.hexValue.setAttribute( "position", "0 -0.9 0.001" );
-		this.hexValue.setAttribute( "wrap-count", 15 );
-		this.hexValue.setAttribute( "width", 1.3 );
-
-		this.el.appendChild( this.hexValue );
-
-	},
-	setupColorPreview() {
-
-		this.colorPreview = document.createElement( "a-circle" );
-		this.colorPreview.setAttribute( "position", "-0.45 -0.9 0" );
-		this.colorPreview.setAttribute( "material", {
-			color: "#ffffff",
-			flatShading: true,
-			transparent: true,
-			shader: "flat",
-			fog: false,
-			side: "double"
-		} );
-		this.colorPreview.setAttribute( "radius", 0.05 );
-		this.el.appendChild( this.colorPreview );
-
-	},
-	setupColorWheel() {
-
-		this.hsv = {
-			h: 0.0,
-			s: 0.0,
-			v: 1.0
-		};
-		this.colorWheel = document.createElement( "a-circle" );
-		this.colorWheel.setAttribute( "material", {
-			color: "#ffffff",
-			flatShading: true,
-			transparent: true,
-			shader: "flat",
-			fog: false,
-			side: "double"
-		} );
-		this.colorWheel.setAttribute( "radius", 0.5 );
-		this.el.appendChild( this.colorWheel );
-		this.colorWheel.className = "intersectable no-yoga-layout";
-		this.colorWheel.addEventListener( "loaded", () => {
-
-			let colorWheel = this.colorWheel.getObject3D( "mesh" );
-			let vertexShader =
-        "\n\n      varying vec2 vUv;\n      void main() {\n        vUv = uv;\n        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);\n        gl_Position = projectionMatrix * mvPosition;\n      }\n    ";
-
-			let fragmentShader =
-        "\n      #define M_PI2 6.28318530718\n      uniform float brightness;\n      varying vec2 vUv;\n      vec3 hsb2rgb(in vec3 c){\n          vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0 );\n          rgb = rgb * rgb * (3.0 - 2.0 * rgb);\n          return c.z * mix( vec3(1.0), rgb, c.y);\n      }\n\n      void main() {\n        vec2 toCenter = vec2(0.5) - vUv;\n        float angle = atan(toCenter.y, toCenter.x);\n        float radius = length(toCenter) * 2.0;\n        vec3 color = hsb2rgb(vec3((angle / M_PI2) + 0.5, radius, brightness));\n        gl_FragColor = vec4(color, 1.0);\n      }\n      ";
-
-			colorWheel.material = new THREE.ShaderMaterial( {
-				uniforms: {
-					brightness: {
-						type: "f",
-						value: this.hsv.v
-					}
-				},
-				vertexShader: vertexShader,
-				fragmentShader: fragmentShader
-			} );
-			colorWheel.material.needsUpdate = true;
-
-		} );
-
-	},
-	setupBrightnessSlider() {
-
-		this.brightnessSlider = document.createElement( "a-plane" );
-		this.brightnessSlider.setAttribute( "height", 0.1 );
-		this.brightnessSlider.setAttribute( "width", 0.8 );
-		this.brightnessSlider.setAttribute( "position", "0 -0.6 0" );
-		this.brightnessSlider.className = "intersectable no-yoga-layout";
-		this.el.appendChild( this.brightnessSlider );
-		this.brightnessSlider.addEventListener( "loaded", () => {
-
-			let vertexShader =
-        "\n      varying vec2 vUv;\n      void main(){\n        vUv = uv;\n        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);\n      }\n    ";
-
-			let fragmentShader =
-        "\n      uniform vec3 color1;\n      uniform vec3 color2;\n      varying vec2 vUv;\n\n      void main(){\n        vec4 c1 = vec4(color1, 1.0);\n  \t    vec4 c2 = vec4(color2, 1.0);\n\n        vec4 color = mix(c2, c1, smoothstep(0.0, 1.0, vUv.x));\n        gl_FragColor = color;\n      }\n    ";
-
-			this.brightnessSlider.getObject3D( "mesh" ).material = new THREE.ShaderMaterial( {
-				uniforms: {
-					color1: {
-						type: "c",
-						value: new THREE.Color( 0xffffff )
-					},
-					color2: {
-						type: "c",
-						value: new THREE.Color( 0x000000 )
-					}
-				},
-				vertexShader: vertexShader,
-				fragmentShader: fragmentShader
-			} );
-			this.brightnessSlider.getObject3D( "mesh" ).material.needsUpdate = true;
-
-		} );
-		let brightnessResetLeft = document.createElement( "a-triangle" );
-		brightnessResetLeft.setAttribute( "vertex-a", "0 0.05 0" );
-		brightnessResetLeft.setAttribute( "vertex-b", "-0.05 -0.05 0" );
-		brightnessResetLeft.setAttribute( "vertex-c", "0.05 -0.05 0" );
-		brightnessResetLeft.setAttribute( "position", "-0.475 -0.6 0" );
-		brightnessResetLeft.setAttribute( "rotation", "0 0 90" );
-		brightnessResetLeft.setAttribute( "shader", "flat" );
-		brightnessResetLeft.setAttribute( "color", "#009688" );
-		brightnessResetLeft.setAttribute( "ui-btn", "" );
-		brightnessResetLeft.className = "intersectable";
-		this.el.appendChild( brightnessResetLeft );
-
-		let brightnessResetRight = document.createElement( "a-triangle" );
-		brightnessResetRight.setAttribute( "vertex-a", "0 0.05 0" );
-		brightnessResetRight.setAttribute( "vertex-b", "-0.05 -0.05 0" );
-		brightnessResetRight.setAttribute( "vertex-c", "0.05 -0.05 0" );
-		brightnessResetRight.setAttribute( "position", "0.475 -0.6 0" );
-		brightnessResetRight.setAttribute( "rotation", "0 0 -90" );
-		brightnessResetRight.setAttribute( "color", "#009688" );
-		brightnessResetRight.setAttribute( "shader", "flat" );
-		brightnessResetRight.setAttribute( "ui-btn", "" );
-		brightnessResetRight.className = "intersectable";
-		this.el.appendChild( brightnessResetRight );
-
-		brightnessResetLeft.addEventListener( "mousedown", () => {
-
-			UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
-			this.colorWheel.getObject3D( "mesh" ).material.uniforms[ "brightness" ].value = 0;
-			this.hsv.v = 0;
-			this.hsv.h = 0;
-			this.hsv.s = 0;
-			this.updateColor();
-			UI.utils.stoppedChanging( this.el.object3D.uuid );
-
-		} );
-		brightnessResetRight.addEventListener( "mousedown", () => {
-
-			UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
-			this.colorWheel.getObject3D( "mesh" ).material.uniforms[ "brightness" ].value = 1;
-			this.hsv.v = 1;
-			this.hsv.h = 0;
-			this.hsv.s = 0;
-			this.updateColor();
-			UI.utils.stoppedChanging( this.el.object3D.uuid );
-
-		} );
-
-	},
-	getHex() {
-
-		let rgb = this.hsvToRgb( this.hsv ),
-			color = "rgb(" + rgb.r + ", " + rgb.g + ", " + rgb.b + ")";
-		return "#" + new THREE.Color( color ).getHexString();
-
-	},
-	updateColor() {
-
-		let hex = this.getHex();
-		this.colorPreview.setAttribute( "color", hex );
-		this.hexValue.setAttribute( "value", hex );
-
-	},
-	setupEvents() {
-
-		this.colorWheel.addEventListener( "mousedown", e => {
-
-			this.isMouseDown = true;
-			UI.utils.preventDefault( e );
-
-		} );
-		this.colorWheel.addEventListener( "mouseup", e => {
-
-			this.isMouseDown = false;
-			UI.utils.preventDefault( e );
-
-		} );
-		this.colorWheel.addEventListener( "ui-mousemove", e => {
-
-			if ( ! this.isMouseDown ) return;
-			UI.utils.preventDefault( e );
-
-			UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
-			let colorWheel = this.colorWheel.getObject3D( "mesh" ),
-				radius = 0.5,
-				position = e.detail.intersection.point;
-
-			colorWheel.updateMatrixWorld();
-			colorWheel.worldToLocal( position );
-
-			//Determine Hue and Saturation value from polar co-ordinates
-			let polarPosition = {
-				r: Math.sqrt( position.x * position.x + position.y * position.y ),
-				theta: Math.PI + Math.atan2( position.y, position.x )
-			};
-
-			let angle = ( polarPosition.theta * ( 180 / Math.PI ) + 180 ) % 360;
-			this.hsv.h = angle / 360;
-			this.hsv.s = polarPosition.r / radius;
-			this.updateColor();
-			UI.utils.stoppedChanging( this.el.object3D.uuid );
-
-		} );
-		this.brightnessSlider.addEventListener( "mousedown", e => {
-
-			this.isMouseDown = true;
-			UI.utils.preventDefault( e );
-
-		} );
-		this.brightnessSlider.addEventListener( "mouseup", e => {
-
-			this.isMouseDown = false;
-			UI.utils.preventDefault( e );
-
-		} );
-		this.brightnessSlider.addEventListener( "ui-mousemove", e => {
-
-			UI.utils.preventDefault( e );
-			UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
-			if ( ! this.isMouseDown ) return;
-			let brightnessSlider = this.brightnessSlider.getObject3D( "mesh" ),
-				colorWheel = this.colorWheel.getObject3D( "mesh" ),
-				position = e.detail.intersection.point;
-
-			brightnessSlider.updateMatrixWorld();
-			brightnessSlider.worldToLocal( position );
-
-			//Brightness is a value between 0 and 1. The parent plane is centre registered, hence offset
-			let cursorOffset = position.x + 0.4; //this.brightnessSliderHeight / 2;
-			let brightness = cursorOffset / 0.8; //this.brightnessSliderHeight;
-
-			//Update material brightness
-			colorWheel.material.uniforms[ "brightness" ].value = brightness;
-			this.hsv.v = brightness;
-			this.updateColor();
-			UI.utils.stoppedChanging( this.el.object3D.uuid );
-
-		} );
-
-	},
-	hsvToRgb( hsv ) {
-
-		let r, g, b, i, f, p, q, t;
-		let h = THREE.Math.clamp( hsv.h, 0, 1 );
-		let s = THREE.Math.clamp( hsv.s, 0, 1 );
-		let v = hsv.v;
-
-		i = Math.floor( h * 6 );
-		f = h * 6 - i;
-		p = v * ( 1 - s );
-		q = v * ( 1 - f * s );
-		t = v * ( 1 - ( 1 - f ) * s );
-		switch ( i % 6 ) {
-
-			case 0:
-				r = v;
-				g = t;
-				b = p;
-				break;
-			case 1:
-				r = q;
-				g = v;
-				b = p;
-				break;
-			case 2:
-				r = p;
-				g = v;
-				b = t;
-				break;
-			case 3:
-				r = p;
-				g = q;
-				b = v;
-				break;
-			case 4:
-				r = t;
-				g = p;
-				b = v;
-				break;
-			case 5:
-				r = v;
-				g = p;
-				b = q;
-				break;
-
-		}
-		return {
-			r: Math.round( r * 255 ),
-			g: Math.round( g * 255 ),
-			b: Math.round( b * 255 )
-		};
-
-	}
-} );
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports) {
-
-/* global AFRAME,THREE */
-/**
- * Modal Component for aframe-material-collection.
- * @namespace aframe-material-collection
- * @component ui-modal
- * @author Shane Harris
- */
-module.exports = AFRAME.registerComponent( "ui-modal", {
-	schema: {
-		modal: { type: "selector" },
-		main: { type: "selector" }
-	},
-	init() {
-
-		if ( this.data.modal && this.data.main ) {
-
-			// Get the modal panel to be able to animate its scale on open/close.
-			this.modalPanel = document.querySelector( this.data.modal.getAttribute( "ui-panel" ) );
-
-			this.mainComponents = this.data.main.components;
-			this.modalComponents = this.data.modal.components;
-			// Pause rendering of modal until opened.
-			if ( this.modalComponents && this.modalComponents[ "ui-renderer" ] ) {
-
-				this.modalComponents[ "ui-renderer" ].pause();
-
-			}
-			// Setup close listeners for anything with the class close-modal.
-			let close_buttons = this.data.modal.querySelectorAll( ".close-modal" );
-			for ( let i = 0; i < close_buttons.length; i ++ ) {
-
-				let close_button = close_buttons[ i ];
-				close_button.addEventListener( "mousedown", () => {
-
-					this.close();
-
-				} );
-
-			}
-			// Add click handler for opening the modal, pause the main render screen and play the modal renderer
-			this.openModal = this.open.bind( this );
-			this.el.addEventListener( "mousedown", this.openModal );
-			this.data.main.modal = this;
-
-			// Expose methods to open/close the modal.
-			this.el.open = this.open.bind( this );
-			this.el.close = this.close.bind( this );
-
-		}
-
 	},
 	remove() {
+		
+		this.el.removeObject3D('ui-ripple');
+		
+	//	this.ripple.dispose();
+	
+		this.el.remove(this.rippleGeometry)
+		this.el.remove(this.ripple )
+		this.el.remove(self )
+		this.el.remove(this.object3D )
+		//this.rippleGeometry.dispose();
+		console.error(this.el)
+		//this.el.dispose();
+		//this.el.object3D.geometry.dispose();
+	}
+} );
 
-		this.el.removeEventListener( "mousedown", this.openModal );
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
+
+/* global AFRAME,THREE */
+/**
+ * Scroll Pane for aframe-material-collection. Expects
+ * @namespace aframe-material-collection
+ * @component ui-scroll-pane
+ * @author Shane Harris
+ */
+
+module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
+	schema: {
+		height: { type: "number", default: 1.2 },
+		width: { type: "number", default: 2.9 },
+		scrollPadding: { type: "number", default: 0.05 },
+		scrollZOffset: { type: "number", default: 0 },
+		scrollHandleColor: { default: "#000000" },
+		intersectableClass: { default: "intersectable" },
+		cameraEl: { type: "selector" },
+		lookControlsComponent: { default: "look-controls" }
+	},
+	init() {
+
+		// Setup scroll bar and panel backing.
+		this.setupElements();
+		// Grab content container.
+		this.container = this.el.querySelector( ".container" );
+		if ( typeof this.container === "undefined" ) {
+
+			throw 'ui-scroll-pane needs an entity inside it with the class "container" - <a-entity class="container"></a-entity>';
+
+		}
+		// Setup scroll bar.
+		this.scrollBarWidth = this.rail.getAttribute( "width" );
+		const position = this.container.getAttribute("position");
+	//	this.container.setAttribute( "position", - this.data.width / 2 + " " + position.y +  " " + this.data.height / 2 + " " + position.z );
+		this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0002 ) );
+		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0005 ) );
+		this.el.sceneEl.renderer.localClippingEnabled = true;
+
+		// Setup content clips.
+		this.content_clips = [
+			new THREE.Plane( new THREE.Vector3( 0, 1, 0 ), this.data.height / 2 ),
+			new THREE.Plane( new THREE.Vector3( 0, - 1, 0 ), this.data.height / 2 ),
+			new THREE.Plane( new THREE.Vector3( - 1, 0, 0 ), this.data.width / 2 ),
+			new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), this.data.width / 2 )
+		];
+		// Pause/play camera look controls
+		const playPauseCamera = method => {
+
+			if ( this.data.cameraEl ) {
+
+				let lookControls = this.data.cameraEl.components[ this.data.lookControlsComponent ];
+				if ( lookControls ) {
+
+					lookControls[ method ]();
+
+				}
+
+			}
+
+		};
+		// Setup mouse move handler for scrolling and updating scroll handle.
+		const mousemove = e => this.mouseMove( e );
+		// Start scroll
+		this.handle.addEventListener( "mousedown", e => {
+			console.error("mousedown handle")
+			// Pause look controls to allow scrolling
+			playPauseCamera( "pause" );
+			this.isDragging = true;
+			// Store the start point offset
+			this.handlePos = this.handle.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y;
+			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
+		
+			// Start changes
+			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
+			// Prevent default behaviour of event
+			UI.utils.preventDefault( e );
+
+		} );
+		// End scroll
+		const endScroll = e => {
+
+			if ( this.isDragging ) {
+
+				this.backgroundPanel.removeEventListener( "ui-mousemove", mousemove );
+				// Play look controls once scrolling is finished
+				playPauseCamera( "play" );
+				this.isDragging = false;
+				// Stop changes
+				UI.utils.stoppedChanging( this.handle.object3D.uuid );
+				// Prevent default behaviour of event
+				UI.utils.preventDefault( e );
+
+			}
+
+		};
+		this.backgroundPanel.addEventListener( "mouseup", endScroll );
+		this.backgroundPanel.addEventListener( "mouseleave", endScroll );
+		// // Handle clicks on rail to scroll
+		this.rail.addEventListener( "mousedown", e => {
+console.error("mousedown rail")
+			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
+			// Pause look controls
+			this.isDragging = true;
+			// Reset handle pos to center of handle
+			this.handlePos = 0;
+			// Scroll immediately and register mouse move events.
+			this.scroll( this.rail.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
+			//this.scoll(10)
+			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
+			// Prevent default behaviour of event
+			UI.utils.preventDefault( e );
+
+		} );
+
+		// Setup content clips after the scene is loaded to be able to access all entity materials
+
+		// update content clips world positions from this current element.
+
+		this.updateContent();
+		this.el.emit( "scroll-pane-loaded" );
+		this.setupMouseWheelScroll();
+
+		// Expose methods to the element to update/set the content of the scroll pane.
+		this.el.setContent = this.setContent.bind( this );
+		this.el.updateContent = this.updateContent.bind( this );
+		this.el.scroll = this.scroll.bind( this );
 
 	},
-	open() {
+	updateContentClips() {
 
-		if ( this.mainComponents && this.mainComponents[ "ui-renderer" ] ) {
+		this.el.sceneEl.object3D.updateMatrixWorld();
+		// update content clips world positions from this current element.
+		this.content_clips[ 0 ].set( new THREE.Vector3( 0, 1, 0 ), this.data.height / 2 );
+		this.content_clips[ 1 ].set( new THREE.Vector3( 0, - 1, 0 ), this.data.height / 2 );
+		this.content_clips[ 2 ].set( new THREE.Vector3( - 1, 0, 0 ), this.data.width / 2 );
+		this.content_clips[ 3 ].set( new THREE.Vector3( 1, 0, 0 ), this.data.width / 2 );
+		//this.el.sceneEl.object3D.updateMatrixWorld();
+		this.content_clips[ 0 ].applyMatrix4( this.el.object3D.matrixWorld );
+		this.content_clips[ 1 ].applyMatrix4( this.el.object3D.matrixWorld );
+		this.content_clips[ 2 ].applyMatrix4( this.el.object3D.matrixWorld );
+		this.content_clips[ 3 ].applyMatrix4( this.el.object3D.matrixWorld );
 
-			this.mainComponents[ "ui-renderer" ].pauseRender();
-			this.tweenModalScale( 0.0000001, 1 );
-			this.modalComponents[ "ui-renderer" ].play();
+	},
+	setContent( body, noAutoReload ) {
+
+		if ( this.container ) {
+
+			// Remove all children in the container and all yoga nodes
+			while ( this.container.firstChild ) {
+
+				let child = this.container.firstChild;
+				if ( this.container.yoga_node && child.yoga_node ) {
+
+					this.container.yoga_node.removeChild( child.yoga_node );
+
+				}
+				if ( child.object3D ) {
+
+					UI.utils.clearObject( child.object3D );
+
+				}
+				this.container.removeChild( child );
+				this.container.firstChild = null;
+
+			}
+			// Set the content in the scroll pane.
+			return new Promise( resolve => {
+
+				let loadedWrapper = document.createElement( "a-entity" );
+				loadedWrapper.setAttribute( "visible", false );
+				loadedWrapper.insertAdjacentHTML( "afterbegin", body );
+				loadedWrapper.addEventListener( "loaded", e => {
+
+					// Trigger an update to redraw scrollbars and fire change events.
+					if ( ! noAutoReload ) this.updateContent();
+					resolve( loadedWrapper );
+					loadedWrapper.setAttribute( "visible", true );
+
+				} );
+				this.container.appendChild( loadedWrapper );
+
+			} );
 
 		}
 
 	},
-	close() {
+	updateContent( should_not_scroll ) {
 
-		// Pause the modal rendering and play the main rendering again.
-		this.modalComponents[ "ui-renderer" ].pause();
-		this.mainComponents[ "ui-renderer" ].play();
-		this.mainComponents[ "ui-renderer" ].playRender();
-		this.tweenModalScale( 1, 0.0000001 ).then( () => {
+		this.updateContentClips();
+		this.currentUuid = THREE.Math.generateUUID();
+		UI.utils.isChanging( this.el.sceneEl, this.currentUuid );
+		//this.setChildClips();
+		//if ( typeof Yoga !== "undefined" ) this.initialiseYoga( this.container, this.data.width * 100 );
+		//this.container.yoga_node.calculateLayout( this.data.width * 100, "auto", Yoga.DIRECTION_LTR );
+		this.content_height = 10; //Number.NEGATIVE_INFINITY;
+		//if ( typeof Yoga !== "undefined" ) this.updateYoga( this.container );
 
-			this.el.sceneEl.emit( "modal-closed" );
+		this.handleSize = THREE.Math.clamp( this.data.height / this.content_height, 0.1, 1 );
+		this.handle.setAttribute( "width", this.handleSize === 1 ? 0.00000001 : 0.1 );
+		this.rail.setAttribute( "width", this.handleSize === 1 ? 0.00000001 : 0.1 );
+		this.rail.setAttribute( "color", this.handleSize === 1 ? "#efefef" : "#fff" );
+		this.handle.setAttribute( "height", this.data.height * this.handleSize );
+		/*if ( ! should_not_scroll ) {
+
+			this.container.object3D.position.y = this.data.height / 2;
+			this.handle.setAttribute(
+				"position",
+				this.data.width / 2 +
+          this.data.scrollPadding +
+          " " +
+          ( this.data.height - this.data.height * this.handleSize ) / 2 +
+          " " +
+          ( this.data.scrollZOffset + 0.0005 )
+			);
+
+		}*/
+
+	},
+	mouseMove( e ) {
+console.error("mouseMove")
+		if ( this.isDragging ) {
+
+			let pos = this.rail.object3D.worldToLocal( e.detail.intersection.point );
+			this.scroll( pos.y - this.handlePos );
+
+		}
+
+	},
+
+
+
+
+	scroll( positionY ) {
+console.error(positionY)
+		let min = - this.data.height / 2 + ( this.data.height * this.handleSize ) / 2;
+		let max = this.data.height / 2 - ( this.data.height * this.handleSize ) / 2;
+		// Set scroll position with start point offset.
+		let scroll_pos = THREE.Math.clamp( positionY, min, max );
+		let scroll_perc = this.handleSize === 1 ? 0 : 1 - ( scroll_pos - min ) / ( max - min );
+		console.error(( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2)
+		this.container.object3D.position.y = ( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2;
+		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " " + scroll_pos + " " + ( this.data.scrollZOffset + 0.0005 ) );
+
+	},
+	setupMouseWheelScroll() {
+
+		this.backgroundPanel.addEventListener( "ui-mousewheel", e => {
+
+			if ( this.handleSize !== 1 ) {
+
+				// Start changes
+				UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
+				this.scroll( this.handle.getAttribute( "position" ).y + ( e.detail.evt.deltaY < 0 ? 0.1 : - 0.1 ) );
+				// Stop changes
+				UI.utils.stoppedChanging( this.el.object3D.uuid );
+				UI.utils.preventDefault( e );
+
+			}
 
 		} );
 
 	},
-	tweenModalScale( from, to ) {
+	setupElements() {
 
-		return new Promise( r => {
+		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
+		this.backgroundPanel = document.createElement( "a-plane" );
+		this.backgroundPanel.setAttribute( "class", "ui background " + this.data.intersectableClass );
+		this.backgroundPanel.setAttribute( "width", this.data.width + 1 );
+		this.backgroundPanel.setAttribute( "height", this.data.height + 1 );
+		this.backgroundPanel.setAttribute( "position", "0 1 -0.013" );
+		this.backgroundPanel.setAttribute( "opacity", 0.000001 ); //
+		//this.backgroundPanel.setAttribute( "transparent", true );
 
-			let _this = this;
-			new TWEEN.Tween( { x: from } )
-				.to( { x: to }, 250 )
-				.onUpdate( function () {
+		this.el.appendChild( this.backgroundPanel );
 
-					if ( _this.modalPanel ) _this.modalPanel.setAttribute( "scale", this.x + " " + this.x + " " + this.x );
+		// Add scroll bar rail.
+		this.rail = document.createElement( "a-plane" );
+		//this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );
+		this.rail.setAttribute( "width", 0.1 );
+		this.rail.setAttribute( "height", this.data.height );
+		this.rail.setAttribute( "shader", "flat" );
+		this.rail.setAttribute( "class", "ui" );
+		this.el.appendChild( this.rail );
 
-				} )
-				.onComplete( r )
-				.easing( TWEEN.Easing.Exponential.Out )
-				.start();
+		// Add scroll bar handle.
+		this.handle = document.createElement( "a-plane" );
+		//this.handle.setAttribute( "class", "ui handle " + this.data.intersectableClass );
+		this.handle.setAttribute( "width", 0.1 );
+		this.handle.setAttribute( "height", this.data.height );
+		this.handle.setAttribute( "color", this.data.scrollHandleColor );
+		this.handle.setAttribute( "shader", "flat" );
+		this.handle.setAttribute( "class", "ui" );
+		this.el.appendChild( this.handle );
 
-		} );
+	},
+
+
+	setChildClips( parent ) {
+
+		// Traverse the entity tree inside the content container and add content clips to each material found.
+		parent = parent || this.container;
+		for ( let i = 0; i < parent.childNodes.length; i ++ ) {
+
+			let child = parent.childNodes[ i ];
+			//if (child.nodeType === 1) {
+			child._content_clips = this.content_clips;
+			let traverse = () => {
+
+				if ( child.object3D ) {
+
+					child.object3D.traverse( object => {
+
+						if ( object.material ) {
+
+							// Add shader chunks to be able to clip shader materials - needed for <a-text> entities.
+							if ( object.material.isRawShaderMaterial ) {
+
+								object.material.onBeforeCompile = function ( shader ) {
+
+									let vertexParts = shader.vertexShader.split( "\n" );
+									let vertexMainIndex = vertexParts.indexOf( "void main(void) {" );
+									vertexParts.splice( vertexMainIndex, 0, "#include <clipping_planes_pars_vertex>" );
+									vertexParts.splice( vertexMainIndex + 2, 0, "#include <begin_vertex>" );
+									vertexParts.splice( vertexParts.length - 2, 0, "#include <project_vertex>" );
+									vertexParts.splice( vertexParts.length - 2, 0, "#include <clipping_planes_vertex>" );
+									shader.vertexShader = vertexParts.join( "\n" );
+									let fragmentParts = shader.fragmentShader.split( "\n" );
+									let fragmentMainIndex = fragmentParts.indexOf( "void main() {" );
+									fragmentParts.splice( fragmentMainIndex, 0, "#include <clipping_planes_pars_fragment>" );
+									fragmentParts.splice( fragmentMainIndex + 2, 0, "#include <clipping_planes_fragment>" );
+									shader.fragmentShader = fragmentParts.join( "\n" );
+
+								};
+								object.material.clipping = true;
+
+							}
+							// Set the content clipping planes.
+							object.material.clippingPlanes = this.content_clips;
+							object.material.clipShadows = true;
+							object.material.needsUpdate = true;
+
+						}
+
+					} );
+
+				}
+
+			};
+			// Wait for next tick - exokit required this.
+			setTimeout( () => {
+
+				if ( child.getAttribute ) {
+
+					let text = child.getAttribute( "text" );
+
+					if ( text ) {
+
+						// Wait for the font to load first.
+						child.addEventListener( "textfontset", () => {
+
+							clearTimeout( this.fontRenderTimeout );
+							this.fontRenderTimeout = setTimeout( () => UI.utils.stoppedChanging( this.currentUuid ), 500 );
+							traverse();
+
+						} );
+
+					} else {
+
+						traverse();
+
+					}
+
+				}
+
+			}, 0 );
+			// }
+			// Recurse
+			this.setChildClips( child );
+
+		}
 
 	}
 } );
 
 
 /***/ }),
-/* 35 */,
-/* 36 */
+/* 21 */,
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4006,8 +2343,8 @@ class Utils {
  */
 
 
-let version = __webpack_require__( 21 ).version;
-console.log( "aframe-material-collection version " + version );
+let version = __webpack_require__( 14 ).version;
+console.log( "aframe-material-collection version test" + version );
 
 if ( typeof AFRAME === "undefined" ) {
 
@@ -4025,39 +2362,39 @@ window.UI = {
 	a_ui_fab_button_small: __webpack_require__( 2 ),
 	a_ui_switch: __webpack_require__( 3 ),
 	a_ui_slider: __webpack_require__( 4 ),
-	a_ui_number: __webpack_require__( 5 ),
-	a_ui_toast: __webpack_require__( 6 ),
-	a_ui_checkbox: __webpack_require__( 7 ),
-	a_ui_radio: __webpack_require__( 8 ),
-	a_ui_input_text: __webpack_require__( 9 ),
-	a_ui_text_input: __webpack_require__( 22 ),
-	a_ui_number_input: __webpack_require__( 23 ),
-	a_ui_int_input: __webpack_require__( 24 ),
-	a_ui_password_input: __webpack_require__( 25 ),
-//	a_ui_scroll_pane: require( "./primitives/scroll-pane" ),
-	a_ui_renderer: __webpack_require__( 10 ),
+//	a_ui_number: require( "./primitives/number" ),
+//	a_ui_toast: require( "./primitives/toast" ),
+	a_ui_checkbox: __webpack_require__( 5 ),
+	a_ui_radio: __webpack_require__( 6 ),
+	a_ui_input_text: __webpack_require__( 7 ),
+	a_ui_text_input: __webpack_require__( 15 ),
+//	a_ui_number_input: require( "./primitives/number-input" ),
+//	a_ui_int_input: require( "./primitives/int-input" ),
+//	a_ui_password_input: require( "./primitives/password-input" ),
+	a_ui_scroll_pane: __webpack_require__( 16 ),
+//	a_ui_renderer: require( "./primitives/renderer" ),
 
 	// Components
-	text: __webpack_require__( 26 ),
-	input_text: __webpack_require__( 11 ),
-	btn: __webpack_require__( 12 ),
-	icon: __webpack_require__( 27 ),
-	rounded: __webpack_require__( 28 ),
-	ripple: __webpack_require__( 29 ),
-	slider: __webpack_require__( 13 ),
-	number: __webpack_require__( 14 ),
-	switch: __webpack_require__( 15 ),
-	toast: __webpack_require__( 16 ),
-	//scroll_pane: require( "./components/scroll-pane" ),
-	mouse_shim: __webpack_require__( 30 ),
-	double_click: __webpack_require__( 31 ),
-	checkbox: __webpack_require__( 17 ),
-	radio: __webpack_require__( 18 ),
-	border: __webpack_require__( 32 ),
-	curvedPlane: __webpack_require__( 19 ),
-	colorPicker: __webpack_require__( 33 ),
-	modal: __webpack_require__( 34 ),
-	renderer: __webpack_require__( 20 )
+	//text: require( "./components/text" ),
+	//input_text: require( "./components/input-text" ),
+	btn: __webpack_require__( 8 ),
+	icon: __webpack_require__( 17 ),
+	rounded: __webpack_require__( 18 ),
+	ripple: __webpack_require__( 19 ),
+	slider: __webpack_require__( 9 ),
+	number: __webpack_require__( 10 ),
+	switch: __webpack_require__( 11 ),
+	////toast: require( "./components/toast" ),
+	scroll_pane: __webpack_require__( 20 ),
+	//mouse_shim: require( "./components/mouse-shim" ),
+	//double_click: require( "./components/double-click" ),
+	checkbox: __webpack_require__( 12 ),
+	radio: __webpack_require__( 13 ),
+	//border: require( "./components/border" ),
+	//curvedPlane: require( "./components/curved-plane" ),
+	//colorPicker: require( "./components/color-picker" ),
+	//modal: require( "./components/modal" ),
+	//renderer: require( "./components/renderer" )
 };
 //module.exports = UI;
 
