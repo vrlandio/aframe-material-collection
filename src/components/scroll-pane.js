@@ -166,15 +166,16 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
 		this.backgroundPanel = document.createElement( "a-plane" );
 		//this.backgroundPanel.setAttribute( "class", "ui background " + this.data.intersectableClass );
-		this.backgroundPanel.setAttribute( "width", this.data.width + 1 );
-		this.backgroundPanel.setAttribute( "height", this.data.height + 1 );
-		this.backgroundPanel.setAttribute( "position", "0 1 0.25" );
+		this.backgroundPanel.setAttribute( "width", this.data.width  );
+		this.backgroundPanel.setAttribute( "height", this.data.height );
+		this.backgroundPanel.setAttribute( "position", "3 -4.5 0.25" );
 		this.backgroundPanel.setAttribute( "class", "ui" );
 		this.backgroundPanel.setAttribute( "visible", "false" );
 		//this.backgroundPanel.setAttribute( "opacity", 0.000001 ); //
 		//this.backgroundPanel.setAttribute( "transparent", true );
 
 		this.el.appendChild( this.backgroundPanel );
+		
 /*
 		// Add scroll bar rail.
 		this.rail = document.createElement( "a-plane" );
