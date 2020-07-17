@@ -161,18 +161,15 @@ module.exports = AFRAME.registerPrimitive(
 				radius: 0.1,
 				segments: 6
 			},
-			material: {
-				color: "#009688",
-				shader: "flat"
-			},
-			"ui-btn": {},
+			
+			//"ui-btn": {},
 			//  "ui-ripple": { size: { x: 0.1, y: 0.1 }, zIndex: 0.002, fadeDelay: 300, duration: 500 },
-			"ui-icon": { size: { x: 0.105, y: 0.105 } }
+			//"ui-icon": { size: { x: 0.105, y: 0.105 } }
 		},
 		mappings: {
 			radius: "geometry.radius",
 			color: "material.color",
-			"icon-color": "ui-icon.color",
+			//"icon-color": "ui-icon.color",
 			transparent: "material.transparent",
 			src: "ui-icon.src",
 			// "ripple-color": "ui-ripple.color",
@@ -212,7 +209,7 @@ module.exports = AFRAME.registerPrimitive(
 			},
 			"ui-btn": {},
 			// "ui-ripple": { size: { x: 0.125, y: 0.125 }, zIndex: -0.001, color: "#ff0000" },
-			"ui-icon": { size: { x: 0.075, y: 0.075 }, src: "icons/sort_white_64dp.png" }
+			//"ui-icon": { size: { x: 0.075, y: 0.075 }, src: "icons/sort_white_64dp.png" }
 		},
 		mappings: {
 			radius: "geometry.radius",
@@ -1545,48 +1542,54 @@ module.exports = AFRAME.registerPrimitive(
  * @component ui-icon
  * @author Shane Harris
  */
-module.exports = AFRAME.registerComponent( "ui-icon", {
+module.exports = AFRAME.registerComponent("ui-icon", {
 	schema: {
-		src: { default: "icons/send_white_64dp.png" },
+		src: { default: "" },
 		size: { type: "vec2", default: { x: 0.1, y: 0.1 } },
 		zIndex: { type: "number", default: 0.003 },
 		color: { default: "#fff" }
 	},
 	init() {
 
-	/*	this.icon = new THREE.Mesh(
-			new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
-			new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
-		);
-		this.icon.position.set( 0, 0, this.data.zIndex );
-		this.el.object3D.add( this.icon );
-*/
-     this.icon = null;
+		/*	this.icon = new THREE.Mesh(
+				new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
+				new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
+			);
+			this.icon.position.set( 0, 0, this.data.zIndex );
+			this.el.object3D.add( this.icon );
+	*/
+
 
 	}
 
 	,
 	update() {
-		this.icon = new THREE.Mesh(
-			new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
-			new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
+
+		const textureLoader = new THREE.TextureLoader().load(this.data.src)
+		const material = new THREE.MeshBasicMaterial({ color: this.data.color, alphaTest: 0.4, transparent: true, map: textureLoader })
+
+		textureLoader.dispose();
+		let icon = new THREE.Mesh(
+			new THREE.PlaneGeometry(this.data.size.x, this.data.size.y),
+			material
 		);
-		this.icon.position.set( 0, 0, this.data.zIndex );
-		this.el.object3D.add( this.icon );
-	
-		
+		icon.position.set(0, 0, this.data.zIndex);
+		this.el.object3D.add(icon);
+		material.map.dispose();
+
+
+
 	},
 	remove() {
-		this.el.removeObject3D( "mesh" );
-		this.icon.geometry.dispose();
-        this.icon.material.dispose();
-	  
-		this.el.object3D.remove(this.icon)
-		this.el.remove(this.icon)
-		delete this.icon
+		this.el.object3D.remove(this.el.object3D)
+		this.el.remove("ui-icon")
+		this.el.object3D.children[1].material.map.dispose();
+
+
+
 
 	}
-} );
+});
 
 
 /***/ }),
