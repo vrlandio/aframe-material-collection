@@ -1569,21 +1569,25 @@ module.exports = AFRAME.registerComponent("ui-icon", {
 		const material = new THREE.MeshBasicMaterial({ color: this.data.color, alphaTest: 0.4, transparent: true, map: textureLoader })
 
 		textureLoader.dispose();
-		let icon = new THREE.Mesh(
+		this.icon = new THREE.Mesh(
 			new THREE.PlaneGeometry(this.data.size.x, this.data.size.y),
 			material
 		);
-		icon.position.set(0, 0, this.data.zIndex);
-		this.el.object3D.add(icon);
-		material.map.dispose();
-
+		this.icon.position.set(0, 0, this.data.zIndex);
+		this.el.object3D.add(this.icon);
+		
 
 
 	},
 	remove() {
 		this.el.object3D.remove(this.el.object3D)
+	
+		this.icon.geometry.dispose();
+		this.icon.material.map.dispose();
+		this.icon.material.dispose();
+	    this.icon = null; 
 		this.el.remove("ui-icon")
-		this.el.object3D.children[1].material.map.dispose();
+		
 
 
 
