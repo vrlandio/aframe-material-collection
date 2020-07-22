@@ -14,7 +14,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		handleColor: { default: "#606572" },
 		handleDisabledColor: { default: "#afafaf" },
 		railColor: { default: "#fff" },
-		switchDuration: { type: "int", default: 350 },
+		switchDuration: { type: "int", default: 0 },
 		handleZIndex: { type: "number", default: 0.01 },
 		intersectableClass: { default: "intersectable" },
 		width: { type: "number", default: 0.3 },

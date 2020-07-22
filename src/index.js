@@ -22,6 +22,7 @@ window.UI = {
 	a_ui_button: require( "./primitives/button" ),
 	a_ui_fab_button: require( "./primitives/fab_button" ),
 	a_ui_fab_button_small: require( "./primitives/fab_button_small" ),
+	a_ui_round_button: require( "./primitives/round_button" ),
 	a_ui_switch: require( "./primitives/switch" ),
 	a_ui_slider: require( "./primitives/slider" ),
 //	a_ui_number: require( "./primitives/number" ),

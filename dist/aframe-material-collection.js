@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -234,6 +234,55 @@ module.exports = AFRAME.registerPrimitive(
 
 /* global AFRAME */
 /**
+ * Floating Action Button Primitive for aframe-material-collection.
+ * @namespace aframe-material-collection
+ * @primitive a-ui-fab-button
+ * @author Shane Harris
+ */
+
+module.exports = AFRAME.registerPrimitive(
+	"a-ui-round-button",
+	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
+		defaultComponents: {
+			
+			"box-rounded": {zOffset: -0.025,depth: 0.025,width: 0.2,height:0.075,opacity:0.8,borderRadius: 0.02,curveSegments:16, color: "#232328"},
+			"troika-text": {
+			
+				zOffset: -0.025,
+				//wrapCount: 10,
+				fontSize: 0.1,
+				depthOffset: -0.1,
+				"depth-offset": -0.1,
+				align: "center",
+				color: "#000000",
+				font: "/assets/fonts/FiraMono-Regular.ttf"
+			}
+		},
+		mappings: {
+			height: "box-rounded.height",
+			width: "box-rounded.width",
+			color: "box-rounded.color",
+		
+			"font-color": "troika-text.color",
+        	"text-value": "troika-text.value",
+			"wrap-count": "troika-text.wrapCount",
+			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
+			disabled: "ui-btn.disabled",
+			"hover-height": "ui-btn.hoverHeight",
+			"active-height": "ui-btn.activeHeight"
+		
+		}
+	} )
+);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+/* global AFRAME */
+/**
  * Switch Primitive for aframe-material-collection.
  * @namespace aframe-material-collection
  * @primitive a-ui-switch
@@ -255,7 +304,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -281,7 +330,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -313,7 +362,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -351,7 +400,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -390,7 +439,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -403,7 +452,7 @@ module.exports = AFRAME.registerPrimitive(
 
 module.exports = AFRAME.registerComponent( "ui-btn", {
 	schema: {
-		duration: { type: "int", default: 250 },
+		duration: { type: "int", default: 0 },
 		hoverHeight: { type: "number", default: 0.01 },
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
@@ -563,7 +612,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -762,7 +811,7 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -844,7 +893,7 @@ module.exports = AFRAME.registerComponent( "ui-number", {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -863,7 +912,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		handleColor: { default: "#606572" },
 		handleDisabledColor: { default: "#afafaf" },
 		railColor: { default: "#fff" },
-		switchDuration: { type: "int", default: 350 },
+		switchDuration: { type: "int", default: 0 },
 		handleZIndex: { type: "number", default: 0.01 },
 		intersectableClass: { default: "intersectable" },
 		width: { type: "number", default: 0.3 },
@@ -1069,7 +1118,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -1292,7 +1341,7 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN */
@@ -1323,17 +1372,17 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		// Create center circle for checked state.
 		this.filled_circle = document.createElement( "a-circle" );
 		this.filled_circle.setAttribute( "radius", this.data.selectedRadius );
-		this.filled_circle.setAttribute( "scale", "0 0 0" );
-		this.filled_circle.setAttribute( "color", this.data.disabled ? this.data.disabledColor : this.data.selectedColor );
+		this.filled_circle.setAttribute( "scale", "1 1 1" );
+		//this.filled_circle.setAttribute( "color", this.data.disabled ? this.data.disabledColor : this.data.selectedColor );
 		this.filled_circle.setAttribute( "shader", "flat" );
 		this.filled_circle.setAttribute( "class", this.data.intersectableClass + "no-yoga-layout" );
 		this.filled_circle.setAttribute( "segments", 6 );
-		this.el.components.material.material.color = new THREE.Color( this.data.disabled ? this.data.disabledColor : this.data.unselectedColor );
+		//this.el.components.material.material.color = new THREE.Color( this.data.disabled ? this.data.disabledColor : this.data.unselectedColor );
 		this.el.appendChild( this.filled_circle );
 		// Create backing for getting click events.
 		this.backing = document.createElement( "a-circle" );
 		this.backing.setAttribute( "radius", this.data.selectedRadius );
-		this.backing.setAttribute( "position", "0 0 -0.001" );
+		this.backing.setAttribute( "position", "0 0 -0.005" );
 		this.backing.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
 		this.backing.setAttribute( "shader", "flat" );
 		this.backing.setAttribute( "segments", 6 );
@@ -1347,6 +1396,8 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 
 			this.click();
 
+		}else {
+			this.deselect();
 		}
 
 		this.clickHandler = e => {
@@ -1395,8 +1446,12 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		let _this = this;
 		// Start changes
 		UI.utils.isChanging( this.el.sceneEl, this.filled_circle.object3D.uuid );
-		new TWEEN.Tween( { x: 1 } )
-			.to( { x: 0.000001 }, 200 )
+		this.filled_circle.setAttribute( "color", "#5f5f5f");
+		//_this.filled_circle.object3D.scale.set( 0.1, 0.1, 0.1 );
+		UI.utils.stoppedChanging( _this.filled_circle.object3D.uuid );
+		this.isRippling = false;
+	/*	new TWEEN.Tween( { x: 1 } )
+			.to( { x:0 }, 0 )
 			.onUpdate( function () {
 
 				_this.filled_circle.object3D.scale.set( this.x, this.x, this.x );
@@ -1411,7 +1466,7 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 			} )
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
-
+*/
 	},
 	click() {
 
@@ -1438,8 +1493,14 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		let _this = this;
 		// Start changes
 		UI.utils.isChanging( this.el.sceneEl, this.filled_circle.object3D.uuid );
-		new TWEEN.Tween( { x: 0.000001 } )
-			.to( { x: 1 }, 250 )
+		console.error("radio tween")
+		this.filled_circle.setAttribute( "color", "#ffffff" );
+		//_this.filled_circle.object3D.scale.set( 0.9, 0.9,0.9 );
+		UI.utils.stoppedChanging( this.filled_circle.object3D.uuid );
+		this.isSelecting = false;
+
+	/*	new TWEEN.Tween( { x: 1 } )
+			.to( { x: 0 }, 0 )
 			.onUpdate( function () {
 
 				_this.filled_circle.object3D.scale.set( this.x, this.x, this.x );
@@ -1454,7 +1515,7 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 			} )
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
-
+*/
 	},
 	remove() {
 		this.el.removeObject3D("ui-radio")
@@ -1466,13 +1527,13 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module) {
 
 module.exports = {"name":"aframe-material-collection","version":"0.5.0","description":"Material UI based primitives and components for use in your aframe projects.","homepage":"https://github.com/shaneharris/aframe-material-collection","keywords":["AFRAME","UI","Material"],"scripts":{"start":"webpack-dev-server --mode development","build":"webpack --mode production"},"repository":{"type":"git","url":"git@github.com:shaneharris/aframe-material-collection.git"},"bugs":{"url":"https://github.com/shaneharris/aframe-material-collection/issues"},"devDependencies":{"uglifyjs-webpack-plugin":"^1.2.7","webpack":"^4.16.1","webpack-cli":"^3.1.0","webpack-dev-server":"^3.1.4"},"author":"Shane Harris","license":"MIT","dependencies":{}};
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -1502,7 +1563,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -1532,7 +1593,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1597,7 +1658,7 @@ module.exports = AFRAME.registerComponent("ui-icon", {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1653,7 +1714,7 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -1803,7 +1864,7 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2011,8 +2072,8 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 
 /***/ }),
-/* 21 */,
-/* 22 */
+/* 22 */,
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2169,7 +2230,7 @@ class Utils {
  */
 
 
-let version = __webpack_require__( 14 ).version;
+let version = __webpack_require__( 15 ).version;
 console.log( "aframe-material-collection version test" + version );
 
 if ( typeof AFRAME === "undefined" ) {
@@ -2186,36 +2247,37 @@ window.UI = {
 	a_ui_button: __webpack_require__( 0 ),
 	a_ui_fab_button: __webpack_require__( 1 ),
 	a_ui_fab_button_small: __webpack_require__( 2 ),
-	a_ui_switch: __webpack_require__( 3 ),
-	a_ui_slider: __webpack_require__( 4 ),
+	a_ui_round_button: __webpack_require__( 3 ),
+	a_ui_switch: __webpack_require__( 4 ),
+	a_ui_slider: __webpack_require__( 5 ),
 //	a_ui_number: require( "./primitives/number" ),
 //	a_ui_toast: require( "./primitives/toast" ),
-	a_ui_checkbox: __webpack_require__( 5 ),
-	a_ui_radio: __webpack_require__( 6 ),
-	a_ui_input_text: __webpack_require__( 7 ),
-	a_ui_text_input: __webpack_require__( 15 ),
+	a_ui_checkbox: __webpack_require__( 6 ),
+	a_ui_radio: __webpack_require__( 7 ),
+	a_ui_input_text: __webpack_require__( 8 ),
+	a_ui_text_input: __webpack_require__( 16 ),
 //	a_ui_number_input: require( "./primitives/number-input" ),
 //	a_ui_int_input: require( "./primitives/int-input" ),
 //	a_ui_password_input: require( "./primitives/password-input" ),
-	a_ui_scroll_pane: __webpack_require__( 16 ),
+	a_ui_scroll_pane: __webpack_require__( 17 ),
 //	a_ui_renderer: require( "./primitives/renderer" ),
 
 	// Components
 	//text: require( "./components/text" ),
 	//input_text: require( "./components/input-text" ),
-	btn: __webpack_require__( 8 ),
-	icon: __webpack_require__( 17 ),
-	rounded: __webpack_require__( 18 ),
-	ripple: __webpack_require__( 19 ),
-	slider: __webpack_require__( 9 ),
-	number: __webpack_require__( 10 ),
-	switch: __webpack_require__( 11 ),
+	btn: __webpack_require__( 9 ),
+	icon: __webpack_require__( 18 ),
+	rounded: __webpack_require__( 19 ),
+	ripple: __webpack_require__( 20 ),
+	slider: __webpack_require__( 10 ),
+	number: __webpack_require__( 11 ),
+	switch: __webpack_require__( 12 ),
 	////toast: require( "./components/toast" ),
-	scroll_pane: __webpack_require__( 20 ),
+	scroll_pane: __webpack_require__( 21 ),
 	//mouse_shim: require( "./components/mouse-shim" ),
 	//double_click: require( "./components/double-click" ),
-	checkbox: __webpack_require__( 12 ),
-	radio: __webpack_require__( 13 ),
+	checkbox: __webpack_require__( 13 ),
+	radio: __webpack_require__( 14 ),
 	//border: require( "./components/border" ),
 	//curvedPlane: require( "./components/curved-plane" ),
 	//colorPicker: require( "./components/color-picker" ),
