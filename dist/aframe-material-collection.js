@@ -104,21 +104,23 @@ module.exports = AFRAME.registerPrimitive(
 				primitive: "box",
 				width: 0.5,
 				height: 0.175,
-				depth: 0.015
+				depth: 0.01
 			},
 			material: {
 				color: "#009688",
-				shader: "flat"
+				
 			},
 			"ui-btn": {
 				animated: "ui-btn.animated",
 			},
 			//   "ui-rounded": { borderRadius: 0.0025 },
 			//   "ui-ripple": { size: { x: 0.5, y: 0.175 }, clampToSquare: true, zIndex: 0.001 },
-			"text": {
+			"troika-text": {
 				align: "center",
-				zOffset: 0.025,
-				wrapCount: 10
+				depthOffset: -2000,
+				wrapCount: 10,
+				value: "a",
+				fontSize: 0.015
 			}
 		},
 		mappings: {
@@ -127,8 +129,8 @@ module.exports = AFRAME.registerPrimitive(
 			color: "material.color",
 			transparent: "material.transparent",
 			"font-color": "text.color",
-
-			"text-value": "text.value",
+            "text-value": "troika-text.value",
+			
 			"wrap-count": "text.wrapCount",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
@@ -453,7 +455,7 @@ module.exports = AFRAME.registerPrimitive(
 module.exports = AFRAME.registerComponent( "ui-btn", {
 	schema: {
 		duration: { type: "int", default: 0 },
-		hoverHeight: { type: "number", default: 0.01 },
+		hoverHeight: { type: "number", default: 0.001 },
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
 		animated: { type: "boolean", default: true },
@@ -480,7 +482,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	},
 	update() {
 
-		if ( this.data.disabled ) {
+		if ( !this.data.disabled ) {
 
 			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );

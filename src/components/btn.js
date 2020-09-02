@@ -9,7 +9,7 @@
 module.exports = AFRAME.registerComponent( "ui-btn", {
 	schema: {
 		duration: { type: "int", default: 0 },
-		hoverHeight: { type: "number", default: 0.01 },
+		hoverHeight: { type: "number", default: 0.001 },
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
 		animated: { type: "boolean", default: true },
@@ -36,7 +36,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	},
 	update() {
 
-		if ( this.data.disabled ) {
+		if ( !this.data.disabled ) {
 
 			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );

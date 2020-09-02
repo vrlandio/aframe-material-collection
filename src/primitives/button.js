@@ -14,21 +14,23 @@ module.exports = AFRAME.registerPrimitive(
 				primitive: "box",
 				width: 0.5,
 				height: 0.175,
-				depth: 0.015
+				depth: 0.01
 			},
 			material: {
 				color: "#009688",
-				shader: "flat"
+				
 			},
 			"ui-btn": {
 				animated: "ui-btn.animated",
 			},
 			//   "ui-rounded": { borderRadius: 0.0025 },
 			//   "ui-ripple": { size: { x: 0.5, y: 0.175 }, clampToSquare: true, zIndex: 0.001 },
-			"text": {
+			"troika-text": {
 				align: "center",
-				zOffset: 0.025,
-				wrapCount: 10
+				depthOffset: -2000,
+				wrapCount: 10,
+				value: "a",
+				fontSize: 0.015
 			}
 		},
 		mappings: {
@@ -37,8 +39,8 @@ module.exports = AFRAME.registerPrimitive(
 			color: "material.color",
 			transparent: "material.transparent",
 			"font-color": "text.color",
-
-			"text-value": "text.value",
+            "text-value": "troika-text.value",
+			
 			"wrap-count": "text.wrapCount",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
