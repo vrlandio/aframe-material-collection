@@ -15,7 +15,10 @@ module.exports = AFRAME.registerPrimitive(
 				radius: 0.1,
 				segments: 6
 			},
-			
+			material: {
+				color: "#009688",
+				shader: "flat"
+			},
 			//"ui-btn": {},
 			//  "ui-ripple": { size: { x: 0.1, y: 0.1 }, zIndex: 0.002, fadeDelay: 300, duration: 500 },
 			//"ui-icon": { size: { x: 0.105, y: 0.105 } }
