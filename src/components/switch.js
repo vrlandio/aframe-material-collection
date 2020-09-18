@@ -35,14 +35,14 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 				}
 
 			} else {
-
+				
 				this.click();
 
 			}
 			this.setDisabled();
 
 		}
-
+		
 	},
 	init() {
 
@@ -98,7 +98,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 	},
 
-    update() {
+    update(data) {
 
 		if ( this.data.disabled ) {
 
@@ -111,6 +111,9 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 			this.railEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 		}
+console.error(this.data.value)
+//		this.el.setAttribute( "value", this.data.value );
+		this.click();
 
 	},
 	mouseEnter(e) {
