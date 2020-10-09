@@ -17,7 +17,8 @@ module.exports = AFRAME.registerPrimitive(
 			},
 			material: {
 				color: "#009688",
-				shader: "flat"
+				shader: "flat",
+				transparent: "false"
 			},
 			//"ui-btn": {},
 			//  "ui-ripple": { size: { x: 0.1, y: 0.1 }, zIndex: 0.002, fadeDelay: 300, duration: 500 },

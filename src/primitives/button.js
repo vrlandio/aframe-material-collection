@@ -10,16 +10,16 @@ module.exports = AFRAME.registerPrimitive(
 	"a-ui-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			geometry: {
-				primitive: "box",
-				width: 0.5,
-				height: 0.175,
-				depth: 0.01
+		
+			"box-rounded": {width: 0.03,
+				height: 0.01,
+				depth: 0.01,
+				color: "#000111",
+				curveSegments: 13,
+				borderRadius: 0.01,
+				material: "standard"
 			},
-			material: {
-				color: "#009688",
-				
-			},
+			
 			"ui-btn": {
 				animated: "ui-btn.animated",
 			},
@@ -27,21 +27,23 @@ module.exports = AFRAME.registerPrimitive(
 			//   "ui-ripple": { size: { x: 0.5, y: 0.175 }, clampToSquare: true, zIndex: 0.001 },
 			"troika-text": {
 				align: "center",
-				depthOffset: -2000,
+				depthOffset: -6000,
 				wrapCount: 10,
 				value: "a",
 				fontSize: 0.015
-			}
+			},
+			
 		},
 		mappings: {
-			height: "geometry.height",
-			width: "geometry.width",
-			color: "material.color",
-			transparent: "material.transparent",
-			"font-color": "text.color",
+			height: "box-rounded.height",
+			width: "box-rounded.width",
+			depth: "box-rounded.depth",
+			color: "box-rounded.color",
+			transparent: "box-rounded.transparent",
+			
             "text-value": "troika-text.value",
 			
-			"wrap-count": "text.wrapCount",
+		
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
 			disabled: "ui-btn.disabled",
