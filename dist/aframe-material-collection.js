@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 24);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -113,15 +113,14 @@ module.exports = AFRAME.registerPrimitive(
 			"ui-btn": {
 				animated: "ui-btn.animated",
 			},
-			//   "ui-rounded": { borderRadius: 0.0025 },
-			//   "ui-ripple": { size: { x: 0.5, y: 0.175 }, clampToSquare: true, zIndex: 0.001 },
+
 			"troika-text": {
 				align: "center",
 				depthOffset: -6000,
 				wrapCount: 10,
-				value: "a",
 				fontSize: 0.015
 			},
+		
 			
 		},
 		mappings: {
@@ -132,7 +131,6 @@ module.exports = AFRAME.registerPrimitive(
 			transparent: "box-rounded.transparent",
 			
             "text-value": "troika-text.value",
-			
 		
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
@@ -563,8 +561,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseDown( e ) {
 
 		const _this = this;
+	
 		// Press state animation from hovered
-		/*  this.tween(
+/*  this.tween(
       this.defaultZ + this.data.hoverHeight,
       this.defaultZ + this.data.activeHeight,
       function() {
@@ -574,7 +573,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
         _this.el.object3D.position.z = _this.defaultZ + _this.data.activeHeight;
       }
     );
-    */
+  */  
 		UI.utils.preventDefault( e );
 
 	},
@@ -1549,6 +1548,67 @@ module.exports = {"name":"aframe-material-collection","version":"0.5.0","descrip
 
 /* global AFRAME */
 /**
+ * Button Primitive for aframe-material-collection.
+ * @namespace aframe-material-collection
+ * @primitive a-ui-button
+ * @author Shane Harris
+ */
+
+module.exports = AFRAME.registerPrimitive(
+	"a-ui-icon-button",
+	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
+		defaultComponents: {
+		
+			"box-rounded": {width: 0.03,
+				height: 0.01,
+				depth: 0.01,
+				color: "#000111",
+				curveSegments: 13,
+				borderRadius: 0.01,
+				material: "standard"
+			},
+			
+			"ui-btn": {
+				animated: "ui-btn.animated",
+			},
+
+			"troika-text": {
+				align: "center",
+				depthOffset: -6000,
+				wrapCount: 10,
+				fontSize: 0.015
+			},
+			"ui-icon": {
+				zIndex: 0.01
+			},
+
+			
+		},
+		mappings: {
+			height: "box-rounded.height",
+			width: "box-rounded.width",
+			depth: "box-rounded.depth",
+			color: "box-rounded.color",
+			transparent: "box-rounded.transparent",
+			
+            "text-value": "troika-text.value",
+			src: "ui-icon.src",
+			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
+			disabled: "ui-btn.disabled",
+			"hover-height": "ui-btn.hoverHeight",
+			"active-height": "ui-btn.activeHeight"
+		}
+	} )
+);
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+/* global AFRAME */
+/**
  * Text Input Primitive for aframe-material-collection.
  * @namespace aframe-material-collection
  * @primitive a-ui-text-input
@@ -1574,7 +1634,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -1604,7 +1664,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1669,7 +1729,7 @@ module.exports = AFRAME.registerComponent("ui-icon", {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1725,7 +1785,7 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -1875,7 +1935,7 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2083,8 +2143,8 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 
 /***/ }),
-/* 22 */,
-/* 23 */
+/* 23 */,
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2256,6 +2316,7 @@ window.UI = {
 	utils: utils,
 	// Primitives
 	a_ui_button: __webpack_require__( 0 ),
+	a_ui_icon_button: __webpack_require__( 16 ),
 	a_ui_fab_button: __webpack_require__( 1 ),
 	a_ui_fab_button_small: __webpack_require__( 2 ),
 	a_ui_round_button: __webpack_require__( 3 ),
@@ -2266,25 +2327,25 @@ window.UI = {
 	a_ui_checkbox: __webpack_require__( 6 ),
 	a_ui_radio: __webpack_require__( 7 ),
 	a_ui_input_text: __webpack_require__( 8 ),
-	a_ui_text_input: __webpack_require__( 16 ),
+	a_ui_text_input: __webpack_require__( 17 ),
 //	a_ui_number_input: require( "./primitives/number-input" ),
 //	a_ui_int_input: require( "./primitives/int-input" ),
 //	a_ui_password_input: require( "./primitives/password-input" ),
-	a_ui_scroll_pane: __webpack_require__( 17 ),
+	a_ui_scroll_pane: __webpack_require__( 18 ),
 //	a_ui_renderer: require( "./primitives/renderer" ),
 
 	// Components
 	//text: require( "./components/text" ),
 	//input_text: require( "./components/input-text" ),
 	btn: __webpack_require__( 9 ),
-	icon: __webpack_require__( 18 ),
-	rounded: __webpack_require__( 19 ),
-	ripple: __webpack_require__( 20 ),
+	icon: __webpack_require__( 19 ),
+	rounded: __webpack_require__( 20 ),
+	ripple: __webpack_require__( 21 ),
 	slider: __webpack_require__( 10 ),
 	number: __webpack_require__( 11 ),
 	switch: __webpack_require__( 12 ),
 	////toast: require( "./components/toast" ),
-	scroll_pane: __webpack_require__( 21 ),
+	scroll_pane: __webpack_require__( 22 ),
 	//mouse_shim: require( "./components/mouse-shim" ),
 	//double_click: require( "./components/double-click" ),
 	checkbox: __webpack_require__( 13 ),

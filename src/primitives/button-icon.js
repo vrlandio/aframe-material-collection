@@ -7,7 +7,7 @@
  */
 
 module.exports = AFRAME.registerPrimitive(
-	"a-ui-button",
+	"a-ui-icon-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
 		
@@ -30,7 +30,10 @@ module.exports = AFRAME.registerPrimitive(
 				wrapCount: 10,
 				fontSize: 0.015
 			},
-		
+			"ui-icon": {
+				zIndex: 0.01
+			},
+
 			
 		},
 		mappings: {
@@ -41,7 +44,7 @@ module.exports = AFRAME.registerPrimitive(
 			transparent: "box-rounded.transparent",
 			
             "text-value": "troika-text.value",
-		
+			src: "ui-icon.src",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
 			disabled: "ui-btn.disabled",

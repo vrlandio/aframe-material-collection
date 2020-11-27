@@ -20,6 +20,7 @@ window.UI = {
 	utils: utils,
 	// Primitives
 	a_ui_button: require( "./primitives/button" ),
+	a_ui_icon_button: require( "./primitives/button-icon" ),
 	a_ui_fab_button: require( "./primitives/fab_button" ),
 	a_ui_fab_button_small: require( "./primitives/fab_button_small" ),
 	a_ui_round_button: require( "./primitives/round_button" ),

@@ -111,8 +111,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseDown( e ) {
 
 		const _this = this;
+	
 		// Press state animation from hovered
-		/*  this.tween(
+/*  this.tween(
       this.defaultZ + this.data.hoverHeight,
       this.defaultZ + this.data.activeHeight,
       function() {
@@ -122,7 +123,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
         _this.el.object3D.position.z = _this.defaultZ + _this.data.activeHeight;
       }
     );
-    */
+  */  
 		UI.utils.preventDefault( e );
 
 	},
