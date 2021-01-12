@@ -163,6 +163,7 @@ module.exports = AFRAME.registerPrimitive(
 				radius: 0.1,
 				segments: 6
 			},
+			
 			material: {
 				color: "#009688",
 				shader: "flat",
@@ -1565,7 +1566,9 @@ module.exports = AFRAME.registerPrimitive(
 				color: "#000111",
 				curveSegments: 13,
 				borderRadius: 0.01,
-				material: "standard"
+				material: "standard",
+				depth: 0.02,
+				envMapIntensity: 0.4
 			},
 			
 			"ui-btn": {
@@ -1579,7 +1582,7 @@ module.exports = AFRAME.registerPrimitive(
 				fontSize: 0.015
 			},
 			"ui-icon": {
-				zIndex: 0.01
+				zIndex: 0.02
 			},
 
 			
@@ -1955,13 +1958,12 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		scrollHandleColor: { default: "#000000" },
 		intersectableClass: { default: "intersectable" },
 		cameraEl: { type: "selector" },
-		lookControlsComponent: { default: "look-controls" }
+		lookControlsComponent: { default: "look-controls" },
 	},
 	init() {
 
-
-		if (!AFRAME.utils.device.isMobile())
-		return;
+		if ( ! AFRAME.utils.device.isMobile() )
+			return;
 		this.handlePos = 0;
 		// Setup scroll bar and panel backing.
 		this.setupElements();
@@ -1972,25 +1974,23 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 			throw 'ui-scroll-pane needs an entity inside it with the class "container" - <a-entity class="container"></a-entity>';
 
 		}
+
 		// Setup scroll bar.
-	//	this.scrollBarWidth = this.rail.getAttribute( "width" );
-		const position = this.container.getAttribute("position");
-	//	this.container.setAttribute( "position", - this.data.width / 2 + " " + position.y +  " " + this.data.height / 2 + " " + position.z );
-	
-	//this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0002 ) );
-	//	this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0005 ) );
-	
-	
+		//	this.scrollBarWidth = this.rail.getAttribute( "width" );
+		const position = this.container.getAttribute( "position" );
+		//	this.container.setAttribute( "position", - this.data.width / 2 + " " + position.y +  " " + this.data.height / 2 + " " + position.z );
+
+		//this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0002 ) );
+		//	this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0005 ) );
 
 		//this.backgroundPanel.addEventListener( "ui-mousemove", mouseMove );
 		// End scroll
-		const endScroll = e => {  
+		const endScroll = e => {
 
-			console.error("endscroll")
+			console.error( "endscroll" );
 
 			if ( this.isDragging ) {
 
-			
 				// Play look controls once scrolling is finished
 				//playPauseCamera( "play" );
 				this.isDragging = false;
@@ -1998,73 +1998,77 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 				// Stop changes
 				//UI.utils.stoppedChanging( this.backgroundPanel.object3D.uuid );
 				// Prevent default behaviour of event
-				
-			
+
 				UI.utils.preventDefault( e );
+
 			}
 
 		};
+
 		const mouseMove = ( e ) => {
-		
+
 			   if ( this.isDragging ) {
-				if (this.handlePos === 0)   {
-				this.handlePos =  e.detail.intersection.point;
-				this.el.sceneEl.emit( "stateadded", { detail: "scroll"} );
-				console.error("stateadded scroll")	
-			}
+
+				if ( this.handlePos === 0 ) {
+
+					this.handlePos = e.detail.intersection.point;
+					this.el.sceneEl.emit( "stateadded", { detail: "scroll" } );
+					console.error( "stateadded scroll" );
+
+				}
+
 				   const pos = this.backgroundPanel.object3D.worldToLocal( e.detail.intersection.point );
-				   const posInter = e.detail.intersection.point
-				  
+				   const posInter = e.detail.intersection.point;
+
 				   //this.scroll( -pos.y + this.handlePos );
-				
-				   this.scroll(pos.y - this.handlePos.y );
-			   }
-	   
-		   }
+
+				   this.scroll( pos.y - this.handlePos.y );
+
+			}
+
+		   };
+
 	   	const mouseOver = ( e ) => {
-		
-			 
-	   
-		   }
-	   
-	   
-		const startScroll = (e) => {
-			console.error("startScroll")
-			this.el.sceneEl.emit( "stateremoved", {detail: "noscroll"} );
+
+		   };
+
+		const startScroll = ( e ) => {
+
+			console.error( "startScroll" );
+			this.el.sceneEl.emit( "stateremoved", { detail: "noscroll" } );
 			this.isDragging = true;
 			// Reset handle pos to center of handle
 			 // this.backgroundPanel.object3D.position.y;
-			console.error(this.backgroundPanel.object3D.position.y)
+			console.error( this.backgroundPanel.object3D.position.y );
 			// Scroll immediately and register mouse move events.
-			
+
 			//this.scroll( this.backgroundPanel.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
 			//this.scoll(10)
-		
-			
+
 			UI.utils.preventDefault( e );
 
-		}  
-
+		};
 
 		this.backgroundPanel.addEventListener( "mouseup", endScroll );
 		this.backgroundPanel.addEventListener( "mouseleave", endScroll );
 		this.backgroundPanel.addEventListener( "mouseover", mouseOver );
 		this.backgroundPanel.addEventListener( "ui-mousemove", mouseMove );
-		this.backgroundPanel.addEventListener( "mousedown", startScroll);
-	
+		this.backgroundPanel.addEventListener( "mousedown", startScroll );
+
 		// // Handle clicks on rail to scroll
 		this.backgroundPanel.addEventListener( "nomousedown", e => {
-            console.error("touchstart")
+
+			console.error( "touchstart" );
 			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
 			// Pause look controls
 			this.isDragging = true;
 			// Reset handle pos to center of handle
 			this.handlePos = 0;
 			// Scroll immediately and register mouse move events.
-			
+
 			this.scroll( this.backgroundPanel.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
 			//this.scoll(10)
-		
+
 			// Prevent default behaviour of event
 			UI.utils.preventDefault( e );
 
@@ -2074,49 +2078,46 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 		// update content clips world positions from this current element.
 
-	//	this.updateContent();
-	//	this.el.emit( "scroll-pane-loaded" );
-	//	this.setupMouseWheelScroll();
+		//	this.updateContent();
+		//	this.el.emit( "scroll-pane-loaded" );
+		//	this.setupMouseWheelScroll();
 
 		// Expose methods to the element to update/set the content of the scroll pane.
-	//	this.el.setContent = this.setContent.bind( this );
-	//	this.el.updateContent = this.updateContent.bind( this );
+		//	this.el.setContent = this.setContent.bind( this );
+		//	this.el.updateContent = this.updateContent.bind( this );
 		this.el.scroll = this.scroll.bind( this );
 
 	},
-	
-	
-
 
 	scroll( positionY ) {
 
-		let min = - this.data.height / 2 + ( this.data.height * this.handleSize ) / 2;
-		let max = this.data.height / 2 - ( this.data.height * this.handleSize ) / 2;
+		const min = - this.data.height / 2 + ( this.data.height * this.handleSize ) / 2;
+		const max = this.data.height / 2 - ( this.data.height * this.handleSize ) / 2;
 		// Set scroll position with start point offset.
-		let scroll_pos = THREE.Math.clamp( positionY, min, max );
-		let scroll_perc = this.handleSize === 1 ? 0 : 1 - ( scroll_pos - min ) / ( max - min );
-	
-		this.container.object3D.position.y = positionY // ( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2;
+		const scroll_pos = THREE.Math.clamp( positionY, min, max );
+		const scroll_perc = this.handleSize === 1 ? 0 : 1 - ( scroll_pos - min ) / ( max - min );
+
+		this.container.object3D.position.y = positionY; // ( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2;
 		//this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " " + scroll_pos + " " + ( this.data.scrollZOffset + 0.0005 ) );
 
 	},
-	
+
 	setupElements() {
 
 		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
 		this.backgroundPanel = document.createElement( "a-plane" );
 		//this.backgroundPanel.setAttribute( "class", "ui background " + this.data.intersectableClass );
-		this.backgroundPanel.setAttribute( "width", this.data.width  );
+		this.backgroundPanel.setAttribute( "width", this.data.width );
 		this.backgroundPanel.setAttribute( "height", this.data.height );
-		this.backgroundPanel.setAttribute( "position", "3 -4.5 0.25" );
+		this.backgroundPanel.setAttribute( "position", "0 0 0.55" );
 		this.backgroundPanel.setAttribute( "class", "ui" );
 		this.backgroundPanel.setAttribute( "visible", "false" );
-		//this.backgroundPanel.setAttribute( "opacity", 0.000001 ); //
-		//this.backgroundPanel.setAttribute( "transparent", true );
+		///this.backgroundPanel.setAttribute( "opacity", 0.1 ); //
+		//	this.backgroundPanel.setAttribute( "transparent", false );
 
 		this.el.appendChild( this.backgroundPanel );
-		
-/*
+
+		/*
 		// Add scroll bar rail.
 		this.rail = document.createElement( "a-plane" );
 		//this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );
@@ -2136,8 +2137,8 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		this.handle.setAttribute( "class", "ui" );
 		this.el.appendChild( this.handle );
 */
-	},
 
+	},
 
 } );
 

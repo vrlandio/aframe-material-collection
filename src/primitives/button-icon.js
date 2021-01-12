@@ -17,7 +17,9 @@ module.exports = AFRAME.registerPrimitive(
 				color: "#000111",
 				curveSegments: 13,
 				borderRadius: 0.01,
-				material: "standard"
+				material: "standard",
+				depth: 0.02,
+				envMapIntensity: 0.4
 			},
 			
 			"ui-btn": {
@@ -31,7 +33,7 @@ module.exports = AFRAME.registerPrimitive(
 				fontSize: 0.015
 			},
 			"ui-icon": {
-				zIndex: 0.01
+				zIndex: 0.02
 			},
 
 			

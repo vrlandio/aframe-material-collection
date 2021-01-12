@@ -15,6 +15,7 @@ module.exports = AFRAME.registerPrimitive(
 				radius: 0.1,
 				segments: 6
 			},
+			
 			material: {
 				color: "#009688",
 				shader: "flat",
