@@ -100,21 +100,23 @@ module.exports = AFRAME.registerPrimitive(
 	"a-ui-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			"troika-text": {
+			"notroika-text": {
 				align: "left",
 		     	depthOffset: -6000,
 				wrapCount: 10,
 				fontSize: 0.015,
 			
 			},
-			"box-rounded": {width: 0.03,
+			"box-rounded": {
+				width: 0.03,
 				height: 0.01,
 				depth: 0.01,
 				color: 0xff0000,
 				curveSegments: 13,
 				borderRadius: 0.01,
 				material: "standard",
-				envMapIntensity: 0.75
+				envMapIntensity: 0.75,
+				
 			},
 			
 			"ui-btn": {
@@ -477,7 +479,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
+
 		this.el.setAttribute( "class", "ui" );
+		
 		// register input events for interaction
 		if ( ! this.data.disabled ) {
 

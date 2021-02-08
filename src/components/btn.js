@@ -22,7 +22,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
+
 		this.el.setAttribute( "class", "ui" );
+		
 		// register input events for interaction
 		if ( ! this.data.disabled ) {
 

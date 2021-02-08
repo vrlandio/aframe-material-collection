@@ -10,21 +10,23 @@ module.exports = AFRAME.registerPrimitive(
 	"a-ui-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			"troika-text": {
+			"notroika-text": {
 				align: "left",
 		     	depthOffset: -6000,
 				wrapCount: 10,
 				fontSize: 0.015,
 			
 			},
-			"box-rounded": {width: 0.03,
+			"box-rounded": {
+				width: 0.03,
 				height: 0.01,
 				depth: 0.01,
 				color: 0xff0000,
 				curveSegments: 13,
 				borderRadius: 0.01,
 				material: "standard",
-				envMapIntensity: 0.75
+				envMapIntensity: 0.75,
+				
 			},
 			
 			"ui-btn": {
