@@ -10,7 +10,9 @@ module.exports = AFRAME.registerComponent("ui-icon", {
 		src: { default: "" },
 		size: { type: "vec2", default: { x: 0.1, y: 0.1 } },
 		zIndex: { type: "number", default: 0.003 },
-		color: { default: "#fff" }
+		color: { default: "#fff" },
+		iconmesh: {default: "circle"}
+
 	},
 	init() {
 
@@ -32,6 +34,13 @@ module.exports = AFRAME.registerComponent("ui-icon", {
 		const material = new THREE.MeshBasicMaterial({ color: this.data.color, alphaTest: 0.4, transparent: true, map: textureLoader })
 
 		textureLoader.dispose();
+		console.error(this.data.iconmesh)
+		if (this.data.iconmesh == "circle")
+		this.icon = new THREE.Mesh(
+			new THREE.CircleGeometry(this.data.size.x/2.5, 32),
+			material
+		);
+		else 
 		this.icon = new THREE.Mesh(
 			new THREE.PlaneGeometry(this.data.size.x, this.data.size.y),
 			material

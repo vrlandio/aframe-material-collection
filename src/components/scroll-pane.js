@@ -174,7 +174,7 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 		this.el.appendChild( this.backgroundPanel );
 
-		/*
+	/*	
 		// Add scroll bar rail.
 		this.rail = document.createElement( "a-plane" );
 		//this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );

@@ -31,6 +31,7 @@ module.exports = AFRAME.registerPrimitive(
 			//"icon-color": "ui-icon.color",
 			transparent: "material.transparent",
 			src: "ui-icon.src",
+			"icon-mesh": "ui-icon.iconmesh",
 			// "ripple-color": "ui-ripple.color",
 			// "ripple-size": "ui-ripple.size",
 			// "ripple-z-index": "ui-ripple.zIndex",

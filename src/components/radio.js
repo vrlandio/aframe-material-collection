@@ -15,7 +15,7 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		unselectedColor: { default: "#5f5f5f" },
 		disabledColor: { default: "#afafaf" },
 		disabled: { type: "boolean", default: false },
-		intersectableClass: { default: "intersectable" },
+		intersectableClass: { default: "ui" },
 		width: { type: "number", default: 0.15 },
 		height: { type: "number", default: 0.15 }
 	},
@@ -29,7 +29,7 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		this.filled_circle.setAttribute( "scale", "1 1 1" );
 		//this.filled_circle.setAttribute( "color", this.data.disabled ? this.data.disabledColor : this.data.selectedColor );
 		this.filled_circle.setAttribute( "shader", "flat" );
-		this.filled_circle.setAttribute( "class", this.data.intersectableClass + "no-yoga-layout" );
+		this.filled_circle.setAttribute( "class", this.data.intersectableClass );
 		this.filled_circle.setAttribute( "segments", 6 );
 		//this.el.components.material.material.color = new THREE.Color( this.data.disabled ? this.data.disabledColor : this.data.unselectedColor );
 		this.el.appendChild( this.filled_circle );
@@ -37,7 +37,7 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		this.backing = document.createElement( "a-circle" );
 		this.backing.setAttribute( "radius", this.data.selectedRadius );
 		this.backing.setAttribute( "position", "0 0 -0.005" );
-		this.backing.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
+		this.backing.setAttribute( "class", this.data.intersectableClass );
 		this.backing.setAttribute( "shader", "flat" );
 		this.backing.setAttribute( "segments", 6 );
 		// this.backing.setAttribute("opacity", 0.0001);
@@ -67,6 +67,18 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		};
 
 	},
+	update() {
+
+		if ( this.data.selected ) {
+
+			this.click();
+
+		}else {
+			this.deselect();
+		}
+	},
+
+
 	play() {
 
 		// Add / Remove click handlers based on disabled state.
@@ -153,23 +165,6 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		UI.utils.stoppedChanging( this.filled_circle.object3D.uuid );
 		this.isSelecting = false;
 
-	/*	new TWEEN.Tween( { x: 1 } )
-			.to( { x: 0 }, 0 )
-			.onUpdate( function () {
-
-				_this.filled_circle.object3D.scale.set( this.x, this.x, this.x );
-
-			} )
-			.onComplete( () => {
-
-				// Stop changes
-				UI.utils.stoppedChanging( this.filled_circle.object3D.uuid );
-				this.isSelecting = false;
-
-			} )
-			.easing( TWEEN.Easing.Exponential.Out )
-			.start();
-*/
 	},
 	remove() {
 		this.el.removeObject3D("ui-radio")
