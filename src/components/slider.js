@@ -21,7 +21,8 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 		lookControlsComponent: { default: "look-controls" },
 		handleRadius: { type: "number", default: 0.055 },
 		scrollZOffset: { type: "number", default: 0 },
-		cameraEl: { type: "selector" }
+		cameraEl: { type: "selector" },
+		courser2d: { type: "boolean", default: false },
 	},
 	getValue() {
 
@@ -33,16 +34,7 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 		this.scroll_perc = this.data.value;
 		this.width = this.data.width;
 		this.height = this.data.height;
-		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
-		this.backgroundPanel = document.createElement( "a-plane" );
-		this.backgroundPanel.setAttribute( "class", "no-yoga-layout background " + this.data.intersectableClass );
-		this.backgroundPanel.setAttribute( "width", this.data.width + 0.01 );
-		this.backgroundPanel.setAttribute( "height", this.data.height + 0.01 );
-		this.backgroundPanel.setAttribute( "position", "0 0 -0.02" );
-		//this.backgroundPanel.setAttribute("opacity", 0.0001); //
-		this.backgroundPanel.setAttribute( "transparent", false );
-		this.backgroundPanel.setAttribute( "visible", false );
-		this.el.appendChild( this.backgroundPanel );
+
 		// Setup handle circle entity.
 		this.handleEl = document.createElement( "a-circle" );
 		this.handleEl.setAttribute( "radius", this.data.handleRadius );
@@ -50,33 +42,39 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 		this.handleEl.setAttribute( "shader", "flat" );
 		// this.handleEl.setAttribute('ui-ripple','size:0.1 0.1;color:#999;fadeDelay:300;duration:500');
 		this.handleEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
-		this.handleEl.setAttribute( "position", - this.data.width / 2 + this.data.handleRadius + " 0 " + this.data.handleZIndex );
-		this.handleEl.setAttribute( "segments", 6 );
+		this.handleEl.setAttribute( "position", - this.data.width / 2 + this.data.handleRadius  + " 0 " + this.data.handleZIndex );
+		
 		this.el.appendChild( this.handleEl );
 
 		// Setup rail entity.
 		this.railEl = document.createElement( "a-plane" );
-		this.railEl.setAttribute( "width", this.data.width - 0.1 );
+		this.railEl.setAttribute( "width", this.data.width - this.data.handleRadius /2 );
 		this.railEl.setAttribute( "height", "0.05" );
 		this.railEl.setAttribute( "shader", "flat" );
-		this.railEl.setAttribute( "ui-rounded", "borderRadius:0.025" );
 		this.railEl.setAttribute( "color", this.data.railColor );
-		this.railEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
+		this.railEl.setAttribute( "class", "ui" );
 		this.el.appendChild( this.railEl );
 		// Wait for the rounded edge on the rail to load to clone the geometry for the
 		// selected progress bar part of the rail
-		this.railEl.addEventListener( "rounded-loaded", () => {
+		this.railEl.addEventListener( "loaded", () => {
 
 			this.getRailObject( this.railEl.object3D );
 			this.slide( this.scroll_perc, true );
 
 		} );
+
+		if ( ! this.data.disabled ) {
+
+			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+
+		}
 		// Pause/play camera look controls
 		const playPauseCamera = method => {
 
 			if ( this.data.cameraEl ) {
 
-				let lookControls = this.data.cameraEl.components[ this.data.lookControlsComponent ];
+				const lookControls = this.data.cameraEl.components[ this.data.lookControlsComponent ];
 				if ( lookControls ) {
 
 					lookControls[ method ]();
@@ -86,8 +84,10 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 			}
 
 		};
+
 		// Setup mouse move handler for scrolling and updating scroll handle.
 		const mousemove = e => this.mouseMove( e );
+		
 		// Start scroll
 		this.handleEl.addEventListener( "mousedown", e => {
 
@@ -97,19 +97,35 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 			// Store the start point offset
 			this.el.emit( "slide-start", this.scroll_perc );
 			this.handlePos = this.handleEl.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).x;
-			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
+			this.railEl.addEventListener( "ui-mousemove", mousemove );
+			this.handleEl.addEventListener( "ui-mousemove", mousemove );
+		
+			this.railEl.addEventListener( "mouseup", endScroll, {
+				once: true,
+			} );
+			this.handleEl.addEventListener( "mouseup", endScroll , {
+				once: true,
+			});
 			// Start changes
 			UI.utils.isChanging( this.el.sceneEl, this.handleEl.object3D.uuid );
 			// Prevent default behaviour of event
 			UI.utils.preventDefault( e );
-
+			
+			
 		} );
 		// End scroll
 		const endScroll = e => {
 
 			if ( this.isDragging ) {
 
-				this.backgroundPanel.removeEventListener( "ui-mousemove", mousemove );
+				this.railEl.removeEventListener( "ui-mousemove", mousemove );
+				this.handleEl.removeEventListener( "ui-mousemove", mousemove );
+				this.railEl.removeEventListener( "mouseup", endScroll, {
+					once: true,
+				} );
+				this.handleEl.removeEventListener( "mouseup", endScroll , {
+					once: true,
+				});
 				// Play look controls once scrolling is finished
 				playPauseCamera( "play" );
 				this.isDragging = false;
@@ -122,35 +138,39 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 			}
 
 		};
-		this.backgroundPanel.addEventListener( "mouseup", endScroll );
-		this.backgroundPanel.addEventListener( "mouseleave", endScroll );
-		// // Handle clicks on rail to scroll
-		this.railEl.addEventListener( "mousedown", e => {
 
-			UI.utils.isChanging( this.el.sceneEl, this.handleEl.object3D.uuid );
-			// Pause look controls
-			this.isDragging = true;
-			// Reset handle pos to center of handle
-			this.handlePos = 0;
-			// Scroll immediately and register mouse move events.
-			this.slide( this.railEl.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).x );
-			this.backgroundPanel.addEventListener( "ui-mousemove", mousemove );
-			this.el.emit( "slide-end", this.scroll_perc );
-			// Prevent default behaviour of event
-			UI.utils.preventDefault( e );
 
-		} );
 		this.el.slide = this.slide.bind( this );
 		this.el.getValue = this.getValue.bind( this );
 		this.el.railEl = this.railEl;
 
 	},
+	mouseEnter() {
+
+		if ( this.data.courser2d ) {
+
+			this.el.sceneEl.classList.remove( "grab-cursor" );
+			this.el.sceneEl.classList.add( "pointer-cursor" );
+
+		}
+
+	},
+	mouseLeave() {
+
+		if ( this.data.courser2d ) {
+
+			this.el.sceneEl.classList.remove( "pointer-cursor" );
+			this.el.sceneEl.classList.add( "grab-cursor" );
+
+		}
+
+	},
 	slide( positionX, isPerc ) {
 
-		let min = - this.data.width / 2 + this.data.handleRadius;
-		let max = this.data.width / 2 - this.data.handleRadius;
+		const min = - this.data.width / 2 + this.data.handleRadius;
+		const max = this.data.width / 2 - this.data.handleRadius;
 		// Set scroll position with start point offset.
-		let scroll_pos = isPerc ? min + ( max - min ) * positionX : THREE.Math.clamp( positionX, min, max );
+		const scroll_pos = isPerc ? min + ( max - min ) * positionX : THREE.Math.clamp( positionX, min, max );
 		this.scroll_perc = isPerc ? positionX : ( scroll_pos - min ) / ( max - min );
 		this.el.emit( "slide", this.scroll_perc );
 		//this.progress.scale.set( this.scroll_perc || 0.0001, 1, 1 );
@@ -165,10 +185,26 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 	},
 	mouseMove( e ) {
 
+		console.error( "mouseMove slider" );
 		if ( this.isDragging ) {
 
-			let pos = this.railEl.object3D.worldToLocal( e.detail.intersection.point );
+			const pos = this.railEl.object3D.worldToLocal( e.detail.intersection.point );
 			this.slide( pos.x - this.handlePos + this.data.handleRadius );
+
+		}
+
+	},
+	update() {
+		this.scroll_perc = this.data.value;
+		if ( ! this.data.disabled ) {
+
+			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+
+		} else {
+
+			this.handleEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 		}
 
@@ -189,5 +225,11 @@ module.exports = AFRAME.registerComponent( "ui-slider", {
 
 		} );
 
-	}
+	},
+	remove() {
+
+		this.el.removeObject3D( 'ui-slider' );
+		
+
+	},
 } );

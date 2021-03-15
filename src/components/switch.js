@@ -19,7 +19,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		intersectableClass: { default: "intersectable" },
 		width: { type: "number", default: 0.3 },
 		height: { type: "number", default: 0.1 },
-		courser2d : { type: "boolean", default: false }
+		courser2d: { type: "boolean", default: false },
 	},
 	updateSchema() {
 
@@ -35,14 +35,15 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 				}
 
 			} else {
-				
+
 				this.click();
 
 			}
+
 			this.setDisabled();
 
 		}
-		
+
 	},
 	init() {
 
@@ -56,7 +57,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		//  this.handleEl.setAttribute('ui-ripple','size:0.1 0.1;color:#999;fadeDelay:300;duration:500');
 		this.handleEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
 		this.handleEl.setAttribute( "position", "-0.05 0 " + this.data.handleZIndex );
-		this.handleEl.setAttribute( "segments", 6 );
+		//this.handleEl.setAttribute( "segments", 6 );
 		this.el.appendChild( this.handleEl );
 
 		// Setup rail entity.
@@ -64,13 +65,13 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		this.railEl.setAttribute( "width", "0.15" );
 		this.railEl.setAttribute( "height", "0.05" );
 		this.railEl.setAttribute( "shader", "flat" );
-		this.railEl.setAttribute( "ui-rounded", "borderRadius:0.025" );
+		
 		this.railEl.setAttribute( "color", this.data.railColor );
 		this.railEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
 		this.el.appendChild( this.railEl );
 		// Wait for the rounded edge on the rail to load to clone the geometry for the
 		// selected progress bar part of the rail
-		this.railEl.addEventListener( "rounded-loaded", () => {
+		this.railEl.addEventListener( "loaded", () => {
 
 			this.getRailObject( this.railEl.object3D );
 			this.setDisabled();
@@ -89,51 +90,53 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 			}
 
 		};
-        if ( ! this.data.disabled ) {
 
-		this.railEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
-        this.railEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+		if ( ! this.data.disabled ) {
+
+			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 		}
 
 	},
 
-    update(data) {
+	update( data ) {
 
 		if ( this.data.disabled ) {
 
-			this.railEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );		
-			this.railEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 		} else {
 
-			this.railEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
-			this.railEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.handleEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 		}
-console.error(this.data.value)
-//		this.el.setAttribute( "value", this.data.value );
+
+		//		this.el.setAttribute( "value", this.data.value );
 		this.click();
 
 	},
-	mouseEnter(e) {
+	mouseEnter() {
 
-		if (this.data.courser2d) {
-	
-		   this.el.sceneEl.classList.remove("initial-cursor");	
-		   this.el.sceneEl.classList.add("pointer-cursor");	
-	
+		if ( this.data.courser2d ) {
+
+			this.el.sceneEl.classList.remove( "grab-cursor" );
+			this.el.sceneEl.classList.add( "pointer-cursor" );
+
 		}
 
 	},
 	mouseLeave() {
-		
-		if (this.data.courser2d) {
 
-		   this.el.sceneEl.classList.remove("pointer-cursor");	
-		  
+		if ( this.data.courser2d ) {
+
+			this.el.sceneEl.classList.remove( "pointer-cursor" );
+			this.el.sceneEl.classList.add( "grab-cursor" );
+
 		}
-	   
+
 	},
 	setDisabled() {
 
@@ -214,9 +217,11 @@ console.error(this.data.value)
 
 	},
 	remove() {
-		this.el.removeObject3D('ui-switch');
-	//	this.el.remove(this.handleEl)
-       // this.el.remove(this.railEl)  
+
+		this.el.removeObject3D( 'ui-switch' );
+		//	this.el.remove(this.handleEl)
+		// this.el.remove(this.railEl)
 		//this.el.object3D.geometry.dispose();
-	}
+
+	},
 } );

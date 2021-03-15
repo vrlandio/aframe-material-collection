@@ -14,6 +14,7 @@ module.exports = AFRAME.registerPrimitive(
 		mappings: {
 			value: "ui-slider.value",
 			disabled: "ui-slider.disabled",
+			courser2d: "ui-slider.courser2d",
 			"camera-el": "ui-slider.cameraEl"
 		}
 	} )
