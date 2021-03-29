@@ -23,7 +23,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
 
-		this.el.setAttribute( "class", "ui" );
+	
 		
 		// register input events for interaction
 		if ( ! this.data.disabled ) {
@@ -39,6 +39,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	update() {
 
 		if ( !this.data.disabled ) {
+			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
+			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
+			this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );

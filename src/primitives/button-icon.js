@@ -55,3 +55,55 @@ module.exports = AFRAME.registerPrimitive(
 		}
 	} )
 );
+
+
+
+module.exports = AFRAME.registerPrimitive(
+	"a-ui-icon-button-new",
+	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
+		defaultComponents: {
+		
+			"box-rounded": {
+			
+				
+				color: "#000111",
+				curveSegments: 16,
+				borderRadius: 0.005,
+				material: "standard",
+				depth: 0.02,
+				envMapIntensity: 0.5,
+				
+			},
+			
+		
+			"ui-icon": {
+				zIndex: 0.005,
+				iconmesh: "plane",
+				size: {x:1.45,y:0.95},
+				width: 0.5,
+				height: 0.5,
+			},
+			
+		
+
+			
+		},
+		mappings: {
+			height: "box-rounded.height",
+			width: "box-rounded.width",
+		
+			depth: "box-rounded.depth",
+			color: "box-rounded.color",
+			transparent: "box-rounded.transparent",
+			
+          
+			src: "ui-icon.src",
+			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
+			disabled: "ui-btn.disabled",
+			"hover-height": "ui-btn.hoverHeight",
+			"active-height": "ui-btn.activeHeight"
+		
+		}
+	} )
+);
