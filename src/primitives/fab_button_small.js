@@ -19,12 +19,13 @@ module.exports = AFRAME.registerPrimitive(
 				shader: "flat"
 			},
 			"ui-icon": {
-				zIndex: 0.005,
+				zIndex: 0.00001,
 				iconmesh: "circle",
 				size: {x:0.1,y:0.1},
 				width: 0.01,
 				height: 0.01,
-				radius: 0.01,
+				radius: 0.04,
+
 			},
 			"ui-btn": {},
 			// "ui-ripple": { size: { x: 0.125, y: 0.125 }, zIndex: -0.001, color: "#ff0000" },
@@ -32,6 +33,8 @@ module.exports = AFRAME.registerPrimitive(
 		},
 		mappings: {
 			radius: "geometry.radius",
+			radiusicon: "ui-icon.radius",
+			
 			color: "material.color",
 			"icon-color": "ui-icon.color",
 			transparent: "material.transparent",
@@ -43,6 +46,8 @@ module.exports = AFRAME.registerPrimitive(
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
+			tooltip: "ui-btn.tooltip",
+			tooltiptext:"ui-btn.tooltiptext",
 		}
 	} )
 );

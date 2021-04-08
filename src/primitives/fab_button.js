@@ -38,6 +38,7 @@ module.exports = AFRAME.registerPrimitive(
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
+			tooltip: "ui-btn.tooltip",
 		}
 	} )
 );

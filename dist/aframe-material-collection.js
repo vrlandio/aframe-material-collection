@@ -192,6 +192,7 @@ module.exports = AFRAME.registerPrimitive(
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
+			tooltip: "ui-btn.tooltip",
 		}
 	} )
 );
@@ -222,12 +223,13 @@ module.exports = AFRAME.registerPrimitive(
 				shader: "flat"
 			},
 			"ui-icon": {
-				zIndex: 0.005,
+				zIndex: 0.00001,
 				iconmesh: "circle",
 				size: {x:0.1,y:0.1},
 				width: 0.01,
 				height: 0.01,
-				radius: 0.01,
+				radius: 0.04,
+
 			},
 			"ui-btn": {},
 			// "ui-ripple": { size: { x: 0.125, y: 0.125 }, zIndex: -0.001, color: "#ff0000" },
@@ -235,6 +237,8 @@ module.exports = AFRAME.registerPrimitive(
 		},
 		mappings: {
 			radius: "geometry.radius",
+			radiusicon: "ui-icon.radius",
+			
 			color: "material.color",
 			"icon-color": "ui-icon.color",
 			transparent: "material.transparent",
@@ -246,6 +250,8 @@ module.exports = AFRAME.registerPrimitive(
 			disabled: "ui-btn.disabled",
 			animated: "ui-btn.animated",
 			courser2d: "ui-btn.courser2d",
+			tooltip: "ui-btn.tooltip",
+			tooltiptext:"ui-btn.tooltiptext",
 		}
 	} )
 );
@@ -481,8 +487,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
 		animated: { type: "boolean", default: true },
-		courser2d : { type: "boolean", default: false }
-	},
+		courser2d: { type: "boolean", default: false },
+	    tooltip: { type: "boolean", default: false },
+		tooltiptext: { type: "string", default: "tooltip" },
+		tooltipwidth: { type: "number", default: 0.1 },	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -491,8 +499,6 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
 
-	
-		
 		// register input events for interaction
 		if ( ! this.data.disabled ) {
 
@@ -506,7 +512,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	},
 	update() {
 
-		if ( !this.data.disabled ) {
+		if ( ! this.data.disabled ) {
+
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
@@ -530,10 +537,14 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseEnter( e ) {
 
 		if ( this.data.animated ) {
-		    if (this.data.courser2d) {
- 			this.el.sceneEl.classList.remove("grab-cursor");	
-            this.el.sceneEl.classList.add("pointer-cursor");	
+
+		    if ( this.data.courser2d ) {
+
+ 			this.el.sceneEl.classList.remove( "grab-cursor" );
+				this.el.sceneEl.classList.add( "pointer-cursor" );
+
 			}
+
 			const _this = this;
 			// Lift the button up for hover animation
 			this.tween(
@@ -548,8 +559,28 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 					_this.el.object3D.position.z = _this.defaultZ + _this.data.hoverHeight;
 
-				}
+				},
 			);
+
+		}
+
+		if ( this.data.tooltip ) {
+
+			this.el.setAttribute( "box-rounded-text", {
+				width: this.data.tooltipwidth,
+				height: 0.015,
+				depth: 0.001,
+				color: 0xfffff0,
+				curveSegments: 13,
+				borderRadius: 0.005,
+				material: "phong",
+				zOffset: 0,
+				xOffset: 0, 
+				yOffset: 0.03,
+				envMapIntensity: 1.0,
+				text: this.data.tooltiptext,
+			
+			 } );
 
 		}
 		//UI.utils.preventDefault(e)
@@ -563,15 +594,28 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			return ( this.is_clicked = false );
 
 		}
+
 		// Reset button state from hover
 		if ( this.data.animated ) {
+
 			this.resetAnimation( this.defaultZ + this.data.hoverHeight );
-			if (this.data.courser2d) {
-			  this.el.sceneEl.classList.remove("pointer-cursor");	
-			  this.el.sceneEl.classList.add("grab-cursor");	
+			if ( this.data.courser2d ) {
+
+			  this.el.sceneEl.classList.remove( "pointer-cursor" );
+			  this.el.sceneEl.classList.add( "grab-cursor" );
+
 			}
+
 		}
+
+		if ( this.data.tooltip ) {
+
+			this.el.removeAttribute( "box-rounded-text" );
+
+		}
+
 		//UI.utils.preventDefault(e)
+		console.error( "mouseLeave Button" );
 
 	},
 	mouseUp( e ) {
@@ -585,9 +629,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseDown( e ) {
 
 		const _this = this;
-	
+
 		// Press state animation from hovered
-/*  this.tween(
+		/*  this.tween(
       this.defaultZ + this.data.hoverHeight,
       this.defaultZ + this.data.activeHeight,
       function() {
@@ -597,13 +641,13 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
         _this.el.object3D.position.z = _this.defaultZ + _this.data.activeHeight;
       }
     );
-  */  
+  */
 		UI.utils.preventDefault( e );
 
 	},
 	resetAnimation( start_z ) {
 
-		let _this = this;
+		const _this = this;
 		this.tween(
 			start_z,
 			this.defaultZ,
@@ -616,13 +660,13 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 				_this.el.object3D.position.z = _this.defaultZ;
 
-			}
+			},
 		);
 
 	},
 	tween( from, to, callback, complete ) {
 
-		let _this = this;
+		const _this = this;
 		// Start changes
 		UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
 		return new TWEEN.Tween( { x: from } )
@@ -638,7 +682,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
 
-	}
+	},
 } );
 
 
@@ -1800,21 +1844,16 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 		size: { type: "vec2", default: { x: 0.1, y: 0.1 } },
 		width:  { type: "number", default: 0.1 },
 		height:  { type: "number", default: 0.1 },
-		zIndex: { type: "number", default: 0.03 },
+		zIndex: { type: "number", default: 0.0001 },
 		color: { default: "#fff" },
 		iconmesh: { default: "circle" },
+		radius: { type: "number", default: 0.03 },
 
 	},
 	init() {
 
-		/*	this.icon = new THREE.Mesh(
-				new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
-				new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
-			);
-			this.icon.position.set( 0, 0, this.data.zIndex );
-			this.el.object3D.add( this.icon );
-	*/
-	
+		//this._manager = new THREE.LoadingManager();
+        //this._loader = new THREE.TextureLoader(this._manager);
 
 	},
 
@@ -1827,7 +1866,7 @@ const Mesh = this.el.object3D.getObjectByProperty( "type", "Mesh" )
 
 
 		//this.el.setAttribute( "a-image", "src", this.data.src );
-		const textureMap  = new THREE.TextureLoader().load( this.data.src );
+		const textureMap  =  new THREE.TextureLoader().load( this.data.src );
 		let width, height;
         if (Mesh.geometry.boundingBox)  {
 
@@ -1845,13 +1884,21 @@ const Mesh = this.el.object3D.getObjectByProperty( "type", "Mesh" )
 
 
 
-		const material = new THREE.MeshStandardMaterial( { color: this.data.color, alphaTest: 0.4, transparent: false, map: textureMap } );
-		material.envMapIntensity = 0.4;
-	    textureMap.dispose();   
+		//const material = new THREE.MeshBasicMaterial( { emissive:this.data.color, alphaTest: 0.4, transparent: false, map: textureMap } );
+		
+		const material = new THREE.MeshBasicMaterial({ transparent: true, map: textureMap } );
+		
+		material.onUpdate = function () {
+
+			// Delete texture data once it has been uploaded to the GPU
+
+			material.mipmaps.length = 0;
+
+		};
 
 		if ( this.data.iconmesh == "circle" )
 			this.icon = new THREE.Mesh(
-				new THREE.CircleGeometry( this.data.size.x / 2.5, 32 ),
+				new THREE.CircleGeometry( this.data.radius , 32 ),
 				material,
 			);
 		else

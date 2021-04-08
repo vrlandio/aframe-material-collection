@@ -11,21 +11,16 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 		size: { type: "vec2", default: { x: 0.1, y: 0.1 } },
 		width:  { type: "number", default: 0.1 },
 		height:  { type: "number", default: 0.1 },
-		zIndex: { type: "number", default: 0.03 },
+		zIndex: { type: "number", default: 0.0001 },
 		color: { default: "#fff" },
 		iconmesh: { default: "circle" },
+		radius: { type: "number", default: 0.03 },
 
 	},
 	init() {
 
-		/*	this.icon = new THREE.Mesh(
-				new THREE.PlaneGeometry( this.data.size.x, this.data.size.y ),
-				new THREE.MeshBasicMaterial( { color: this.data.color, alphaTest: 0.4, transparent: true, map: new THREE.TextureLoader().load( this.data.src ) } )
-			);
-			this.icon.position.set( 0, 0, this.data.zIndex );
-			this.el.object3D.add( this.icon );
-	*/
-	
+		//this._manager = new THREE.LoadingManager();
+        //this._loader = new THREE.TextureLoader(this._manager);
 
 	},
 
@@ -38,7 +33,7 @@ const Mesh = this.el.object3D.getObjectByProperty( "type", "Mesh" )
 
 
 		//this.el.setAttribute( "a-image", "src", this.data.src );
-		const textureMap  = new THREE.TextureLoader().load( this.data.src );
+		const textureMap  =  new THREE.TextureLoader().load( this.data.src );
 		let width, height;
         if (Mesh.geometry.boundingBox)  {
 
@@ -56,13 +51,21 @@ const Mesh = this.el.object3D.getObjectByProperty( "type", "Mesh" )
 
 
 
-		const material = new THREE.MeshStandardMaterial( { color: this.data.color, alphaTest: 0.4, transparent: false, map: textureMap } );
-		material.envMapIntensity = 0.4;
-	    textureMap.dispose();   
+		//const material = new THREE.MeshBasicMaterial( { emissive:this.data.color, alphaTest: 0.4, transparent: false, map: textureMap } );
+		
+		const material = new THREE.MeshBasicMaterial({ transparent: true, map: textureMap } );
+		
+		material.onUpdate = function () {
+
+			// Delete texture data once it has been uploaded to the GPU
+
+			material.mipmaps.length = 0;
+
+		};
 
 		if ( this.data.iconmesh == "circle" )
 			this.icon = new THREE.Mesh(
-				new THREE.CircleGeometry( this.data.size.x / 2.5, 32 ),
+				new THREE.CircleGeometry( this.data.radius , 32 ),
 				material,
 			);
 		else

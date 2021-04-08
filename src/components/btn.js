@@ -13,8 +13,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		activeHeight: { type: "number", default: - 0.001 },
 		disabled: { type: "boolean", default: false },
 		animated: { type: "boolean", default: true },
-		courser2d : { type: "boolean", default: false }
-	},
+		courser2d: { type: "boolean", default: false },
+	    tooltip: { type: "boolean", default: false },
+		tooltiptext: { type: "string", default: "tooltip" },
+		tooltipwidth: { type: "number", default: 0.1 },	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -23,8 +25,6 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
 
-	
-		
 		// register input events for interaction
 		if ( ! this.data.disabled ) {
 
@@ -38,7 +38,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	},
 	update() {
 
-		if ( !this.data.disabled ) {
+		if ( ! this.data.disabled ) {
+
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
@@ -62,10 +63,14 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseEnter( e ) {
 
 		if ( this.data.animated ) {
-		    if (this.data.courser2d) {
- 			this.el.sceneEl.classList.remove("grab-cursor");	
-            this.el.sceneEl.classList.add("pointer-cursor");	
+
+		    if ( this.data.courser2d ) {
+
+ 			this.el.sceneEl.classList.remove( "grab-cursor" );
+				this.el.sceneEl.classList.add( "pointer-cursor" );
+
 			}
+
 			const _this = this;
 			// Lift the button up for hover animation
 			this.tween(
@@ -80,8 +85,28 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 					_this.el.object3D.position.z = _this.defaultZ + _this.data.hoverHeight;
 
-				}
+				},
 			);
+
+		}
+
+		if ( this.data.tooltip ) {
+
+			this.el.setAttribute( "box-rounded-text", {
+				width: this.data.tooltipwidth,
+				height: 0.015,
+				depth: 0.001,
+				color: 0xfffff0,
+				curveSegments: 13,
+				borderRadius: 0.005,
+				material: "phong",
+				zOffset: 0,
+				xOffset: 0, 
+				yOffset: 0.03,
+				envMapIntensity: 1.0,
+				text: this.data.tooltiptext,
+			
+			 } );
 
 		}
 		//UI.utils.preventDefault(e)
@@ -95,15 +120,28 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			return ( this.is_clicked = false );
 
 		}
+
 		// Reset button state from hover
 		if ( this.data.animated ) {
+
 			this.resetAnimation( this.defaultZ + this.data.hoverHeight );
-			if (this.data.courser2d) {
-			  this.el.sceneEl.classList.remove("pointer-cursor");	
-			  this.el.sceneEl.classList.add("grab-cursor");	
+			if ( this.data.courser2d ) {
+
+			  this.el.sceneEl.classList.remove( "pointer-cursor" );
+			  this.el.sceneEl.classList.add( "grab-cursor" );
+
 			}
+
 		}
+
+		if ( this.data.tooltip ) {
+
+			this.el.removeAttribute( "box-rounded-text" );
+
+		}
+
 		//UI.utils.preventDefault(e)
+		console.error( "mouseLeave Button" );
 
 	},
 	mouseUp( e ) {
@@ -117,9 +155,9 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	mouseDown( e ) {
 
 		const _this = this;
-	
+
 		// Press state animation from hovered
-/*  this.tween(
+		/*  this.tween(
       this.defaultZ + this.data.hoverHeight,
       this.defaultZ + this.data.activeHeight,
       function() {
@@ -129,13 +167,13 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
         _this.el.object3D.position.z = _this.defaultZ + _this.data.activeHeight;
       }
     );
-  */  
+  */
 		UI.utils.preventDefault( e );
 
 	},
 	resetAnimation( start_z ) {
 
-		let _this = this;
+		const _this = this;
 		this.tween(
 			start_z,
 			this.defaultZ,
@@ -148,13 +186,13 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 				_this.el.object3D.position.z = _this.defaultZ;
 
-			}
+			},
 		);
 
 	},
 	tween( from, to, callback, complete ) {
 
-		let _this = this;
+		const _this = this;
 		// Start changes
 		UI.utils.isChanging( this.el.sceneEl, this.el.object3D.uuid );
 		return new TWEEN.Tween( { x: from } )
@@ -170,5 +208,5 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
 
-	}
+	},
 } );
