@@ -19,22 +19,15 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 	},
 	init() {
 
-		
-		this._loader = new THREE.TextureLoader(  );
-
-	},
-
-	update() {
-
 		const Mesh = this.el.object3D.getObjectByProperty( "type", "Mesh" );
 
-		//this.el.setAttribute( "a-image", "src", this.data.src );
-		const textureMap = this._loader.load( this.data.src );
+		this.textureLoader = new THREE.TextureLoader();
+		const textureMap = this.textureLoader.load( this.data.src );
 		let width, height;
 		if ( Mesh.geometry.boundingBox ) {
 
 		   width = Mesh.geometry.boundingBox.max.x;
-			height = Mesh.geometry.boundingBox.max.y;
+		   height = Mesh.geometry.boundingBox.max.y;
 
 		} else {
 
@@ -43,27 +36,38 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 
 		}
 
-		//const material = new THREE.MeshBasicMaterial( { emissive:this.data.color, alphaTest: 0.4, transparent: false, map: textureMap } );
-
-		const material = new THREE.MeshBasicMaterial( { transparent:true, map: textureMap } );
+		this.material = new THREE.MeshBasicMaterial( { transparent: true, map: textureMap } );
 
 		if ( this.data.iconmesh == "circle" )
 			this.icon = new THREE.Mesh(
 				new THREE.CircleGeometry( this.data.radius, 32 ),
-				material,
+				this.material,
 			);
 		else
 			this.icon = new THREE.Mesh(
 				new THREE.PlaneGeometry( width, height ),
-				material,
+				this.material,
 			);
 
 		this.icon.position.set( 0, 0, this.data.zIndex );
 		this.el.object3D.add( this.icon );
 
 	},
+
+	update( data ) {
+
+		if ( this.data.src !== data.src && this.material ) {
+
+			const textureMap = this.textureLoader.load( this.data.src );
+			this.material.map = textureMap;
+
+	 }
+
+	},
+
 	remove() {
-        console.info("icon remove()")
+
+		console.info( "icon remove()" );
 		this.el.object3D.remove( this.el.object3D );
 
 		/*this.icon.geometry.dispose();
