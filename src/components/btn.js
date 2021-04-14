@@ -107,7 +107,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 				text: this.data.tooltiptext,
 			
 			 } );
-
+			
 		}
 		//UI.utils.preventDefault(e)
 

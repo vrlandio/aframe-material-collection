@@ -24,7 +24,7 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 		this.textureLoader = new THREE.TextureLoader();
 		const textureMap = this.textureLoader.load( this.data.src );
 		let width, height;
-		if ( Mesh.geometry.boundingBox ) {
+		if ( Mesh && Mesh.geometry.boundingBox ) {
 
 		   width = Mesh.geometry.boundingBox.max.x;
 		   height = Mesh.geometry.boundingBox.max.y;
