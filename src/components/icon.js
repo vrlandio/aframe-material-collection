@@ -35,7 +35,13 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 			height = this.data.height;
 
 		}
-
+		
+		textureMap.onUpdate = function() {
+			// Delete texture data once it has been uploaded to the GPU
+			textureMap.image.close && textureMap.image.close();
+			delete textureMap.image;
+		  };
+	  
 		this.material = new THREE.MeshBasicMaterial( { transparent: true, map: textureMap } );
 
 		if ( this.data.iconmesh == "circle" )
@@ -54,12 +60,23 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 
 	},
 
-	update( data ) {
+	update( dataUpdate ) {
+	
+		if (dataUpdate.src ===  undefined)
+		return
 
-		if ( this.data.src !== data.src && this.material ) {
+		
+	
+		if ( this.data.src !== dataUpdate.src && this.material ) {
 
 			const textureMap = this.textureLoader.load( this.data.src );
 			this.material.map = textureMap;
+			textureMap.onUpdate = function() {
+				// Delete texture data once it has been uploaded to the GPU
+				console.info("icon onUpdate GPU upload")
+
+				delete textureMap.image;
+			  };
 
 	 }
 
