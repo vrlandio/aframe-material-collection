@@ -1906,7 +1906,7 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 			textureMap.onUpdate = function() {
 				// Delete texture data once it has been uploaded to the GPU
 				console.info("icon onUpdate GPU upload")
-
+				textureMap.image.close && textureMap.image.close();
 				delete textureMap.image;
 			  };
 
