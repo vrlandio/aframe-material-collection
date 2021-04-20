@@ -14,6 +14,17 @@ if ( typeof AFRAME === "undefined" ) {
 
 }
 let utils = new Utils();
+import "./components/scroll-pane-container"
+
+/*
+import "./components/scroll-pane"
+
+import "./primitives/button";
+import "./primitives/button-icon";
+import "./primitives/fab_button_small";
+import "./primitives/switch";
+import "./primitives/slider";
+*/
 
 window.UI = {
 	// Utils
@@ -50,6 +61,7 @@ window.UI = {
 	switch: require( "./components/switch" ),
 	////toast: require( "./components/toast" ),
 	scroll_pane: require( "./components/scroll-pane" ),
+
 	//mouse_shim: require( "./components/mouse-shim" ),
 	//double_click: require( "./components/double-click" ),
 	checkbox: require( "./components/checkbox" ),

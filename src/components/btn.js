@@ -16,7 +16,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		courser2d: { type: "boolean", default: false },
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
-		tooltipwidth: { type: "number", default: 0.1 },	},
+		tooltipwidth: { type: "number", default: 0.1 }	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -40,7 +40,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		if ( ! this.data.disabled ) {
 
-			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			/*this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
@@ -49,7 +49,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-
+         */
 		} else {
 
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
@@ -92,7 +92,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		if ( this.data.tooltip ) {
 
-			this.el.setAttribute( "box-rounded-text", {
+			this.tooltipElement = document.createElement( "a-entity" );
+			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
 				height: 0.015,
 				depth: 0.001,
@@ -101,18 +102,26 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 				borderRadius: 0.005,
 				material: "phong",
 				zOffset: 0,
-				xOffset: 0, 
+				xOffset: 0,
 				yOffset: 0.03,
 				envMapIntensity: 1.0,
 				text: this.data.tooltiptext,
-			
+
 			 } );
-			
+
+			this.el.appendChild( this.tooltipElement );
+
 		}
 		//UI.utils.preventDefault(e)
 
 	},
 	mouseLeave( e ) {
+		if ( this.data.tooltip ) {
+
+			this.el.remove( this.tooltipElement );
+			this.el.removeAttribute( "box-rounded-text" );
+
+		}
 
 		// Ignore mouse leave event if the button was clicked - mouse up already resets to default state.
 		if ( this.is_clicked ) {
@@ -134,12 +143,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		}
 
-		if ( this.data.tooltip ) {
-
-			this.el.removeAttribute( "box-rounded-text" );
-
-		}
-
+	
 		//UI.utils.preventDefault(e)
 		console.error( "mouseLeave Button" );
 

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -143,6 +143,48 @@ module.exports = AFRAME.registerPrimitive(
 			disabled: "ui-btn.disabled",
 			"hover-height": "ui-btn.hoverHeight",
 			"active-height": "ui-btn.activeHeight"
+		}
+	} )
+);
+
+
+module.exports = AFRAME.registerPrimitive(
+	"a-ui-button-tooltip",
+	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
+		defaultComponents: {
+		
+		
+			"ui-btn": {},
+			"box-rounded": {
+				width: 0.03,
+				height: 0.01,
+				depth: 0.01,
+				color: 0xff0000,
+				curveSegments: 13,
+				borderRadius: 0.01,
+				material: "standard",
+				envMapIntensity: 0.75,
+				
+			},
+			
+		},
+		mappings: {
+			height: "box-rounded.height",
+			width: "box-rounded.width",
+			depth: "box-rounded.depth",
+			color: "box-rounded.color",
+			transparent: "box-rounded.transparent",
+			
+            "text-value": "troika-text.value",
+			"text-size": "troika-text.fontSize",
+			"text-color": "troika-text.color",
+			animated: "ui-btn.animated",
+			courser2d: "ui-btn.courser2d",
+		
+		
+		
+			tooltip: "ui-btn.tooltip",
+			tooltiptext:"ui-btn.tooltiptext",
 		}
 	} )
 );
@@ -489,7 +531,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		courser2d: { type: "boolean", default: false },
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
-		tooltipwidth: { type: "number", default: 0.1 },	},
+		tooltipwidth: { type: "number", default: 0.1 }	},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -513,7 +555,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		if ( ! this.data.disabled ) {
 
-			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+			/*this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
@@ -522,7 +564,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-
+         */
 		} else {
 
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
@@ -565,7 +607,8 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		if ( this.data.tooltip ) {
 
-			this.el.setAttribute( "box-rounded-text", {
+			this.tooltipElement = document.createElement( "a-entity" );
+			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
 				height: 0.015,
 				depth: 0.001,
@@ -574,18 +617,26 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 				borderRadius: 0.005,
 				material: "phong",
 				zOffset: 0,
-				xOffset: 0, 
+				xOffset: 0,
 				yOffset: 0.03,
 				envMapIntensity: 1.0,
 				text: this.data.tooltiptext,
-			
+
 			 } );
-			
+
+			this.el.appendChild( this.tooltipElement );
+
 		}
 		//UI.utils.preventDefault(e)
 
 	},
 	mouseLeave( e ) {
+		if ( this.data.tooltip ) {
+
+			this.el.remove( this.tooltipElement );
+			this.el.removeAttribute( "box-rounded-text" );
+
+		}
 
 		// Ignore mouse leave event if the button was clicked - mouse up already resets to default state.
 		if ( this.is_clicked ) {
@@ -607,12 +658,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 		}
 
-		if ( this.data.tooltip ) {
-
-			this.el.removeAttribute( "box-rounded-text" );
-
-		}
-
+	
 		//UI.utils.preventDefault(e)
 		console.error( "mouseLeave Button" );
 
@@ -1655,6 +1701,247 @@ module.exports = {"name":"aframe-material-collection","version":"0.5.0","descrip
 /* 16 */
 /***/ (function(module, exports) {
 
+/* global AFRAME,THREE */
+/**
+ * Scroll Pane for aframe-material-collection. Expects
+ * @namespace aframe-material-collection
+ * @component ui-scroll-pane
+ * @author Shane Harris
+ */
+
+module.exports = AFRAME.registerComponent( "ui-scroll-pane-container", {
+	schema: {
+		height: { type: "number", default: 1.2 },
+		width: { type: "number", default: 2.9 },
+		scrollPadding: { type: "number", default: 0.05 },
+		scrollZOffset: { type: "number", default: 0 },
+		scrollHandleColor: { default: "#000000" },
+		intersectableClass: { default: "intersectable" },
+		cameraEl: { type: "selector" },
+		lookControlsComponent: { default: "look-controls" },
+	},
+	init() {
+
+		this.handlePos = 0;
+		// Setup scroll bar and panel backing.
+		this.setupElements();
+		// Grab content container.
+		this.container = this.el.querySelector( ".container" );
+		if ( typeof this.container === "undefined" ) {
+
+			throw 'ui-scroll-pane needs an entity inside it with the class "container" - <a-entity class="container"></a-entity>';
+
+		}
+
+		// Setup scroll bar.
+		//	this.scrollBarWidth = this.rail.getAttribute( "width" );
+		const position = this.container.getAttribute( "position" );
+		//this.container.setAttribute( "position", - this.data.width / 2 + " " + position.y +  " " + this.data.height / 2 + " " + position.z );
+
+		//this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0002 ) );
+		//	this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 1 " + ( this.data.scrollZOffset + 0.0005 ) );
+
+		//this.backgroundPanel.addEventListener( "ui-mousemove", mouseMove );
+		// End scroll
+		const endScroll = e => {
+
+			console.error( "endscroll" );
+
+			if ( this.isDragging ) {
+
+				// Play look controls once scrolling is finished
+				//playPauseCamera( "play" );
+				this.isDragging = false;
+				this.handlePos = 0;
+				// Stop changes
+				//UI.utils.stoppedChanging( this.backgroundPanel.object3D.uuid );
+				// Prevent default behaviour of event
+				const cursorcontroller = document.querySelector( "#cursor-controller" );
+				cursorcontroller.removeAttribute( "ui-mouse-shim-vrland" );
+				this.handle.removeEventListener( "mousemove", mouseMove );
+				
+
+			}
+			e.preventDefault();
+
+		};
+
+		const mouseMove = ( e ) => {
+
+			console.error( "mouseMOve" );
+			/*	if(this.isDragging){
+				let pos = this.rail.object3D.worldToLocal(e.detail.intersection.point);
+				this.scroll(pos.y-this.handlePos);
+			}
+*/
+			   if ( this.isDragging ) {
+
+				if ( this.handlePos === 0 || this.startScroll ) {
+
+					this.handlePos = e.detail.intersection.point;
+						this.el.sceneEl.emit( "stateadded", { detail: "scroll" } );
+						console.error( "stateadded scroll" );
+					this.startScroll = false;
+				}
+
+				   const pos = this.rail.object3D.worldToLocal( e.detail.intersection.point );
+				   const posInter = e.detail.intersection.point;
+
+				   this.scroll( pos.y - this.handlePos.y - this.data.height*0.1/2 );
+
+			}
+
+		   };
+
+	   	const mouseOver = ( e ) => {
+
+		   };
+
+		const startScroll = ( e ) => {
+
+			console.error( "startScroll" );
+			this.el.sceneEl.emit( "stateremoved", { detail: "noscroll" } );
+			this.isDragging = true;
+			//this.handlePos =  this.handle.object3D.position.y
+			// Reset handle pos to center of handle
+			 // this.backgroundPanel.object3D.position.y;
+			 this.startScroll = true;
+			console.error( this.backgroundPanel.object3D.position.y );
+			// Scroll immediately and register mouse move events.
+			const cursorcontroller = document.querySelector( "#cursor-controller" );
+			cursorcontroller.setAttribute( "ui-mouse-shim-vrland", "fps:15;" );
+			this.handle.addEventListener( "ui-mousemove", mouseMove );
+			//this.scroll( this.handle.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
+			//this.scoll(10)
+
+			e.preventDefault();
+
+		};
+
+		/*	this.backgroundPanel.addEventListener( "mouseup", endScroll );
+		this.backgroundPanel.addEventListener( "mouseleave", endScroll );
+		this.backgroundPanel.addEventListener( "mouseover", mouseOver );
+		this.backgroundPanel.addEventListener( "ui-mousemove", mouseMove );
+		this.backgroundPanel.addEventListener( "mousedown", startScroll );
+
+		// // Handle clicks on rail to scroll
+		this.backgroundPanel.addEventListener( "nomousedown", e => {
+
+			console.error( "touchstart" );
+			UI.utils.isChanging( this.el.sceneEl, this.handle.object3D.uuid );
+			// Pause look controls
+			this.isDragging = true;
+			// Reset handle pos to center of handle
+			this.handlePos = 0;
+			// Scroll immediately and register mouse move events.
+
+			this.scroll( this.backgroundPanel.object3D.worldToLocal( e.detail.intersection ? e.detail.intersection.point : e.relatedTarget.object3D.position ).y );
+			//this.scoll(10)
+
+			// Prevent default behaviour of event
+		e.preventDefault();
+
+		} );
+*/
+		this.handle.addEventListener( "mousedown", startScroll );
+		this.rail.addEventListener( "mouseout", endScroll );
+		this.handle.addEventListener( "mouseup", endScroll );
+		this.rail.addEventListener( "mouseup", endScroll );
+		//this.rail.addEventListener( "ui-mousemove", mouseMove );
+
+		//this.handle.addEventListener( "mouseout", endScroll );
+		// Setup content clips after the scene is loaded to be able to access all entity materials
+
+		// update content clips world positions from this current element.
+
+		//	this.updateContent();
+		//	this.el.emit( "scroll-pane-loaded" );
+		//	this.setupMouseWheelScroll();
+
+		// Expose methods to the element to update/set the content of the scroll pane.
+		//	this.el.setContent = this.setContent.bind( this );
+		//	this.el.updateContent = this.updateContent.bind( this );
+		this.el.scroll = this.scroll.bind( this );
+
+		this.handleSize = 0.1; //THREE.Math.clamp((this.data.height/2),0.1,1);
+		this.handle.setAttribute( 'width', this.handleSize === 1 ? 0.00000001 : 0.1 );
+		this.rail.setAttribute( 'width', this.handleSize === 1 ? 0.00000001 : 0.1 );
+		this.rail.setAttribute( 'color', this.handleSize === 1 ? '#efefef' : '#fff' );
+		this.handle.setAttribute( 'height', this.data.height * this.handleSize );
+
+
+
+		this.el.sceneEl.renderer.localClippingEnabled = true;
+
+        // Setup content clips.
+        this.content_clips = [
+            new THREE.Plane( new THREE.Vector3( 0, 1, 0 ), (this.data.height/2) ),
+            new THREE.Plane( new THREE.Vector3( 0, -1, 0 ), (this.data.height/2) ),
+            new THREE.Plane( new THREE.Vector3( -1, 0, 0 ), (this.data.width/2) ),
+            new THREE.Plane( new THREE.Vector3( 1, 0, 0 ), (this.data.width/2) )
+        ];
+
+
+	},
+
+	scroll( positionY ) {
+
+		const min = - this.data.height / 2 + ( this.data.height * this.handleSize ) / 2;
+		const max = this.data.height / 2 - ( this.data.height * this.handleSize ) / 2;
+		// Set scroll position with start point offset.
+		const scroll_pos = THREE.Math.clamp( positionY, min, max );
+		const scroll_perc = this.handleSize === 1 ? 0 : 1 - ( scroll_pos - min ) / ( max - min );
+
+		this.container.object3D.position.y = positionY; // ( this.content_height - this.data.height ) * scroll_perc + this.data.height / 2;
+		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " " + scroll_pos + " " + ( this.data.scrollZOffset + 0.0005 ) );
+
+	},
+
+	setupElements() {
+
+		// Setup background with mouse input to catch mouse move events when not exactly over the scroll bar.
+		this.backgroundPanel = document.createElement( "a-plane" );
+		//this.backgroundPanel.setAttribute( "class", "ui background " + this.data.intersectableClass );
+		this.backgroundPanel.setAttribute( "width", this.data.width );
+		this.backgroundPanel.setAttribute( "height", this.data.height );
+		this.backgroundPanel.setAttribute( "position", "0 0 0" );
+		this.backgroundPanel.setAttribute( "class", "ui" );
+		this.backgroundPanel.setAttribute( "visible", "true" );
+		///this.backgroundPanel.setAttribute( "opacity", 0.1 ); //
+		//	this.backgroundPanel.setAttribute( "transparent", false );
+
+		this.el.appendChild( this.backgroundPanel );
+
+		// Add scroll bar rail.
+		this.rail = document.createElement( "a-plane" );
+		//this.rail.setAttribute( "class", "rail " + this.data.intersectableClass );
+		this.rail.setAttribute( "width", 0.1 );
+		this.rail.setAttribute( "height", this.data.height );
+		this.rail.setAttribute( "shader", "flat" );
+		this.rail.setAttribute( "class", "ui" );
+		this.rail.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 0 0" );
+		this.el.appendChild( this.rail );
+
+		// Add scroll bar handle.
+		this.handle = document.createElement( "a-plane" );
+		this.handle.setAttribute( "class", "ui handle " + this.data.intersectableClass );
+		this.handle.setAttribute( "width", 0.1 );
+		this.handle.setAttribute( "height", this.data.height );
+		this.handle.setAttribute( "color", this.data.scrollHandleColor );
+		this.handle.setAttribute( "shader", "flat" );
+		//this.handle.setAttribute( "class", "ui" );
+		this.handle.setAttribute( "position", this.data.width / 2 + this.data.scrollPadding + " 0 0.002" );
+		this.el.appendChild( this.handle );
+
+	},
+
+} );
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
 /* global AFRAME */
 /**
  * Button Primitive for aframe-material-collection.
@@ -1767,7 +2054,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -1797,7 +2084,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 /* global AFRAME */
@@ -1827,7 +2114,7 @@ module.exports = AFRAME.registerPrimitive(
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1931,7 +2218,7 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -1987,7 +2274,7 @@ module.exports = AFRAME.registerComponent( "ui-rounded", {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,TWEEN,THREE */
@@ -2137,7 +2424,7 @@ module.exports = AFRAME.registerComponent( "ui-ripple", {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /* global AFRAME,THREE */
@@ -2343,8 +2630,8 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 
 
 /***/ }),
-/* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2493,6 +2780,9 @@ class Utils {
 
 }
 
+// EXTERNAL MODULE: ./src/components/scroll-pane-container.js
+var scroll_pane_container = __webpack_require__(16);
+
 // CONCATENATED MODULE: ./src/index.js
 /* global AFRAME */
 /**
@@ -2511,12 +2801,23 @@ if ( typeof AFRAME === "undefined" ) {
 }
 let utils = new Utils();
 
+
+/*
+import "./components/scroll-pane"
+
+import "./primitives/button";
+import "./primitives/button-icon";
+import "./primitives/fab_button_small";
+import "./primitives/switch";
+import "./primitives/slider";
+*/
+
 window.UI = {
 	// Utils
 	utils: utils,
 	// Primitives
 	a_ui_button: __webpack_require__( 0 ),
-	a_ui_icon_button: __webpack_require__( 16 ),
+	a_ui_icon_button: __webpack_require__( 17 ),
 	a_ui_fab_button: __webpack_require__( 1 ),
 	a_ui_fab_button_small: __webpack_require__( 2 ),
 	a_ui_round_button: __webpack_require__( 3 ),
@@ -2527,25 +2828,26 @@ window.UI = {
 	a_ui_checkbox: __webpack_require__( 6 ),
 	a_ui_radio: __webpack_require__( 7 ),
 	a_ui_input_text: __webpack_require__( 8 ),
-	a_ui_text_input: __webpack_require__( 17 ),
+	a_ui_text_input: __webpack_require__( 18 ),
 //	a_ui_number_input: require( "./primitives/number-input" ),
 //	a_ui_int_input: require( "./primitives/int-input" ),
 //	a_ui_password_input: require( "./primitives/password-input" ),
-	a_ui_scroll_pane: __webpack_require__( 18 ),
+	a_ui_scroll_pane: __webpack_require__( 19 ),
 //	a_ui_renderer: require( "./primitives/renderer" ),
 
 	// Components
 	//text: require( "./components/text" ),
 	//input_text: require( "./components/input-text" ),
 	btn: __webpack_require__( 9 ),
-	icon: __webpack_require__( 19 ),
-	rounded: __webpack_require__( 20 ),
-	ripple: __webpack_require__( 21 ),
+	icon: __webpack_require__( 20 ),
+	rounded: __webpack_require__( 21 ),
+	ripple: __webpack_require__( 22 ),
 	slider: __webpack_require__( 10 ),
 	number: __webpack_require__( 11 ),
 	switch: __webpack_require__( 12 ),
 	////toast: require( "./components/toast" ),
-	scroll_pane: __webpack_require__( 22 ),
+	scroll_pane: __webpack_require__( 23 ),
+
 	//mouse_shim: require( "./components/mouse-shim" ),
 	//double_click: require( "./components/double-click" ),
 	checkbox: __webpack_require__( 13 ),
