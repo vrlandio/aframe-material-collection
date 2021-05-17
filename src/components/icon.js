@@ -26,8 +26,8 @@ module.exports = AFRAME.registerComponent( "ui-icon", {
 		let width, height;
 		if ( Mesh && Mesh.geometry.boundingBox ) {
 
-		   width = Mesh.geometry.boundingBox.max.x;
-		   height = Mesh.geometry.boundingBox.max.y;
+		   width = Mesh.geometry.boundingBox.max.x*1.5;
+		   height = Mesh.geometry.boundingBox.max.y*1.5;
 
 		} else {
 

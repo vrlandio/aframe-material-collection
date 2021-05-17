@@ -26,6 +26,7 @@ module.exports = AFRAME.registerPrimitive(
 				borderRadius: 0.01,
 				material: "standard",
 				envMapIntensity: 0.75,
+				transparent: false,
 				
 			},
 			
@@ -74,6 +75,7 @@ module.exports = AFRAME.registerPrimitive(
 				borderRadius: 0.01,
 				material: "standard",
 				envMapIntensity: 0.75,
+				transparent: false,
 				
 			},
 			

@@ -38,6 +38,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	},
 	update() {
 
+		
 		if ( ! this.data.disabled ) {
 
 			/*this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
@@ -61,7 +62,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 	},
 	mouseEnter( e ) {
-
+		console.info( "btn mouseEnter Button" );
 		if ( this.data.animated ) {
 
 		    if ( this.data.courser2d ) {
@@ -91,7 +92,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		}
 
 		if ( this.data.tooltip ) {
-
+			
 			this.tooltipElement = document.createElement( "a-entity" );
 			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
@@ -116,6 +117,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 	},
 	mouseLeave( e ) {
+		console.info( "mouseLeave Button" );
 		if ( this.data.tooltip ) {
 
 			this.el.remove( this.tooltipElement );
@@ -144,8 +146,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		}
 
 	
-		//UI.utils.preventDefault(e)
-		console.error( "mouseLeave Button" );
+	
 
 	},
 	mouseUp( e ) {
