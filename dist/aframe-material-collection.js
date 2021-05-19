@@ -210,8 +210,8 @@ module.exports = AFRAME.registerPrimitive(
 		defaultComponents: {
 			geometry: {
 				primitive: "circle",
-				radius: 0.1,
-				segments: 6
+				radius: 0.075,
+				segments: 256
 			},
 			
 			material: {
