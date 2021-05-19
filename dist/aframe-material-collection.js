@@ -260,7 +260,7 @@ module.exports = AFRAME.registerPrimitive(
 			geometry: {
 				primitive: "circle",
 				radius: 0.055,
-				segments: 6
+				segments: 256
 			},
 			material: {
 				color: "#009688",
@@ -2593,9 +2593,7 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		this.backgroundPanel.setAttribute( "position", "0 0 0" );
 		this.backgroundPanel.setAttribute( "class", "ui" );
 		this.backgroundPanel.setAttribute( "visible", "false" );
-		///this.backgroundPanel.setAttribute( "opacity", 0.1 ); //
-		//	this.backgroundPanel.setAttribute( "transparent", false );
-
+		
 		this.el.appendChild( this.backgroundPanel );
 
 	/*	

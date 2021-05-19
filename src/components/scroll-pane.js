@@ -169,9 +169,7 @@ module.exports = AFRAME.registerComponent( "ui-scroll-pane", {
 		this.backgroundPanel.setAttribute( "position", "0 0 0" );
 		this.backgroundPanel.setAttribute( "class", "ui" );
 		this.backgroundPanel.setAttribute( "visible", "false" );
-		///this.backgroundPanel.setAttribute( "opacity", 0.1 ); //
-		//	this.backgroundPanel.setAttribute( "transparent", false );
-
+		
 		this.el.appendChild( this.backgroundPanel );
 
 	/*	

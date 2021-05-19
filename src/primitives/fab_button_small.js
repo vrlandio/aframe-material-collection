@@ -12,7 +12,7 @@ module.exports = AFRAME.registerPrimitive(
 			geometry: {
 				primitive: "circle",
 				radius: 0.055,
-				segments: 6
+				segments: 256
 			},
 			material: {
 				color: "#009688",
