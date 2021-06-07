@@ -8,13 +8,13 @@
 
 module.exports = AFRAME.registerComponent( "ui-checkbox", {
 	schema: {
-		value: { type: "boolean", default: false },
+		value: { type: "boolean", default: true },
 		selectedColor: { default: "#009688" },
 		unselectedColor: { default: "#7f7f7f" },
 		disabledColor: { default: "#afafaf" },
 		indeterminate: { type: "boolean", default: false },
 		disabled: { type: "boolean", default: false },
-		intersectableClass: { default: "intersectable" },
+		intersectableClass: { default: "no" },
 		width: { type: "number", default: 0.15 },
 		height: { type: "number", default: 0.15 }
 	},
@@ -23,21 +23,23 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 		this.width = 0.15;
 		this.height = 0.15;
 		this.container = document.createElement( "a-entity" );
-		this.container.setAttribute( "class", "no-yoga-layout" );
-		this.el.appendChild( this.container );
+	
+	
+
 		this.setupLines();
 		// Add backing element to make the whole object clickable.
-		let backing = document.createElement( "a-plane" );
-		backing.setAttribute( "width", 0.105 );
-		backing.setAttribute( "height", 0.105 );
-		backing.setAttribute( "position", "0 0 -0.002" );
-		backing.setAttribute( "shader", "flat" );
-		backing.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
-		backing.setAttribute( "opacity", 0.0001 );
-		backing.setAttribute( "transparent", true );
-		this.el.appendChild( backing );
+		this.backing = document.createElement( "a-plane" );
+		this.backing.setAttribute( "width", 0.105 );
+		this.backing.setAttribute( "height", 0.105 );
+		this.backing.setAttribute( "position", "0 0 -0.002" );
+		this.backing.setAttribute( "shader", "flat" );
+	
+//		this.backing.setAttribute( "opacity", 1 );
+//this.backing.setAttribute( "transparent", true );
+		this.el.appendChild( this.backing );
+		this.el.appendChild( this.container );
 		this.clickHandler = () => {
-
+console.error("clickhandler")
 			this.data.value = ! this.data.value;
 			this.click();
 
@@ -91,12 +93,14 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 	},
 	click() {
 
+		console.error("cclick")
+
 		// Reset indeterminate state on click
 		this.data.indeterminate = false;
 		// Hide / Show left and top lines for checked state, or right line aswell for intermediate state.
 		this.setSelected();
 		// run animation
-		this.animateSelected();
+		//this.animateSelected();
 
 	},
 	animateSelected() {
@@ -186,7 +190,7 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 		// Check and set the disabled state of the checkbox - add / remove click handler.
 		if ( this.data.disabled ) {
 
-			this.el.removeEventListener( "mousedown", this.clickHandler );
+			this.backing.removeEventListener( "mousedown", this.clickHandler );
 			this.topLine.setAttribute( "color", this.data.disabledColor );
 			this.leftLine.setAttribute( "color", this.data.disabledColor );
 			this.rightLine.setAttribute( "color", this.data.disabledColor );
@@ -194,7 +198,8 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 
 		} else {
 
-			this.el.addEventListener( "mousedown", this.clickHandler );
+		
+			this.backing.addEventListener( "mousedown", this.clickHandler );
 			this.topLine.setAttribute( "color", this.data.unselectedColor );
 			this.leftLine.setAttribute( "color", this.data.unselectedColor );
 			this.rightLine.setAttribute( "color", this.data.value ? this.data.selectedColor : this.data.unselectedColor );

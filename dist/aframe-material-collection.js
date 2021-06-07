@@ -100,13 +100,7 @@ module.exports = AFRAME.registerPrimitive(
 	"a-ui-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			"notroika-text": {
-				align: "left",
-		     	depthOffset: -6000,
-				wrapCount: 10,
-				fontSize: 0.015,
-			
-			},
+
 			"box-rounded": {
 				width: 0.03,
 				height: 0.01,
@@ -117,44 +111,38 @@ module.exports = AFRAME.registerPrimitive(
 				material: "standard",
 				envMapIntensity: 0.75,
 				transparent: false,
-				
+
 			},
-			
+
 			"ui-btn": {
 				animated: "ui-btn.animated",
+			
 			},
 
-			
-		
-			
 		},
 		mappings: {
-			height: "box-rounded.height",
-			width: "box-rounded.width",
-			depth: "box-rounded.depth",
-			color: "box-rounded.color",
-			transparent: "box-rounded.transparent",
-			
-            "text-value": "troika-text.value",
+			"height": "box-rounded.height",
+			"width": "box-rounded.width",
+			"depth": "box-rounded.depth",
+			"color": "box-rounded.color",
+			"transparent": "box-rounded.transparent",
+			"text-value": "troika-text.value",
 			"text-size": "troika-text.fontSize",
 			"text-color": "troika-text.color",
-		
-			animated: "ui-btn.animated",
-			courser2d: "ui-btn.courser2d",
-			disabled: "ui-btn.disabled",
+  			"animated": "ui-btn.animated",
+			"courser2d": "ui-btn.courser2d",
+			"disabled": "ui-btn.disabled",
 			"hover-height": "ui-btn.hoverHeight",
-			"active-height": "ui-btn.activeHeight"
-		}
-	} )
+			"active-height": "ui-btn.activeHeight",
+		},
+	} ),
 );
-
 
 module.exports = AFRAME.registerPrimitive(
 	"a-ui-button-tooltip",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-		
-		
+
 			"ui-btn": {},
 			"box-rounded": {
 				width: 0.03,
@@ -166,29 +154,27 @@ module.exports = AFRAME.registerPrimitive(
 				material: "standard",
 				envMapIntensity: 0.75,
 				transparent: false,
-				
+
 			},
-			
+
 		},
 		mappings: {
-			height: "box-rounded.height",
-			width: "box-rounded.width",
-			depth: "box-rounded.depth",
-			color: "box-rounded.color",
-			transparent: "box-rounded.transparent",
-			
-            "text-value": "troika-text.value",
+			"height": "box-rounded.height",
+			"width": "box-rounded.width",
+			"depth": "box-rounded.depth",
+			"color": "box-rounded.color",
+			"transparent": "box-rounded.transparent",
+
+			"text-value": "troika-text.value",
 			"text-size": "troika-text.fontSize",
 			"text-color": "troika-text.color",
-			animated: "ui-btn.animated",
-			courser2d: "ui-btn.courser2d",
-		
-		
-		
-			tooltip: "ui-btn.tooltip",
-			tooltiptext:"ui-btn.tooltiptext",
-		}
-	} )
+			"animated": "ui-btn.animated",
+			"courser2d": "ui-btn.courser2d",
+
+			"tooltip": "ui-btn.tooltip",
+			"tooltiptext": "ui-btn.tooltiptext",
+		},
+	} ),
 );
 
 
@@ -534,6 +520,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
 		tooltipwidth: { type: "number", default: 0.1 }	},
+	color: {},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -542,34 +529,21 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
 
-		// register input events for interaction
-		if ( ! this.data.disabled ) {
-
-			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
-			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
-			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
-			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-
-		}
-
 	},
-	update() {
+	update( data ) {
 
-		
-		if ( ! this.data.disabled ) {
-
-			/*this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
-			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
-			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
-			this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+		if ( ! this.data.disabled && ( this.data.disabled != data.disabled ) ) {
 
 			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-         */
-		} else {
 
+		} else if ( this.data.disabled && ( this.data.disabled != data.disabled ) ) {
+
+			this.el.setAttribute( "color", "#888889" );
+
+			console.error( "btn remove event" );
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
@@ -579,6 +553,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 	},
 	mouseEnter( e ) {
+
 		console.info( "btn mouseEnter Button" );
 		if ( this.data.animated ) {
 
@@ -609,7 +584,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		}
 
 		if ( this.data.tooltip ) {
-			
+
 			this.tooltipElement = document.createElement( "a-entity" );
 			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
@@ -630,10 +605,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.el.appendChild( this.tooltipElement );
 
 		}
-		//UI.utils.preventDefault(e)
 
 	},
 	mouseLeave( e ) {
+
 		console.info( "mouseLeave Button" );
 		if ( this.data.tooltip ) {
 
@@ -661,9 +636,6 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			}
 
 		}
-
-	
-	
 
 	},
 	mouseUp( e ) {
@@ -729,6 +701,14 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			} )
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
+
+	},
+	remove() {
+
+		this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+		this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
+		this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
+		this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 	},
 } );
@@ -1103,7 +1083,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 			}
 
-			this.setDisabled();
+			//this.setDisabled();
 
 		}
 
@@ -1128,7 +1108,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		this.railEl.setAttribute( "width", "0.15" );
 		this.railEl.setAttribute( "height", "0.05" );
 		this.railEl.setAttribute( "shader", "flat" );
-		
+
 		this.railEl.setAttribute( "color", this.data.railColor );
 		this.railEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
 		this.el.appendChild( this.railEl );
@@ -1137,14 +1117,15 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		this.railEl.addEventListener( "loaded", () => {
 
 			this.getRailObject( this.railEl.object3D );
-			this.setDisabled();
-			this.click();
+
+			//this.click();
 
 		} );
 		this.clickHandler = e => {
 
 			this.data.value = ! this.data.value;
 			this.click();
+			e.preventDefault();
 			// Prevent default behaviour of event
 			if ( e.detail.preventDefault ) {
 
@@ -1165,20 +1146,32 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 	update( data ) {
 
-		if ( this.data.disabled ) {
+		if ( ! this.data.disabled ) {
 
+			this.railEl.setAttribute( "color", this.data.color );
+			this.handleEl.setAttribute( "color", this.data.handleColor );
 			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.addEventListener( "mousedown", this.clickHandler );
+			this.handleEl.setAttribute( "color", this.data.handleColor );
 
-		} else {
+			this.tweenHandle();
+			this.tweenProgress();
 
+		} else if ( this.data.disabled && ( this.data.disabled != data.disabled ) ) {
+
+			console.error( "switch disabled" );
+			this.railEl.setAttribute( "color", this.data.handleDisabledColor );
+			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
 			this.handleEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.handleEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.removeEventListener( "mousedown", this.clickHandler );
+			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
+			this.tweenHandle();
+			this.tweenProgress();
 
 		}
 
-		//		this.el.setAttribute( "value", this.data.value );
-		this.click();
 
 	},
 	mouseEnter() {
@@ -1206,13 +1199,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		// Add / Remove click handlers based on disabled state.
 		if ( this.data.disabled ) {
 
-			this.handleEl.removeEventListener( "mousedown", this.clickHandler );
-			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
-
 		} else {
-
-			this.handleEl.addEventListener( "mousedown", this.clickHandler );
-			this.handleEl.setAttribute( "color", this.data.handleColor );
 
 		}
 
@@ -1282,10 +1269,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 	remove() {
 
 		this.el.removeObject3D( 'ui-switch' );
-		//	this.el.remove(this.handleEl)
-		// this.el.remove(this.railEl)
-		//this.el.object3D.geometry.dispose();
-
+	
 	},
 } );
 
@@ -1304,13 +1288,13 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 module.exports = AFRAME.registerComponent( "ui-checkbox", {
 	schema: {
-		value: { type: "boolean", default: false },
+		value: { type: "boolean", default: true },
 		selectedColor: { default: "#009688" },
 		unselectedColor: { default: "#7f7f7f" },
 		disabledColor: { default: "#afafaf" },
 		indeterminate: { type: "boolean", default: false },
 		disabled: { type: "boolean", default: false },
-		intersectableClass: { default: "intersectable" },
+		intersectableClass: { default: "no" },
 		width: { type: "number", default: 0.15 },
 		height: { type: "number", default: 0.15 }
 	},
@@ -1319,21 +1303,23 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 		this.width = 0.15;
 		this.height = 0.15;
 		this.container = document.createElement( "a-entity" );
-		this.container.setAttribute( "class", "no-yoga-layout" );
-		this.el.appendChild( this.container );
+	
+	
+
 		this.setupLines();
 		// Add backing element to make the whole object clickable.
-		let backing = document.createElement( "a-plane" );
-		backing.setAttribute( "width", 0.105 );
-		backing.setAttribute( "height", 0.105 );
-		backing.setAttribute( "position", "0 0 -0.002" );
-		backing.setAttribute( "shader", "flat" );
-		backing.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
-		backing.setAttribute( "opacity", 0.0001 );
-		backing.setAttribute( "transparent", true );
-		this.el.appendChild( backing );
+		this.backing = document.createElement( "a-plane" );
+		this.backing.setAttribute( "width", 0.105 );
+		this.backing.setAttribute( "height", 0.105 );
+		this.backing.setAttribute( "position", "0 0 -0.002" );
+		this.backing.setAttribute( "shader", "flat" );
+	
+//		this.backing.setAttribute( "opacity", 1 );
+//this.backing.setAttribute( "transparent", true );
+		this.el.appendChild( this.backing );
+		this.el.appendChild( this.container );
 		this.clickHandler = () => {
-
+console.error("clickhandler")
 			this.data.value = ! this.data.value;
 			this.click();
 
@@ -1387,12 +1373,14 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 	},
 	click() {
 
+		console.error("cclick")
+
 		// Reset indeterminate state on click
 		this.data.indeterminate = false;
 		// Hide / Show left and top lines for checked state, or right line aswell for intermediate state.
 		this.setSelected();
 		// run animation
-		this.animateSelected();
+		//this.animateSelected();
 
 	},
 	animateSelected() {
@@ -1482,7 +1470,7 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 		// Check and set the disabled state of the checkbox - add / remove click handler.
 		if ( this.data.disabled ) {
 
-			this.el.removeEventListener( "mousedown", this.clickHandler );
+			this.backing.removeEventListener( "mousedown", this.clickHandler );
 			this.topLine.setAttribute( "color", this.data.disabledColor );
 			this.leftLine.setAttribute( "color", this.data.disabledColor );
 			this.rightLine.setAttribute( "color", this.data.disabledColor );
@@ -1490,7 +1478,8 @@ module.exports = AFRAME.registerComponent( "ui-checkbox", {
 
 		} else {
 
-			this.el.addEventListener( "mousedown", this.clickHandler );
+		
+			this.backing.addEventListener( "mousedown", this.clickHandler );
 			this.topLine.setAttribute( "color", this.data.unselectedColor );
 			this.leftLine.setAttribute( "color", this.data.unselectedColor );
 			this.rightLine.setAttribute( "color", this.data.value ? this.data.selectedColor : this.data.unselectedColor );

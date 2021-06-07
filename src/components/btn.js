@@ -17,6 +17,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
 		tooltipwidth: { type: "number", default: 0.1 }	},
+	color: {},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
 	},
@@ -25,34 +26,21 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		// Store the current button z value for animating mouse events
 		this.defaultZ = this.el.object3D.position.z;
 
-		// register input events for interaction
-		if ( ! this.data.disabled ) {
-
-			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
-			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
-			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
-			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-
-		}
-
 	},
-	update() {
+	update( data ) {
 
-		
-		if ( ! this.data.disabled ) {
-
-			/*this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
-			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
-			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
-			this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+		if ( ! this.data.disabled && ( this.data.disabled != data.disabled ) ) {
 
 			this.el.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.addEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.addEventListener( "mouseup", e => this.mouseUp( e ) );
 			this.el.addEventListener( "mouseout", e => this.mouseLeave( e ) );
-         */
-		} else {
 
+		} else if ( this.data.disabled && ( this.data.disabled != data.disabled ) ) {
+
+			this.el.setAttribute( "color", "#888889" );
+
+			console.error( "btn remove event" );
 			this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
 			this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
@@ -62,6 +50,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 
 	},
 	mouseEnter( e ) {
+
 		console.info( "btn mouseEnter Button" );
 		if ( this.data.animated ) {
 
@@ -92,7 +81,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		}
 
 		if ( this.data.tooltip ) {
-			
+
 			this.tooltipElement = document.createElement( "a-entity" );
 			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
@@ -113,10 +102,10 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.el.appendChild( this.tooltipElement );
 
 		}
-		//UI.utils.preventDefault(e)
 
 	},
 	mouseLeave( e ) {
+
 		console.info( "mouseLeave Button" );
 		if ( this.data.tooltip ) {
 
@@ -144,9 +133,6 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			}
 
 		}
-
-	
-	
 
 	},
 	mouseUp( e ) {
@@ -212,6 +198,14 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			} )
 			.easing( TWEEN.Easing.Exponential.Out )
 			.start();
+
+	},
+	remove() {
+
+		this.el.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
+		this.el.removeEventListener( "mousedown", e => this.mouseDown( e ) );
+		this.el.removeEventListener( "mouseup", e => this.mouseUp( e ) );
+		this.el.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
 
 	},
 } );

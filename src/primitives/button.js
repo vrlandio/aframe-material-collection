@@ -10,13 +10,7 @@ module.exports = AFRAME.registerPrimitive(
 	"a-ui-button",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-			"notroika-text": {
-				align: "left",
-		     	depthOffset: -6000,
-				wrapCount: 10,
-				fontSize: 0.015,
-			
-			},
+
 			"box-rounded": {
 				width: 0.03,
 				height: 0.01,
@@ -27,44 +21,38 @@ module.exports = AFRAME.registerPrimitive(
 				material: "standard",
 				envMapIntensity: 0.75,
 				transparent: false,
-				
+
 			},
-			
+
 			"ui-btn": {
 				animated: "ui-btn.animated",
+			
 			},
 
-			
-		
-			
 		},
 		mappings: {
-			height: "box-rounded.height",
-			width: "box-rounded.width",
-			depth: "box-rounded.depth",
-			color: "box-rounded.color",
-			transparent: "box-rounded.transparent",
-			
-            "text-value": "troika-text.value",
+			"height": "box-rounded.height",
+			"width": "box-rounded.width",
+			"depth": "box-rounded.depth",
+			"color": "box-rounded.color",
+			"transparent": "box-rounded.transparent",
+			"text-value": "troika-text.value",
 			"text-size": "troika-text.fontSize",
 			"text-color": "troika-text.color",
-		
-			animated: "ui-btn.animated",
-			courser2d: "ui-btn.courser2d",
-			disabled: "ui-btn.disabled",
+  			"animated": "ui-btn.animated",
+			"courser2d": "ui-btn.courser2d",
+			"disabled": "ui-btn.disabled",
 			"hover-height": "ui-btn.hoverHeight",
-			"active-height": "ui-btn.activeHeight"
-		}
-	} )
+			"active-height": "ui-btn.activeHeight",
+		},
+	} ),
 );
-
 
 module.exports = AFRAME.registerPrimitive(
 	"a-ui-button-tooltip",
 	AFRAME.utils.extendDeep( {}, AFRAME.primitives.getMeshMixin(), {
 		defaultComponents: {
-		
-		
+
 			"ui-btn": {},
 			"box-rounded": {
 				width: 0.03,
@@ -76,27 +64,25 @@ module.exports = AFRAME.registerPrimitive(
 				material: "standard",
 				envMapIntensity: 0.75,
 				transparent: false,
-				
+
 			},
-			
+
 		},
 		mappings: {
-			height: "box-rounded.height",
-			width: "box-rounded.width",
-			depth: "box-rounded.depth",
-			color: "box-rounded.color",
-			transparent: "box-rounded.transparent",
-			
-            "text-value": "troika-text.value",
+			"height": "box-rounded.height",
+			"width": "box-rounded.width",
+			"depth": "box-rounded.depth",
+			"color": "box-rounded.color",
+			"transparent": "box-rounded.transparent",
+
+			"text-value": "troika-text.value",
 			"text-size": "troika-text.fontSize",
 			"text-color": "troika-text.color",
-			animated: "ui-btn.animated",
-			courser2d: "ui-btn.courser2d",
-		
-		
-		
-			tooltip: "ui-btn.tooltip",
-			tooltiptext:"ui-btn.tooltiptext",
-		}
-	} )
+			"animated": "ui-btn.animated",
+			"courser2d": "ui-btn.courser2d",
+
+			"tooltip": "ui-btn.tooltip",
+			"tooltiptext": "ui-btn.tooltiptext",
+		},
+	} ),
 );

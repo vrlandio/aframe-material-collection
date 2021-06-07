@@ -40,7 +40,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 			}
 
-			this.setDisabled();
+			//this.setDisabled();
 
 		}
 
@@ -65,7 +65,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		this.railEl.setAttribute( "width", "0.15" );
 		this.railEl.setAttribute( "height", "0.05" );
 		this.railEl.setAttribute( "shader", "flat" );
-		
+
 		this.railEl.setAttribute( "color", this.data.railColor );
 		this.railEl.setAttribute( "class", this.data.intersectableClass + " no-yoga-layout" );
 		this.el.appendChild( this.railEl );
@@ -74,14 +74,15 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		this.railEl.addEventListener( "loaded", () => {
 
 			this.getRailObject( this.railEl.object3D );
-			this.setDisabled();
-			this.click();
+
+			//this.click();
 
 		} );
 		this.clickHandler = e => {
 
 			this.data.value = ! this.data.value;
 			this.click();
+			e.preventDefault();
 			// Prevent default behaviour of event
 			if ( e.detail.preventDefault ) {
 
@@ -102,20 +103,32 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 
 	update( data ) {
 
-		if ( this.data.disabled ) {
+		if ( ! this.data.disabled ) {
 
+			this.railEl.setAttribute( "color", this.data.color );
+			this.handleEl.setAttribute( "color", this.data.handleColor );
 			this.handleEl.addEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.handleEl.addEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.addEventListener( "mousedown", this.clickHandler );
+			this.handleEl.setAttribute( "color", this.data.handleColor );
 
-		} else {
+			this.tweenHandle();
+			this.tweenProgress();
 
+		} else if ( this.data.disabled && ( this.data.disabled != data.disabled ) ) {
+
+			console.error( "switch disabled" );
+			this.railEl.setAttribute( "color", this.data.handleDisabledColor );
+			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
 			this.handleEl.removeEventListener( "mouseover", e => this.mouseEnter( e ) );
 			this.handleEl.removeEventListener( "mouseout", e => this.mouseLeave( e ) );
+			this.handleEl.removeEventListener( "mousedown", this.clickHandler );
+			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
+			this.tweenHandle();
+			this.tweenProgress();
 
 		}
 
-		//		this.el.setAttribute( "value", this.data.value );
-		this.click();
 
 	},
 	mouseEnter() {
@@ -143,13 +156,7 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 		// Add / Remove click handlers based on disabled state.
 		if ( this.data.disabled ) {
 
-			this.handleEl.removeEventListener( "mousedown", this.clickHandler );
-			this.handleEl.setAttribute( "color", this.data.handleDisabledColor );
-
 		} else {
-
-			this.handleEl.addEventListener( "mousedown", this.clickHandler );
-			this.handleEl.setAttribute( "color", this.data.handleColor );
 
 		}
 
@@ -219,9 +226,6 @@ module.exports = AFRAME.registerComponent( "ui-switch", {
 	remove() {
 
 		this.el.removeObject3D( 'ui-switch' );
-		//	this.el.remove(this.handleEl)
-		// this.el.remove(this.railEl)
-		//this.el.object3D.geometry.dispose();
-
+	
 	},
 } );
