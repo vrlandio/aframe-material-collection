@@ -30,16 +30,16 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		//this.filled_circle.setAttribute( "color", this.data.disabled ? this.data.disabledColor : this.data.selectedColor );
 		this.filled_circle.setAttribute( "shader", "flat" );
 		this.filled_circle.setAttribute( "class", this.data.intersectableClass );
-		this.filled_circle.setAttribute( "segments", 6 );
+		this.filled_circle.setAttribute( "segments", 32 );
 		//this.el.components.material.material.color = new THREE.Color( this.data.disabled ? this.data.disabledColor : this.data.unselectedColor );
 		this.el.appendChild( this.filled_circle );
 		// Create backing for getting click events.
 		this.backing = document.createElement( "a-circle" );
 		this.backing.setAttribute( "radius", this.data.selectedRadius );
-		this.backing.setAttribute( "position", "0 0 -0.005" );
+		this.backing.setAttribute( "position", "0 0 -0.01" );
 		this.backing.setAttribute( "class", this.data.intersectableClass );
 		this.backing.setAttribute( "shader", "flat" );
-		this.backing.setAttribute( "segments", 6 );
+		this.backing.setAttribute( "segments", 32 );
 		// this.backing.setAttribute("opacity", 0.0001);
 		// this.backing.setAttribute("transparent", true);
 

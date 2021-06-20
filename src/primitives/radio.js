@@ -14,7 +14,7 @@ module.exports = AFRAME.registerPrimitive(
 				primitive: "ring",
 				radiusInner: 0.0575,
 				radiusOuter: 0.0675,
-				segmentsTheta: 6
+				segmentsTheta: 32
 			},
 			material: {
 				shader: "flat",
