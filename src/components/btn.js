@@ -16,7 +16,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		courser2d: { type: "boolean", default: false },
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
-		tooltipwidth: { type: "number", default: 0.1 }	},
+		tooltipwidth: { type: "number", default: 0.05 }	},
 	color: {},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
@@ -86,15 +86,15 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
 				height: 0.015,
-				depth: 0.001,
-				color: 0xfffff0,
+				depth: 0.006,
+				color: 0x18191c,
 				curveSegments: 13,
 				borderRadius: 0.005,
 				material: "phong",
 				zOffset: 0,
 				xOffset: 0,
 				yOffset: 0.03,
-				envMapIntensity: 1.0,
+				envMapIntensity: 0.5,
 				text: this.data.tooltiptext,
 
 			 } );

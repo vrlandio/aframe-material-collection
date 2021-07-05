@@ -440,7 +440,7 @@ module.exports = AFRAME.registerPrimitive(
 				primitive: "ring",
 				radiusInner: 0.0575,
 				radiusOuter: 0.0675,
-				segmentsTheta: 6
+				segmentsTheta: 32
 			},
 			material: {
 				shader: "flat",
@@ -519,7 +519,7 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 		courser2d: { type: "boolean", default: false },
 	    tooltip: { type: "boolean", default: false },
 		tooltiptext: { type: "string", default: "tooltip" },
-		tooltipwidth: { type: "number", default: 0.1 }	},
+		tooltipwidth: { type: "number", default: 0.05 }	},
 	color: {},
 	updateSchema() {
 		// TODO: handle updates to the button state, disabled flag here.
@@ -589,15 +589,15 @@ module.exports = AFRAME.registerComponent( "ui-btn", {
 			this.tooltipElement.setAttribute( "box-rounded-text", {
 				width: this.data.tooltipwidth,
 				height: 0.015,
-				depth: 0.001,
-				color: 0xfffff0,
+				depth: 0.006,
+				color: 0x18191c,
 				curveSegments: 13,
 				borderRadius: 0.005,
 				material: "phong",
 				zOffset: 0,
 				xOffset: 0,
 				yOffset: 0.03,
-				envMapIntensity: 1.0,
+				envMapIntensity: 0.5,
 				text: this.data.tooltiptext,
 
 			 } );
@@ -1538,16 +1538,16 @@ module.exports = AFRAME.registerComponent( "ui-radio", {
 		//this.filled_circle.setAttribute( "color", this.data.disabled ? this.data.disabledColor : this.data.selectedColor );
 		this.filled_circle.setAttribute( "shader", "flat" );
 		this.filled_circle.setAttribute( "class", this.data.intersectableClass );
-		this.filled_circle.setAttribute( "segments", 6 );
+		this.filled_circle.setAttribute( "segments", 32 );
 		//this.el.components.material.material.color = new THREE.Color( this.data.disabled ? this.data.disabledColor : this.data.unselectedColor );
 		this.el.appendChild( this.filled_circle );
 		// Create backing for getting click events.
 		this.backing = document.createElement( "a-circle" );
 		this.backing.setAttribute( "radius", this.data.selectedRadius );
-		this.backing.setAttribute( "position", "0 0 -0.005" );
+		this.backing.setAttribute( "position", "0 0 -0.01" );
 		this.backing.setAttribute( "class", this.data.intersectableClass );
 		this.backing.setAttribute( "shader", "flat" );
-		this.backing.setAttribute( "segments", 6 );
+		this.backing.setAttribute( "segments", 32 );
 		// this.backing.setAttribute("opacity", 0.0001);
 		// this.backing.setAttribute("transparent", true);
 
@@ -1952,7 +1952,7 @@ module.exports = AFRAME.registerPrimitive(
 				depth: 0.01,
 				color: "#000111",
 				curveSegments: 13,
-				borderRadius: 0.01,
+				borderRadius: 0.03,
 				material: "standard",
 				depth: 0.02,
 				envMapIntensity: 0.4,
@@ -1969,7 +1969,7 @@ module.exports = AFRAME.registerPrimitive(
 				fontSize: 0.015,
 			},
 			"ui-icon": {
-				zIndex: 0.02,
+				zIndex: 0.031,
 			},
 
 		},
